@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.csu.ffms.persistence.SecurityMapper">
+
+    <select id="getSecurityBySecurityNumber" resultType="Security">
+        select
+            countnumber as number,
+            userid as userid,
+            tradetype as type,
+            tradename as name,
+            tradetime as date,
+            tradeincome as income
+        from currentcount
+        where countnumber=#{number} and userid=#{userid}
+    </select>
+
+    <select id="getSecurityByUserId" parameterType="string" resultType="Security">
+        select
+            countnumber as number,
+            userid as userid,
+            tradetype as type,
+            tradename as name,
+            tradetime as date,
+            tradeincome as income
+        from currentcount
+        where userid=#{userid}
+    </select>
+
+    <insert id="insertSecurity" parameterType="Security">
+        insert into currentcount(countnumber,userid,tradetype,tradename,tradetime,tradeincome)
+        values(#{number},#{userid},#{type},#{name},#{date},#{income})
+
+    </insert>
+
+    <delete id="deleteSecurity" parameterType="Security">
+        delete from currentcount
+        where countnumber=#{number} and userid=#{userid}
+    </delete>
+
+    <update id="updateSecurity" parameterType="Security">
+        update currentcount set
+            tradetype =#{type},
+            tradename=#{name},
+            tradetime=#{date},
+            tradeincome=#{income}
+        where countnumber=#{number} and userid=#{userid}
+    </update>
+
+</mapper>
