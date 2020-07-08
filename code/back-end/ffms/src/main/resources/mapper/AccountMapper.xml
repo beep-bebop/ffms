@@ -4,5 +4,105 @@
 
 <mapper namespace="org.csu.ffms.persistence.AccountMapper">
 
+    <select id="getAccountByUserid" parameterType="string" resultType="Account">
+    SELECT
+          SIGNON.USERID,
+          SIGNON.PASSWORD,
+          ACCOUNT.USERNAME,
+          ACCOUNT.EMAIL,
+          ACCOUNT.PHONE,
+          RELATION.FAMILYID,
+    FROM ACCOUNT, RELATION, SIGNON
+    WHERE ACCOUNT.USERID = #{userid}
+      AND SIGNON.USERID = ACCOUNT.USERID
+      AND RELATION.USERID = ACCOUNT.USERID
+  </select>
+
+    <select id="getAccountByUseridAndPassword" parameterType="Account" resultType="Account">
+    SELECT
+          SIGNON.USERID,
+          SIGNON.PASSWORD,
+          ACCOUNT.USERNAME,
+          ACCOUNT.EMAIL,
+          ACCOUNT.PHONE,
+          RELATION.FAMILYID,
+    FROM ACCOUNT, RELATION, SIGNON
+    WHERE ACCOUNT.USERID = #{userid}
+      AND SIGNON.PASSWORD = #{password}
+      AND SIGNON.USERID = ACCOUNT.USERID
+      AND RELATION.USERID = ACCOUNT.USERID
+
+    </select>
+
+    <insert id="insertAccount" parameterType="Account">
+    INSERT INTO ACCOUNT
+      (USERID, USERNAME, EMAIL, PHONE)
+    VALUES
+      (#{userid}, #{username}, #{email}, #{phone})
+  </insert>
+
+    <insert id="insertRelation" parameterType="Account">
+    INSERT INTO RELATION (FAMILYID, USERID)
+    VALUES (#{familyid}, #{userid})
+  </insert>
+
+    <insert id="insertSignon" parameterType="Account">
+    INSERT INTO SIGNON (USERID, PASSWORD)
+    VALUES (#{userid}, #{password})
+  </insert>
+
+    <update id="updateAccount" parameterType="Account">
+    UPDATE ACCOUNT SET
+      USERID = #{userid}
+      USERNAME = #{username},
+      EMAIL = #{email},
+      PHONE = #{phone}
+    WHERE USERID = #{userid}
+  </update>
+
+    <update id="updateRelation" parameterType="Account">
+    UPDATE RELATION SET
+      FAMILYID = #(familyid)
+      USERID = #{userid}
+    WHERE USERID = #{userid}
+  </update>
+
+    <update id="updateSignon" parameterType="Account">
+    UPDATE SIGNON SET
+    USERNAME = #{userid}
+    PASSWORD = #{password}
+    WHERE USERNAME = #{userid}
+  </update>
+
+    <select id="getAllAccount" resultType="Account">
+    SELECT
+      SELECT
+          SIGNON.USERID,
+          SIGNON.PASSWORD,
+          ACCOUNT.USERNAME,
+          ACCOUNT.EMAIL,
+          ACCOUNT.PHONE,
+          RELATION.FAMILYID,
+    FROM ACCOUNT, RELATION, SIGNON
+    WHERE SIGNON.USERID = ACCOUNT.USERID
+      AND RELATION.USERID = ACCOUNT.USERID
+    </select>
+
+    <delete id="deleteAccount" parameterType="String">
+    DELETE FROM account
+    WHERE userid=#{userid}
+  </delete>
+
+    <delete id="deleteRelation" parameterType="String">
+    DELETE FROM relation
+    WHERE userid=#{userid}
+  </delete>
+
+    <delete id="deleteSignon" parameterType="String">
+    DELETE FROM signon
+    WHERE userid=#{userid}
+  </delete>
+
+
 
 </mapper>
