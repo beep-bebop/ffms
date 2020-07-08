@@ -1,5 +1,9 @@
 package org.csu.ffms;
 
+import org.csu.ffms.controller.DisburseController;
+import org.csu.ffms.controller.IncomeController;
+import org.csu.ffms.domain.Disburse;
+import org.csu.ffms.domain.Income;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +12,74 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 @MapperScan("org.csu.ffms.persistence")
 class FfmsApplicationTests {
+    @Autowired
+    Disburse disburse;
+    @Autowired
+    DisburseController disburseController;
+    @Autowired
+    Income income;
+    @Autowired
+    IncomeController incomeController;
+
+   @Test
+    void contextLoads() {
+        disburse.setAmount_paid(100);
+        disburse.setDescription("吃饭");
+        disburse.setType("eat");
+        disburse.setUserId("11111");
+        disburseController.newDisburse(disburse);
+    }
 
     @Test
-    void contextLoads() {
+    void contextLoads1() {
+        disburseController.deleteDisburse(2);
+    }
+
+    @Test
+    void contextLoads2() {
+        disburse.setDisburseId(1);
+        disburse.setAmount_paid(500);
+        disburse.setDescription("购物");
+        disburse.setType("shopping");
+        disburse.setUserId("11111");
+        disburseController.updateDisburse(disburse);
+
+    }
+
+    @Test
+    void contextLoads3() {
+        disburse.setUserId("11111");
+        disburseController.findDisburseList(disburse);
+
     }
 
 
+    @Test
+    void contextLoads01() {
+        income.setIncome(100);
+        income.setDescription("游戏");
+        income.setType("fund");
+        income.setUserId("1111111");
+        incomeController.newIncome(income);
+    }
+
+    @Test
+    void contextLoads11() {
+        incomeController.deleteIncome(4);
+    }
+
+    @Test
+    void contextLoads21() {
+        income.setIncomeId(3);
+        income.setIncome(500);
+        income.setDescription("购物");
+        incomeController.updateIncome(income);
+
+    }
+
+    @Test
+    void contextLoads31() {
+        income.setType("salary");
+        incomeController.findIncomeList(income);
+    }
 }
