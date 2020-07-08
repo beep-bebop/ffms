@@ -1,5 +1,8 @@
 import { uniqueId } from 'lodash'
-
+import cash from './modules/cash'
+import bonds from './modules/bonds'
+import fund from './modules/fund'
+import stocks from './modules/stocks'
 /**
  * @description 给菜单数据补充上 path 字段
  * @description https://github.com/d2-projects/d2-admin/issues/209
@@ -17,6 +20,10 @@ function supplementPath (menu) {
 
 export const menuHeader = supplementPath([
   { path: '/index', title: '首页', icon: 'home' },
+  cash,
+  bonds,
+  fund,
+  stocks,
   {
     title: '页面',
     icon: 'folder-o',
@@ -29,14 +36,18 @@ export const menuHeader = supplementPath([
 ])
 
 export const menuAside = supplementPath([
-  { path: '/index', title: '首页', icon: 'home' },
-  {
-    title: '页面',
-    icon: 'folder-o',
-    children: [
-      { path: '/page1', title: '页面 1' },
-      { path: '/page2', title: '页面 2' },
-      { path: '/page3', title: '页面 3' }
-    ]
-  }
+  // { path: '/index', title: '首页', icon: 'home' },
+  cash,
+  bonds,
+  fund,
+  stocks
+  // {
+  //   title: '页面',
+  //   icon: 'folder-o',
+  //   children: [
+  //     { path: '/page1', title: '页面 1' },
+  //     { path: '/page2', title: '页面 2' },
+  //     { path: '/page3', title: '页面 3' }
+  //   ]
+  // }
 ])
