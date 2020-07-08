@@ -1,10 +1,12 @@
 package org.csu.ffms.service;
 
+import ch.qos.logback.classic.spi.STEUtil;
 import org.csu.ffms.domain.Stock;
 import org.csu.ffms.persistence.StockMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,6 +37,11 @@ public class StockService {
 
     public void updateStock(Stock stock){
         stockMapper.updateStock(stock);
+    }
+
+    public List<Stock> getStockByFamilyId(String familyid){
+        List<Stock> stockList=new ArrayList<>();
+        return stockList;
     }
 
 

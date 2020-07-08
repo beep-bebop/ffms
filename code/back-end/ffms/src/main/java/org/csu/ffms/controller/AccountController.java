@@ -1,19 +1,21 @@
 package org.csu.ffms.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import org.csu.ffms.domain.Account;
+import org.csu.ffms.jwt.note.PassToken;
+import org.csu.ffms.jwt.note.UserLoginToken;
+import org.csu.ffms.jwt.token.TokenUtil;
 import org.csu.ffms.service.AccountService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+
+
+@RestController
 @RequestMapping("/account")
-@SessionAttributes(value = {"account" })
 public class AccountController {
     @Autowired
     private AccountService accountService;
@@ -81,6 +83,33 @@ public class AccountController {
         return " ";
     }
 
+    @PassToken
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    public Object login(String username,String password){
+        System.out.println("hello,login");
+        //Account account = accountService.getAccount(username,password);
+        Account account = new Account();
+        account.setUserid("1");
+        account.setPassword("1");
+        JSONObject json = new JSONObject();
+
+        if(account==null){
+            json.put("code",0);
+            json.put("msg","用户名或密码错误");
+        }
+        else{
+            json.put("code",1);
+            String token = TokenUtil.getToken(account);
+            json.put("token",token);
+        }
+        return json;
+    }
+
+    @UserLoginToken
+    @PostMapping("/msg")
+    public String hello(){
+        return "hello,world";
+    }
 
 
 }
