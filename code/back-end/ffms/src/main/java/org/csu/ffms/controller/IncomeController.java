@@ -1,5 +1,6 @@
 package org.csu.ffms.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import org.csu.ffms.domain.Disburse;
 import org.csu.ffms.domain.Income;
 import org.csu.ffms.service.DisburseService;
@@ -16,31 +17,45 @@ public class IncomeController {
     IncomeService incomeService;
 
     @PostMapping("new")
-    public void newIncome(Income income) {
-        System.out.println("333333");
+    public String newIncome(Income income) {
         long time = System.currentTimeMillis();
         java.sql.Date date = new java.sql.Date(time);
         income.setTime(date);
         incomeService.newIncome(income);
-        System.out.println("444444");
+        JSONObject json = new JSONObject();
+        json.put("status",200);
+        json.put("data",income);
+        System.out.println(JSONObject.toJSONString(json));
+        return JSONObject.toJSONString(json);
     }
 
     @DeleteMapping("delete")
-    public void deleteIncome(int incomeId){
+    public String deleteIncome(int incomeId){
         incomeService.deleteIncome(incomeId);
+        JSONObject json = new JSONObject();
+        json.put("status",200);
+        System.out.println(JSONObject.toJSONString(json));
+        return JSONObject.toJSONString(json);
     }
 
     @PutMapping("update")
-    public void updateIncome(Income income){
+    public String updateIncome(Income income){
         incomeService.updateIncome(income);
+        JSONObject json = new JSONObject();
+        json.put("status",200);
+        json.put("data",income);
+        System.out.println(JSONObject.toJSONString(json));
+        return JSONObject.toJSONString(json);
     }
 
     @GetMapping("query")
-    public void findIncomeList(Income income){
+    public String findIncomeList(Income income){
         List<Income> incomeList=incomeService.findIncomeList(income);
-        for(int i =0 ;i<incomeList.size();i++) {
-            System.out.println(incomeList.get(i).toString());
-        }
+        JSONObject json = new JSONObject();
+        json.put("status",200);
+        json.put("data",incomeList);
+        System.out.println(JSONObject.toJSONString(json));
+        return JSONObject.toJSONString(json);
     }
 
 }

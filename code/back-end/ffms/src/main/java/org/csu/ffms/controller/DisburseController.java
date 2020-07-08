@@ -1,6 +1,6 @@
 package org.csu.ffms.controller;
 
-import org.csu.ffms.domain.AppResult;
+import com.alibaba.fastjson.JSONObject;
 import org.csu.ffms.domain.Disburse;
 import org.csu.ffms.service.DisburseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,43 +18,46 @@ public class DisburseController {
     DisburseService disburseService;
 
     @PostMapping("new")
-    public AppResult<Disburse> newDisburse(Disburse disburse) {
+    public String newDisburse(Disburse disburse) {
         long time = System.currentTimeMillis();
         java.sql.Date date = new java.sql.Date(time);
         disburse.setTime(date);
-        AppResult<Disburse> appResult = new AppResult<>();
         disburseService.newDisburse(disburse);
-        appResult.setStatus(200);
-        appResult.setData(disburse);
-        return appResult;
+        JSONObject json = new JSONObject();
+        json.put("status",200);
+        json.put("data",disburse);
+        System.out.println(JSONObject.toJSONString(json));
+        return JSONObject.toJSONString(json);
     }
 
     @DeleteMapping("delete")
-    public AppResult<String> deleteDisburse(int disburseId){
+    public String deleteDisburse(int disburseId){
         disburseService.deleteDisburse(disburseId);
-        AppResult<String> appResult = new AppResult<>();
-        appResult.setStatus(200);
-        appResult.setData("true");
-        return appResult;
+        JSONObject json = new JSONObject();
+        json.put("status",200);
+        System.out.println(JSONObject.toJSONString(json));
+        return JSONObject.toJSONString(json);
 
     }
 
     @PutMapping("update")
-    public AppResult<Disburse> updateDisburse(Disburse disburse){
+    public String updateDisburse(Disburse disburse){
         disburseService.updateDisburse(disburse);
-        AppResult<Disburse> appResult = new AppResult<>();
-        appResult.setStatus(200);
-        appResult.setData(disburse);
-        return appResult;
+        JSONObject json = new JSONObject();
+        json.put("status",200);
+        json.put("data",disburse);
+        System.out.println(JSONObject.toJSONString(json));
+        return JSONObject.toJSONString(json);
     }
 
     @GetMapping(value="query",produces = "application/Json;charset=UTF-8")
-    public AppResult<List<Disburse>> findDisburseList(Disburse disburse){
-        AppResult<List<Disburse>> appResult = new AppResult<>();
+    public String findDisburseList(Disburse disburse){
         List<Disburse> disburseList=disburseService.findDisburseList(disburse);
-        appResult.setStatus(200);
-        appResult.setData(disburseList);
-        return appResult;
+        JSONObject json = new JSONObject();
+        json.put("status",200);
+        json.put("data",disburseList);
+        System.out.println(JSONObject.toJSONString(json));
+        return JSONObject.toJSONString(json);
     }
 
 
