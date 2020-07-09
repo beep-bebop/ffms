@@ -73,4 +73,32 @@ public class AccountController {
     }
 
 
+    @PassToken
+    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    public Object login(String username,String password){
+        System.out.println("hello,login");
+        //Account account = accountService.getAccount(username,password);
+        Account account = new Account();
+        account.setUserid("1");
+        account.setPassword("1");
+        JSONObject json = new JSONObject();
+
+        if(account==null){
+            json.put("code",0);
+            json.put("msg","用户名或密码错误");
+        }
+        else{
+            json.put("code",1);
+            String token = TokenUtil.getToken(account);
+            json.put("token",token);
+        }
+        return json;
+    }
+
+    @UserLoginToken
+    @PostMapping("/msg")
+    public String hello(){
+        return "hello,world";
+    }
+
 }
