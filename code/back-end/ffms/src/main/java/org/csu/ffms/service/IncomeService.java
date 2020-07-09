@@ -15,9 +15,7 @@ public class IncomeService {
     IncomeMapper incomeMapper;
 
     public void newIncome(Income income){
-        System.out.println("111111");
         incomeMapper.newIncome(income);
-        System.out.println("222222");
     }
 
     public void deleteIncome(int incomeId){

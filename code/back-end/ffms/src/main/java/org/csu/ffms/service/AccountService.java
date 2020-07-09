@@ -23,6 +23,10 @@ public class AccountService {
         return accountMapper.getAccountByUseridAndPassword(account);
     }
 
+    public List<Account> getAllAccountByFamilyid(String familyid){
+        return accountMapper.getAllAccountByFamilyid(familyid);
+    }
+
     @Transactional
     public void insertAccount(Account account) {
         accountMapper.insertAccount(account);

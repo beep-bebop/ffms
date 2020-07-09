@@ -38,5 +38,12 @@ public class SecurityService {
         securityMapper.updateSecurity(security);
     }
 
+    public List<Security> getSecurityByType(String userid,String tradetype){
+        return securityMapper.getSecurityByType(userid,tradetype);
+    }
+
+    public List<Security> getSecurityByTime(String userid,String starttime,String endtime){
+        return securityMapper.getSecurityByTime(userid,starttime,endtime);
+    }
 
 }

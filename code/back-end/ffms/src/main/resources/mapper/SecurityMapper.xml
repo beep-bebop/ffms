@@ -48,4 +48,28 @@
         where countnumber=#{number} and userid=#{userid}
     </update>
 
+    <select id="getSecurityByType" resultType="Security">
+        select
+            countnumber as number,
+            userid as userid,
+            tradetype as type,
+            tradename as name,
+            tradetime as date,
+            tradeincome as income
+        from currentcount
+        where userid=#{userid} and tradetype=#{tradetype}
+    </select>
+
+    <select id="getSecurityByTime" resultType="Security">
+        select
+            countnumber as number,
+            userid as userid,
+            tradetype as type,
+            tradename as name,
+            tradetime as date,
+            tradeincome as income
+         from currentcount
+         where userid=#{userid} and
+         date(tradetime) between #{starttime} and #{endtime}
+    </select>
 </mapper>

@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
  * @描述
  **/
 
-@ControllerAdvice
+//@ControllerAdvice
 public class Advice implements ResponseBodyAdvice<Object> {
     @Autowired
     AccountService accountService;
