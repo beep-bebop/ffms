@@ -22,6 +22,7 @@ class AccountTest {
         System.out.println("get userid:1 ");
         Account account=accountService.getAccount("1");
         System.out.println(account.getUsername());
+        System.out.println(account.toString());
     }
 
     @Test

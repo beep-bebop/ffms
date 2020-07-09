@@ -2,15 +2,16 @@ package org.csu.ffms.controller;
 
 import com.alibaba.fastjson.JSONObject;
         import org.csu.ffms.domain.Account;
-        import org.csu.ffms.service.AccountService;
+import org.csu.ffms.jwt.note.PassToken;
+import org.csu.ffms.jwt.note.UserLoginToken;
+import org.csu.ffms.jwt.token.TokenUtil;
+import org.csu.ffms.service.AccountService;
 
         import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.stereotype.Controller;
-        import org.springframework.web.bind.annotation.GetMapping;
-        import org.springframework.web.bind.annotation.PostMapping;
-        import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/account/")
 public class AccountController {
     @Autowired
@@ -74,13 +75,10 @@ public class AccountController {
 
 
     @PassToken
-    @RequestMapping(value = "/login",method = RequestMethod.POST)
+    @RequestMapping(value = "login",method = RequestMethod.POST)
     public Object login(String username,String password){
         System.out.println("hello,login");
-        //Account account = accountService.getAccount(username,password);
-        Account account = new Account();
-        account.setUserid("1");
-        account.setPassword("1");
+        Account account = accountService.getAccount(username,password);
         JSONObject json = new JSONObject();
 
         if(account==null){
@@ -96,7 +94,7 @@ public class AccountController {
     }
 
     @UserLoginToken
-    @PostMapping("/msg")
+    @PostMapping("msg")
     public String hello(){
         return "hello,world";
     }
