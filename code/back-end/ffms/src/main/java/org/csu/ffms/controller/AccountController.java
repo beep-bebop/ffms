@@ -22,7 +22,7 @@ public class AccountController {
     {
         accountService.insertAccount(account);
         JSONObject json = new JSONObject();//新建一个json对象
-        json.put("status",200);//放入键值对
+        json.put("status_code",200);//放入键值对
         json.put("data",account);
         System.out.println(JSONObject.toJSONString(json));//输出JSONObject对象转化成的json字符串
         return "JSONObject.toJSONString(json)";
@@ -36,7 +36,7 @@ public class AccountController {
         if(account != null)  //登录成功
         {
             JSONObject json = new JSONObject();
-            json.put("status",200);
+            json.put("status_code",200);
             json.put("data",account);
             System.out.println(JSONObject.toJSONString(json));
             return "JSONObject.toJSONString(json)";
@@ -44,7 +44,7 @@ public class AccountController {
         else  //用户名或密码不正确
         {
             JSONObject json = new JSONObject();
-            json.put("status",403);
+            json.put("status_code",403);
             System.out.println(JSONObject.toJSONString(json));
             return "JSONObject.toJSONString(json)";
         }
@@ -55,7 +55,7 @@ public class AccountController {
     public String signout()
     {
         JSONObject json = new JSONObject();
-        json.put("status",200);
+        json.put("status_code",200);
         System.out.println(JSONObject.toJSONString(json));
         return "JSONObject.toJSONString(json)";
     }
@@ -66,7 +66,7 @@ public class AccountController {
     {
         accountService.updateAccount(account);
         JSONObject json = new JSONObject();
-        json.put("status",200);
+        json.put("status_code",200);
         json.put("data",account);
         System.out.println(JSONObject.toJSONString(json));
         return "JSONObject.toJSONString(json)";

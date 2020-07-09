@@ -66,4 +66,10 @@ public class AccountService {
         accountMapper.deleteSignon(userid);
     }
 
+    @Transactional
+    public void quitFamily(String userid)
+    {
+        accountMapper.deleteRelation(userid);
+    }
+
 }

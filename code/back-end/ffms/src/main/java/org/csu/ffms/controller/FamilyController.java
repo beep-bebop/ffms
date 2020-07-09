@@ -42,7 +42,7 @@ public class FamilyController {
         familyService.insertFamily(family);
 
         JSONObject json = new JSONObject();//新建一个json对象
-        json.put("status",200);//放入键值对
+        json.put("status_code",200);//放入键值对
         json.put("data",family);
         System.out.println(JSONObject.toJSONString(json));//输出JSONObject对象转化成的json字符串
         return "JSONObject.toJSONString(json)";
@@ -59,7 +59,7 @@ public class FamilyController {
             account.setFamilyid(familyid);
             accountService.updateAccount(account);
             JSONObject json = new JSONObject();
-            json.put("status",200);
+            json.put("status_code",200);
             json.put("data",account);
             System.out.println(JSONObject.toJSONString(json));
             return "JSONObject.toJSONString(json)";
@@ -67,7 +67,7 @@ public class FamilyController {
         else  //家庭组id或者密钥不正确
         {
             JSONObject json = new JSONObject();
-            json.put("status",403);
+            json.put("status_code",403);
             json.put("data",account);
             System.out.println(JSONObject.toJSONString(json));
             return "JSONObject.toJSONString(json)";
@@ -76,7 +76,18 @@ public class FamilyController {
 
 
     //退出家庭组
-
+    @PostMapping("quitFamily")
+    public String quitFamily(Account account)
+    {
+        accountService.quitFamily(account.getUserid());
+        account.setFamilyid(null);
+        accountService.updateAccount(account);
+        JSONObject json = new JSONObject();
+        json.put("status_code",200);
+        json.put("data",account);
+        System.out.println(JSONObject.toJSONString(json));
+        return "JSONObject.toJSONString(json)";
+    }
 
 
 }
