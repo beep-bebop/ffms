@@ -75,7 +75,6 @@
   </update>
 
     <select id="getAllAccount" resultType="Account">
-    SELECT
       SELECT
           SIGNON.USERID,
           SIGNON.PASSWORD,
@@ -106,7 +105,6 @@
 
     <select id="getAllAccountByFamilyid" parameterType="String" resultType="Account">
     SELECT
-      SELECT
           SIGNON.USERID,
           SIGNON.PASSWORD,
           ACCOUNT.USERNAME,

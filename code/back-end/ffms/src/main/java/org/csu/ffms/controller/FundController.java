@@ -2,14 +2,11 @@ package org.csu.ffms.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import org.csu.ffms.domain.Account;
-import org.csu.ffms.domain.Security;
-import org.csu.ffms.domain.Stock;
+import org.csu.ffms.domain.Fund;
 import org.csu.ffms.jwt.note.UserLoginToken;
 import org.csu.ffms.service.AccountService;
-import org.csu.ffms.service.FamilyService;
-import org.csu.ffms.service.StockService;
+import org.csu.ffms.service.FundService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
@@ -17,48 +14,46 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-
 /**
  * @创建人 ： 李振豪
- * @创建时间 2020/7/7
+ * @创建时间 2020/7/9
  * @描述
  **/
 @RestController
-@RequestMapping("/stock")
-public class StockController {
-
+@RequestMapping("/fund")
+public class FundController {
     @Autowired
-    StockService stockService;
+    FundService fundService;
 
     @Autowired
     AccountService accountService;
 
     /**
-     *@描述 返回该用户所拥有的股票的具体信息
-     *@参数  userid：用户id，code：股票代码
+     *@描述 返回该用户所拥有的基金的具体信息
+     *@参数  userid：用户id，fundcode：基金代码
      *@返回值
      *@创建人  李振豪
      *@创建时间  2020/7/9
      *@修改人和其它信息
      */
     @UserLoginToken
-    @GetMapping("/stockInfo")
-    public String getStock(String userid,String code){
+    @GetMapping("/fundInfo")
+    public String getFund(String userid,String fundcode){
         JSONObject jsonObject = new JSONObject();
         try{
-            Stock stock = stockService.getStockByStockCode(code,userid);
+            Fund fund = fundService.getFundByFundCode(fundcode,userid);
             jsonObject.put("status_code",0);
-            jsonObject.put("data",stock);
+            jsonObject.put("data",fund);
         }
         catch (Exception e){
-            System.out.println(new SimpleDateFormat().format(new Date()) +  " 错误--[/stock/stockInfo]");
+            System.out.println(new SimpleDateFormat().format(new Date()) +  " 错误--[/fund/fundInfo]");
             jsonObject.put("status_code",-2);
         }
         return JSONObject.toJSONString(jsonObject);
     }
 
     /**
-     *@描述 该user的所有股票
+     *@描述 该user的所有基金
      *@参数  userid
      *@返回值
      *@创建人  李振豪
@@ -66,23 +61,23 @@ public class StockController {
      *@修改人和其它信息
      */
     @UserLoginToken
-    @GetMapping("/ownStock")
-    public String getAllStock(String userid){
+    @GetMapping("/ownFund")
+    public String getAllFund(String userid){
         JSONObject jsonObject = new JSONObject();
         try{
-            List<Stock> stockList =stockService.getStockByUserId(userid);
+            List<Fund> fundList =fundService.getFundByUserId(userid);
             jsonObject.put("status_code",0);
-            jsonObject.put("data",stockList);
+            jsonObject.put("data",fundList);
         }
         catch (Exception e){
-            System.out.println(new SimpleDateFormat().format(new Date()) +  " 错误--[/stock/ownStock] ");
+            System.out.println(new SimpleDateFormat().format(new Date()) +  " 错误--[/fund/ownFund] ");
             jsonObject.put("status_code",-2);
         }
         return JSONObject.toJSONString(jsonObject);
     }
 
     /**
-     *@描述 获取该用户家庭中的所有股票
+     *@描述 获取该用户家庭中的所有基金
      *@参数  familyid：家庭id
      *@返回值
      *@创建人  李振豪
@@ -90,54 +85,53 @@ public class StockController {
      *@修改人和其它信息
      */
     @UserLoginToken
-    @GetMapping("/familyStocks")
-    public String getFamilyStocks(String familyid){
+    @GetMapping("/familyFunds")
+    public String getFamilyFunds(String familyid){
         JSONObject jsonObject = new JSONObject();
         try{
             List<Account> accountList= accountService.getAllAccountByFamilyid(familyid);
-            List<Stock> stockList=new ArrayList<>();
+            List<Fund> fundList=new ArrayList<>();
             for (Account account : accountList) {
-                System.out.println(account.getUserid());
-                List<Stock> stocks = stockService.getStockByUserId(account.getUserid());
-                for (Stock stock : stocks) {
-                    stockList.add(stock);
+                List<Fund> funds = fundService.getFundByUserId(account.getUserid());
+                for (Fund fund : funds) {
+                    fundList.add(fund);
                 }
             }
             jsonObject.put("status_code",0);
-            jsonObject.put("data",stockList);
+            jsonObject.put("data",fundList);
         }
         catch (Exception e){
-            System.out.println(new SimpleDateFormat().format(new Date()) +  " 错误--[/stock/familyStocks] ");
+            System.out.println(new SimpleDateFormat().format(new Date()) +  " 错误--[/fund/familyFunds] ");
             jsonObject.put("status_code",-2);
         }
         return JSONObject.toJSONString(jsonObject);
     }
 
     /**
-     *@描述 将指定股票插入表中，表示该用户新购了股票
-     *@参数  stock：股票对象
+     *@描述 将指定基金插入表中，表示该用户新购了基金
+     *@参数  fund：基金对象
      *@返回值
      *@创建人  李振豪
      *@创建时间  2020/7/9
      *@修改人和其它信息
      */
     @UserLoginToken
-    @PostMapping("/insertStock")
-    public String insertStock(Stock stock){
+    @PostMapping("/insertFund")
+    public String insertFund(Fund fund){
         JSONObject jsonObject = new JSONObject();
         try{
-            stockService.insertStock(stock);
+            fundService.insertFund(fund);
             jsonObject.put("status_code",0);
         }
         catch (Exception e){
-            System.out.println(new SimpleDateFormat().format(new Date()) +  " 错误--[/stock/insertStock] ");
+            System.out.println(new SimpleDateFormat().format(new Date()) +  " 错误--[/fund/insertFund] ");
             jsonObject.put("status_code",-2);
         }
         return JSONObject.toJSONString(jsonObject);
     }
 
     /**
-     *@描述 删除指定股票，表示该用户股票的抛出
+     *@描述 删除指定基金，表示该用户基金的抛出
      *@参数  同上
      *@返回值
      *@创建人  李振豪
@@ -145,22 +139,22 @@ public class StockController {
      *@修改人和其它信息
      */
     @UserLoginToken
-    @DeleteMapping("/deleteStock")
-    public String deleteStock(String userid,String code){
+    @DeleteMapping("/deleteFund")
+    public String deleteFund(String userid,String fundcode){
         JSONObject jsonObject = new JSONObject();
         try{
-            stockService.deleteStock(stockService.getStockByStockCode(code, userid));
+            fundService.deleteFund(fundService.getFundByFundCode(fundcode, userid));
             jsonObject.put("status_code",0);
         }
         catch (Exception e){
-            System.out.println(new SimpleDateFormat().format(new Date()) +  " 错误--[/stock/deleteStock] ");
+            System.out.println(new SimpleDateFormat().format(new Date()) +  " 错误--[/fund/deleteFund] ");
             jsonObject.put("status_code",-2);
         }
         return JSONObject.toJSONString(jsonObject);
     }
 
     /**
-     *@描述 更新股票信息，表示该用户持有股份的变化
+     *@描述 更新基金信息，表示该用户持有基金的变化
      *@参数  同上
      *@返回值
      *@创建人  李振豪
@@ -168,15 +162,15 @@ public class StockController {
      *@修改人和其它信息
      */
     @UserLoginToken
-    @PutMapping("/updateStock")
-    public String updateStock(Stock stock){
+    @PutMapping("/updateFund")
+    public String updateFund(Fund fund){
         JSONObject jsonObject = new JSONObject();
         try{
-            stockService.updateStock(stock);
+            fundService.updateFund(fund);
             jsonObject.put("status_code",0);
         }
         catch (Exception e){
-            System.out.println(new SimpleDateFormat().format(new Date()) + " 错误--[/stock/updateStock]");
+            System.out.println(new SimpleDateFormat().format(new Date()) + " 错误--[/fund/updateFund]");
             jsonObject.put("status_code",-2);
         }
         return JSONObject.toJSONString(jsonObject);

@@ -18,59 +18,57 @@ public class AccountController {
     private AccountService accountService;
 
     //注册新用户
+    @PassToken
     @PostMapping("newAccount")
     public String newAccount(Account account)
     {
         accountService.insertAccount(account);
         JSONObject json = new JSONObject();//新建一个json对象
-        json.put("status_code",200);//放入键值对
+        json.put("status_code",0);//放入键值对
         json.put("data",account);
         System.out.println(JSONObject.toJSONString(json));//输出JSONObject对象转化成的json字符串
-        return "JSONObject.toJSONString(json)";
+        return JSONObject.toJSONString(json);
     }
 
     //登录
+    @PassToken
     @PostMapping("signon")
     public String signon(String userid,String password)
     {
         Account account = accountService.getAccount(userid,password);
+        JSONObject json = new JSONObject();
         if(account != null)  //登录成功
         {
-            JSONObject json = new JSONObject();
-            json.put("status_code",200);
+            json.put("status_code",0);
             json.put("data",account);
-            System.out.println(JSONObject.toJSONString(json));
-            return "JSONObject.toJSONString(json)";
         }
         else  //用户名或密码不正确
         {
-            JSONObject json = new JSONObject();
-            json.put("status_code",403);
-            System.out.println(JSONObject.toJSONString(json));
-            return "JSONObject.toJSONString(json)";
+            json.put("status_code",-2);
         }
+        return JSONObject.toJSONString(json);
     }
 
     //退出登录
+    @UserLoginToken
     @GetMapping("signout")
     public String signout()
     {
         JSONObject json = new JSONObject();
-        json.put("status_code",200);
-        System.out.println(JSONObject.toJSONString(json));
-        return "JSONObject.toJSONString(json)";
+        json.put("status_code",0);
+        return JSONObject.toJSONString(json);
     }
 
     //登录后修改用户信息
+    @UserLoginToken
     @PostMapping("editAccountForm")
     public String editAccouintForm(Account account)
     {
         accountService.updateAccount(account);
         JSONObject json = new JSONObject();
-        json.put("status_code",200);
+        json.put("status_code",0);
         json.put("data",account);
-        System.out.println(JSONObject.toJSONString(json));
-        return "JSONObject.toJSONString(json)";
+        return JSONObject.toJSONString(json);
     }
 
 
@@ -93,10 +91,5 @@ public class AccountController {
         return json;
     }
 
-    @UserLoginToken
-    @PostMapping("msg")
-    public String hello(){
-        return "hello,world";
-    }
 
 }
