@@ -104,5 +104,21 @@
   </delete>
 
 
+    <select id="getAllAccountByFamilyid" parameterType="String" resultType="Account">
+    SELECT
+      SELECT
+          SIGNON.USERID,
+          SIGNON.PASSWORD,
+          ACCOUNT.USERNAME,
+          ACCOUNT.EMAIL,
+          ACCOUNT.PHONE,
+          RELATION.FAMILYID
+    FROM ACCOUNT, RELATION, SIGNON
+    WHERE SIGNON.USERID = ACCOUNT.USERID
+      AND RELATION.USERID = ACCOUNT.USERID
+      AND RELATION.FAMILYID = #{familyid}
+    </select>
+
+
 
 </mapper>
