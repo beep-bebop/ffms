@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.csu.ffms.persistence.FundMapper">
+
+    <select id="getFundByFundCode" resultType="Fund">
+        select
+            fundcode as code,
+            userid as userid,
+            fundname as name,
+            fundquantity as quantity,
+            income
+        from fund
+        where fundcode=#{code} and userid=#{userid}
+    </select>
+
+    <select id="getFundByUserId" parameterType="string" resultType="Fund">
+        select
+            fundcode as code,
+            userid as userid,
+            fundname as name,
+            fundquantity as quantity,
+            income
+        from fund
+        where userid=#{value}
+    </select>
+
+    <insert id="insertFund" parameterType="Fund">
+        insert into fund(fundcode,userid,fundname,fundquantity,income)
+        values(#{code},#{userid},#{name},#{quantity},#{income})
+
+    </insert>
+
+    <delete id="deleteFund" parameterType="Fund">
+        delete from fund
+        where fundcode=#{code} and userid=#{userid}
+    </delete>
+
+    <update id="updateFund" parameterType="Fund">
+        update fund set
+            fundquantity=#{quantity},
+            income=#{income},
+            fundname=#{name}
+        where fundcode=#{code} and userid=#{userid}
+    </update>
+
+</mapper>
