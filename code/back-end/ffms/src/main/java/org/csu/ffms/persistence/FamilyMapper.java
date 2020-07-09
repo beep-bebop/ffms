@@ -8,6 +8,8 @@ package org.csu.ffms.persistence;
 public interface FamilyMapper {
     Family getFamilyByFamilyid(String familyid);
 
+    Family getFamilyByFamilyandFamilykey(Family family);
+
     void insertFamily(Family family);
 
     void updateFamily(Family family);

@@ -11,6 +11,17 @@
     WHERE FAMILY.FAMILYID = #{familyid}
     </select>
 
+    <select id="getFamilyByFamilyandFamilykey" parameterType="Family" resultType="Family">
+            SELECT
+          FAMILY.FAMILYID,
+          FAMILY.FAMILYNAME,
+          FAMILY.FAMILYKEY
+    FROM FAMILY
+     WHERE FAMILYID = #{familyid}
+      AND FAMILYKEY = #{familykey}
+    </select>
+
+
     <insert id="insertFamily" parameterType="Family">
     INSERT INTO FAMILY
       (FAMILYID, FAMILYNAME,FAMILYKEY)

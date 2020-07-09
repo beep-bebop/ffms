@@ -15,6 +15,14 @@ public class FamilyService {
         return familyMapper.getFamilyByFamilyid(familyid);
     }
 
+    public Family getFamily(String familyid, String familykey) {
+        Family family = new Family();
+        family.setFamilyid(familyid);
+        family.setFamilykey(familykey);
+        return familyMapper.getFamilyByFamilyandFamilykey(family);
+    }
+
+
     @Transactional
     public void insertFamily(Family family) {
          familyMapper.insertFamily(family);

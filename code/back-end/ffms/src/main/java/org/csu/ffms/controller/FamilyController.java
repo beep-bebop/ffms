@@ -47,4 +47,36 @@ public class FamilyController {
         System.out.println(JSONObject.toJSONString(json));//输出JSONObject对象转化成的json字符串
         return "JSONObject.toJSONString(json)";
     }
+
+    //加入家庭组
+    @PostMapping("joinFamily")
+    public String joinFamily(Account account,String familyid,String familykey)
+    {
+
+        Family family = familyService.getFamily(familyid,familykey);
+        if(family != null)  //加入成功
+        {
+            account.setFamilyid(familyid);
+            accountService.updateAccount(account);
+            JSONObject json = new JSONObject();
+            json.put("status",200);
+            json.put("data",account);
+            System.out.println(JSONObject.toJSONString(json));
+            return "JSONObject.toJSONString(json)";
+        }
+        else  //家庭组id或者密钥不正确
+        {
+            JSONObject json = new JSONObject();
+            json.put("status",403);
+            json.put("data",account);
+            System.out.println(JSONObject.toJSONString(json));
+            return "JSONObject.toJSONString(json)";
+        }
+    }
+
+
+    //退出家庭组
+
+
+
 }
