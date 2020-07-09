@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.csu.ffms.persistence.IncomeMapper">
+    <insert id="newIncome" parameterType="Income">
+        INSERT INTO INCOME (INCOMEID,INCOME,USERID,TIME,DESCRIPTION,TYPE)
+        VALUES (#{incomeId},#{income},#{userId},#{time},#{description},#{type})
+    </insert>
+
+    <delete id="deleteIncome" parameterType="int" >
+        delete FROM INCOME WHERE INCOMEID=#{incomeId}
+    </delete>
+
+    <update id="updateIncome" parameterType="Income">
+        UPDATE INCOME
+        SET INCOME = #{income},
+            TIME = #{time},
+            DESCRIPTION = #{description},
+            TYPE = #{type}
+        WHERE INCOMEID = #{incomeId}
+    </update>
+
+    <select id="findIncomeList" parameterType="Income" resultType="Income">
+        SELECT *
+        FROM INCOME
+        WHERE 1=1
+        <if test="userId != null">
+            AND Userid = #{userId}
+        </if>
+        <if test="time != null">
+            AND TIME = #{time}
+        </if>
+        <if test="type != null">
+            AND TYPE = #{type}
+        </if>
+    </select>
+
+</mapper>

@@ -26,7 +26,6 @@ public class AccountService {
     @Transactional
     public void insertAccount(Account account) {
         accountMapper.insertAccount(account);
-        accountMapper.insertRelation(account);
         accountMapper.insertSignon(account);
     }
 
@@ -34,7 +33,6 @@ public class AccountService {
     public void updateAccount(Account account) {
         accountMapper.updateAccount(account);
         accountMapper.updateRelation(account);
-
         if (account.getPassword() != null && account.getPassword().length() > 0) {
             accountMapper.updateSignon(account);
         }
@@ -66,6 +64,12 @@ public class AccountService {
         accountMapper.deleteAccount(userid);
         accountMapper.deleteRelation(userid);
         accountMapper.deleteSignon(userid);
+    }
+
+    @Transactional
+    public void quitFamily(String userid)
+    {
+        accountMapper.deleteRelation(userid);
     }
 
 }
