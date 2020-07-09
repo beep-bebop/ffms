@@ -3,6 +3,15 @@ package org.csu.ffms.domain;
 public class Family {
     private String familyid;
     private String familyname;
+    private String familykey;
+
+    public void setFamilykey(String familykey) {
+        this.familykey = familykey;
+    }
+
+    public String getFamilykey() {
+        return familykey;
+    }
 
     public String getFamilyid() {
         return familyid;

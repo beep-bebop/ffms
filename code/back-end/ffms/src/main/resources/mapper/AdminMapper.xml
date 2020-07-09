@@ -5,7 +5,7 @@
     <select id="getAdminByAdminid" parameterType="string" resultType="Admin">
             SELECT
           ADMINID,
-          ADMINPSAAWORD,
+          ADMINPSAAWORD
     FROM ADMIN
     WHERE ADMIN.ADMINID = #{adminid}
     </select>
@@ -13,7 +13,7 @@
     <select id="getAdminByAdminidAndPassword" parameterType="Admin" resultType="Admin">
     SELECT
           ADMINID,
-          ADMINPSAAWORD,
+          ADMINPSAAWORD
     FROM ADMIN
     WHERE ADMINID = #{adminid}
       AND PSAAWORD = #{password}
@@ -29,7 +29,7 @@
     <update id="updateAdmin" parameterType="Admin">
     UPDATE ACCOUNT SET
           ADMINID =  #{adminid},
-          PSAAWORD =  #{password},
+          PSAAWORD =  #{password}
     WHERE ADMINID = #{adminid}
     </update>
 
@@ -42,7 +42,7 @@
     SELECT
       SELECT
           ADMINID,
-          PSAAWORD,
+          PSAAWORD
     FROM ADMIN
     </select>
 

@@ -6,21 +6,23 @@
             SELECT
           FAMILY.FAMILYID,
           FAMILY.FAMILYNAME,
+          FAMILY.FAMILYKEY
     FROM FAMILY
     WHERE FAMILY.FAMILYID = #{familyid}
     </select>
 
     <insert id="insertFamily" parameterType="Family">
     INSERT INTO FAMILY
-      (FAMILYID, FAMILYNAME)
+      (FAMILYID, FAMILYNAME,FAMILYKEY)
     VALUES
-      (#{familyid}, #{familyname})
+      (#{familyid}, #{familyname},#{familykey})
   </insert>
 
     <update id="updateFamily" parameterType="Family">
     UPDATE ACCOUNT SET
           FAMILYID =  #{familyid},
           FAMILYNAME =  #{familyname},
+          FAMILYKEY = #{familykey}
     WHERE FAMILYID = #{familyid}
     </update>
 
@@ -34,6 +36,7 @@
       SELECT
           FAMILYID,
           FAMILYNAME,
+          FAMILY.FAMILYKEY
     FROM FAMILY
     </select>
 

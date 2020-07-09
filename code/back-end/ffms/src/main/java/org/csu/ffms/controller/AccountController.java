@@ -1,84 +1,75 @@
 package org.csu.ffms.controller;
 
-import org.csu.ffms.domain.Account;
-import org.csu.ffms.service.AccountService;
+import com.alibaba.fastjson.JSONObject;
+        import org.csu.ffms.domain.Account;
+        import org.csu.ffms.service.AccountService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.stereotype.Controller;
+        import org.springframework.web.bind.annotation.GetMapping;
+        import org.springframework.web.bind.annotation.PostMapping;
+        import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/account")
-@SessionAttributes(value = {"account" })
+@RequestMapping("/account/")
 public class AccountController {
     @Autowired
     private AccountService accountService;
 
-    //进入登录界面
-    @GetMapping("/viewSignon")
-    public String viewSignon(Model model)
-    {
-        //登录界面页面
-        return " ";
-    }
-
-    //进入注册界面
-    @GetMapping("/viewEditAccountForm")
-    public String viewEditAccountForm(Model model)
-    {
-        //注册界面页面
-        return " ";
-    }
-
     //注册新用户
-    @PostMapping("/newAccount")
-    public String newAccount(Account account , Model model)
+    @PostMapping("newAccount")
+    public String newAccount(Account account)
     {
         accountService.insertAccount(account);
-        //注册完后进入的页面
-        return " ";
+        JSONObject json = new JSONObject();//新建一个json对象
+        json.put("status",200);//放入键值对
+        json.put("data",account);
+        System.out.println(JSONObject.toJSONString(json));//输出JSONObject对象转化成的json字符串
+        return "JSONObject.toJSONString(json)";
     }
 
     //登录
-    @PostMapping("/signon")
-    public String signon(Account account1 , Model model)
+    @PostMapping("signon")
+    public String signon(String userid,String password)
     {
-        Account account = accountService.getAccount(account1.getUserid(),account1.getPassword());
-        if(account != null)
+        Account account = accountService.getAccount(userid,password);
+        if(account != null)  //登录成功
         {
-            model.addAttribute("account",account);
-            //登录成功后进入的页面
-            return " ";
+            JSONObject json = new JSONObject();
+            json.put("status",200);
+            json.put("data",account);
+            System.out.println(JSONObject.toJSONString(json));
+            return "JSONObject.toJSONString(json)";
         }
-        else if(account == null)
+        else  //用户名或密码不正确
         {
-            model.addAttribute("errormsg", "用户名或密码不正确");
-            //返回当前页面
-            return " ";
+            JSONObject json = new JSONObject();
+            json.put("status",403);
+            System.out.println(JSONObject.toJSONString(json));
+            return "JSONObject.toJSONString(json)";
         }
-        return null;
     }
 
     //退出登录
     @GetMapping("signout")
-    public String signout(Model model)
+    public String signout()
     {
-        model.addAttribute("account" , null);
-        //退出登录后返回的页面
-        return " ";
+        JSONObject json = new JSONObject();
+        json.put("status",200);
+        System.out.println(JSONObject.toJSONString(json));
+        return "JSONObject.toJSONString(json)";
     }
 
     //登录后修改用户信息
-    @PostMapping("/editAccountForm")
-    public String editAccouintForm(Account account ,Model model)
+    @PostMapping("editAccountForm")
+    public String editAccouintForm(Account account)
     {
         accountService.updateAccount(account);
-        //修改用户信息后返回的页面
-        return " ";
+        JSONObject json = new JSONObject();
+        json.put("status",200);
+        json.put("data",account);
+        System.out.println(JSONObject.toJSONString(json));
+        return "JSONObject.toJSONString(json)";
     }
 
 
