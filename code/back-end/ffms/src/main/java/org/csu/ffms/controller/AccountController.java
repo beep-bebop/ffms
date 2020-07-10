@@ -11,6 +11,8 @@ import org.csu.ffms.service.AccountService;
         import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/account/")
 public class AccountController {
@@ -19,9 +21,10 @@ public class AccountController {
 
     //注册新用户
     @PassToken
-    @PostMapping("newAccount")
-    public String newAccount(Account account)
+    @RequestMapping(value="newAccount",method = RequestMethod.POST)
+    public String newAccount(@RequestBody Account account)
     {
+        System.out.println(account.toString());
         accountService.insertAccount(account);
         JSONObject json = new JSONObject();//新建一个json对象
         json.put("status_code",0);//放入键值对
@@ -32,21 +35,26 @@ public class AccountController {
 
     //登录
     @PassToken
-    @PostMapping("signon")
-    public String signon(String userid,String password)
+    @RequestMapping(value="signon",method = RequestMethod.POST)
+    public String signon(@RequestBody Map<String, String> map)
     {
+        String userid=map.get("userid");
+        String password=map.get("password");
         Account account = accountService.getAccount(userid,password);
         JSONObject json = new JSONObject();
         if(account != null)  //登录成功
         {
             json.put("status_code",0);
             json.put("data",account);
+            String token = TokenUtil.getToken(account);
+            json.put("token",token);
         }
         else  //用户名或密码不正确
         {
             json.put("status_code",-2);
         }
         return JSONObject.toJSONString(json);
+
     }
 
     //退出登录
@@ -61,34 +69,14 @@ public class AccountController {
 
     //登录后修改用户信息
     @UserLoginToken
-    @PostMapping("editAccountForm")
-    public String editAccouintForm(Account account)
+    @RequestMapping(value="editAccountForm",method = RequestMethod.POST)
+    public String editAccouintForm(@RequestBody Account account)
     {
         accountService.updateAccount(account);
         JSONObject json = new JSONObject();
         json.put("status_code",0);
         json.put("data",account);
         return JSONObject.toJSONString(json);
-    }
-
-
-    @PassToken
-    @RequestMapping(value = "login",method = RequestMethod.POST)
-    public Object login(String username,String password){
-        System.out.println("hello,login");
-        Account account = accountService.getAccount(username,password);
-        JSONObject json = new JSONObject();
-
-        if(account==null){
-            json.put("code",0);
-            json.put("msg","用户名或密码错误");
-        }
-        else{
-            json.put("code",1);
-            String token = TokenUtil.getToken(account);
-            json.put("token",token);
-        }
-        return json;
     }
 
 

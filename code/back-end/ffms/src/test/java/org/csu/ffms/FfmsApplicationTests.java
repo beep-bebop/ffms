@@ -4,6 +4,7 @@ import org.csu.ffms.controller.DisburseController;
 import org.csu.ffms.controller.IncomeController;
 import org.csu.ffms.domain.Disburse;
 import org.csu.ffms.domain.Income;
+import org.csu.ffms.service.IncomeService;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +64,11 @@ class FfmsApplicationTests {
         incomeController.newIncome(income);
     }
 
+    @Autowired
+    IncomeService incomeService;
     @Test
     void contextLoads11() {
-        incomeController.deleteIncome(4);
+        incomeService.deleteIncome(1);
     }
 
     @Test

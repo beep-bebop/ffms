@@ -1,5 +1,6 @@
 package org.csu.ffms;
 
+import org.csu.ffms.persistence.AccountMapper;
 import org.junit.jupiter.api.Test;
 import org.csu.ffms.domain.Account;
 import org.csu.ffms.service.AccountService;
@@ -27,7 +28,7 @@ class AccountTest {
     @Test
     void getAccountByUseridAndPassword() {
         Account account=accountService.getAccount("1","123");
-        System.out.println(account.getUsername());
+        System.out.println(account.toString());
     }
 
     @Test
@@ -42,8 +43,20 @@ class AccountTest {
     void insertSignon() {
     }
 
+    @Autowired
+    AccountMapper accountMapper;
+
     @Test
     void updateAccount() {
+        Account account = new Account();
+        account.setUserid("1");
+        account.setPassword("11");
+        account.setUsername("lzh");
+        account.setEmail("1@qq.com");
+        account.setPhone("123");
+        accountMapper.updateAccount(account);
+        accountMapper.updateRelation(account);
+        accountMapper.updateSignon(account);
     }
 
     @Test

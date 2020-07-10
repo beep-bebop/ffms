@@ -8,7 +8,7 @@
         VALUES (#{incomeId},#{income},#{userId},#{time},#{description},#{type})
     </insert>
 
-    <delete id="deleteIncome" parameterType="int" >
+    <delete id="deleteIncome" parameterType="int">
         delete FROM INCOME WHERE INCOMEID=#{incomeId}
     </delete>
 

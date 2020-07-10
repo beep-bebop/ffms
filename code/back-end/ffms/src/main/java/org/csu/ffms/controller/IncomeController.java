@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/income/")
@@ -31,8 +32,8 @@ public class IncomeController {
     }
 
     @UserLoginToken
-    @PostMapping("new")
-    public String newIncome(Income income) {
+    @RequestMapping(value="new",method = RequestMethod.POST)
+    public String newIncome(@RequestBody Income income) {
         long time = System.currentTimeMillis();
         java.sql.Date date = new java.sql.Date(time);
         income.setTime(date);
@@ -45,7 +46,9 @@ public class IncomeController {
 
     @UserLoginToken
     @DeleteMapping("delete")
-    public String deleteIncome(int incomeId){
+    public String deleteIncome(@RequestBody Map<String,String>map){
+
+        int incomeId=Integer.parseInt(map.get("incomeId"));
         incomeService.deleteIncome(incomeId);
         JSONObject json = new JSONObject();
         json.put("status",0);
@@ -54,7 +57,7 @@ public class IncomeController {
 
     @UserLoginToken
     @PutMapping("update")
-    public String updateIncome(Income income){
+    public String updateIncome(@RequestBody Income income){
         incomeService.updateIncome(income);
         JSONObject json = new JSONObject();
         json.put("status",0);
@@ -64,7 +67,7 @@ public class IncomeController {
 
     @UserLoginToken
     @GetMapping("query")
-    public String findIncomeList(Income income){
+    public String findIncomeList(@RequestBody Income income){
         List<Income> incomeList=incomeService.findIncomeList(income);
         JSONObject json = new JSONObject();
         json.put("status",0);
