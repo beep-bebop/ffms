@@ -31,7 +31,6 @@ public class DisburseController {
     @Autowired
     Income income;
 
-    //新建支出款项
     @InitBinder
     protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -41,48 +40,41 @@ public class DisburseController {
     }
 
     @UserLoginToken
-    @PostMapping("new")
-    public String newDisburse(Disburse disburse) {
+    @RequestMapping(value="insert",method = RequestMethod.POST)
+    public String newDisburse(@RequestBody Disburse disburse) {
         disburseService.newDisburse(disburse);
-
         JSONObject json = new JSONObject();
         json.put("status",0);
         json.put("data",disburse);
-        System.out.println(JSONObject.toJSONString(json));
-
         return JSONObject.toJSONString(json);
     }
 
     //删除支出款项
     @UserLoginToken
-    @DeleteMapping("delete")
-    public String deleteDisburse(int disburseId){
+    @RequestMapping(value="delete",method = RequestMethod.DELETE)
+    public String deleteDisburse(@RequestParam("disburseid") int disburseId){
         disburseService.deleteDisburse(disburseId);
-
         JSONObject json = new JSONObject();
-        System.out.println(JSONObject.toJSONString(json));
         json.put("status",0);
         return JSONObject.toJSONString(json);
+
     }
 
     //更新支出款项
     @UserLoginToken
-    @PutMapping("update")
-    public String updateDisburse(Disburse disburse){
+    @RequestMapping(value="update",method = RequestMethod.PUT)
+    public String updateDisburse(@RequestBody Disburse disburse){
         disburseService.updateDisburse(disburse);
-
         JSONObject json = new JSONObject();
         json.put("status",0);
         json.put("data",disburse);
-        System.out.println(JSONObject.toJSONString(json));
-
         return JSONObject.toJSONString(json);
     }
 
     //可以通过userId，type，time对家庭支出表进行筛选，并排序
     @UserLoginToken
-    @GetMapping(value="query",produces = "application/Json;charset=UTF-8")
-    public String findDisburseList(Disburse disburse){
+    @RequestMapping(value="query",method = RequestMethod.GET)
+    public String findDisburseList(@RequestBody Disburse disburse){
         List<Disburse> disburseList=disburseService.findDisburseList(disburse);
         disburseService.sortByDate(disburseList);
 
@@ -152,4 +144,6 @@ public class DisburseController {
         System.out.println(JSONObject.toJSONString(json));
         return JSONObject.toJSONString(json);
     }
+
+
 }

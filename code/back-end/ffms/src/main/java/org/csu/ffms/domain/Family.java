@@ -28,4 +28,13 @@ public class Family {
     public void setFamilyname(String familyname) {
         this.familyname = familyname;
     }
+
+    @Override
+    public String toString() {
+        return "Family{" +
+                "familyid='" + familyid + '\'' +
+                ", familyname='" + familyname + '\'' +
+                ", familykey='" + familykey + '\'' +
+                '}';
+    }
 }

@@ -1,6 +1,7 @@
 package org.csu.ffms.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import org.csu.ffms.domain.Disburse;
 import org.csu.ffms.domain.Income;
 import org.csu.ffms.jwt.note.UserLoginToken;
 import org.csu.ffms.service.DisburseService;
@@ -15,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/income/")
@@ -33,41 +35,43 @@ public class IncomeController {
     }
 
     @UserLoginToken
-    @PostMapping("new")
-    public String newIncome(Income income) {
+    @RequestMapping(value="new",method = RequestMethod.POST)
+    public String newIncome(@RequestBody Income income) {
         long time = System.currentTimeMillis();
         java.sql.Date date = new java.sql.Date(time);
         income.setTime(date);
         incomeService.newIncome(income);
         JSONObject json = new JSONObject();
-        json.put("status", 0);
-        json.put("data", income);
+        json.put("status",0);
+        json.put("data",income);
         return JSONObject.toJSONString(json);
     }
 
     @UserLoginToken
     @DeleteMapping("delete")
-    public String deleteIncome(int incomeId) {
+    public String deleteIncome(@RequestBody Map<String,String>map){
+
+        int incomeId=Integer.parseInt(map.get("incomeId"));
         incomeService.deleteIncome(incomeId);
         JSONObject json = new JSONObject();
-        json.put("status", 0);
+        json.put("status",0);
         return JSONObject.toJSONString(json);
     }
 
     @UserLoginToken
     @PutMapping("update")
-    public String updateIncome(Income income) {
+    public String updateIncome(@RequestBody Income income){
         incomeService.updateIncome(income);
         JSONObject json = new JSONObject();
-        json.put("status", 0);
-        json.put("data", income);
+        json.put("status",0);
+        json.put("data",income);
         return JSONObject.toJSONString(json);
     }
 
     @UserLoginToken
     @GetMapping("query")
-    public String findIncomeList(Income income) {
-        List<Income> incomeList = incomeService.findIncomeList(income);
+    public String findIncomeList(@RequestBody Income income){
+        List<Income> incomeList=incomeService.findIncomeList(income);
         JSONObject json = new JSONObject();
         json.put("status", 0);
         json.put("data", incomeList);
