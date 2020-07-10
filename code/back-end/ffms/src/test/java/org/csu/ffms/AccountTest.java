@@ -45,6 +45,13 @@ class AccountTest {
 
     @Test
     void updateAccount() {
+        Account account = new Account();
+        account.setUserid("1");
+        account.setPassword("111");
+        account.setUsername("a");
+        account.setEmail("123@qq");
+        account.setPhone("123");
+        accountService.updateAccount(account);
     }
 
     @Test

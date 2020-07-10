@@ -53,7 +53,6 @@
 
     <update id="updateAccount" parameterType="Account">
     UPDATE ACCOUNT SET
-      USERID = #{userid},
       USERNAME = #{username},
       EMAIL = #{email},
       PHONE = #{phone}
@@ -62,16 +61,14 @@
 
     <update id="updateRelation" parameterType="Account">
     UPDATE RELATION SET
-      USERID = #{userid},
-      FAMILYID = #(familyid)
+      FAMILYID = #{familyid}
     WHERE USERID = #{userid}
   </update>
 
     <update id="updateSignon" parameterType="Account">
     UPDATE SIGNON SET
-    USERNAME = #{userid},
     PASSWORD = #{password}
-    WHERE USERNAME = #{userid}
+    WHERE USERID = #{userid}
   </update>
 
     <select id="getAllAccount" resultType="Account">
