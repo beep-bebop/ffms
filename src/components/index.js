@@ -8,4 +8,3 @@ Vue.component('d2-icon', () => import('./d2-icon'))
 Vue.component('d2-icon-svg', () => import('./d2-icon-svg/index.vue'))
 Vue.component('d2-count-up', () => import('./d2-count-up'))
 Vue.component('d2-module-index-menu', () => import('./d2-module-index-menu'))
-
