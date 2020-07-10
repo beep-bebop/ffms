@@ -1,107 +1,139 @@
 <template>
   <d2-container type="card" class="page">
-    <template slot="header">区域划分</template>
-    <div style="height: 800px; margin: -16px;">
-      <SplitPane :min-percent='20' :default-percent='30' split="vertical">
-        <template slot="paneL">
-          <div style="margin: 20px;">
-            <el-card shadow="hover" class="d2-card" style="background-color: #EACACA;margin: 20px">
-              <el-row>
-                <el-col>
-                  <div>
-                    <span style="font-size: 23px">股票</span>
-                  </div>
-                </el-col>
-                <el-col>
-                  <div class="group">
-                    <d2-count-up style="font-size: 50px" :end="100" :decimals="2"/>
-                  </div>
-                </el-col>
-              </el-row>
-            </el-card>
-            <el-card shadow="hover" class="d2-card" style="background-color: #F0DFB6;margin: 20px">
-              <el-row>
-                <el-col>
-                  <div>
-                    <span style="font-size: 23px">股票</span>
-                  </div>
-                </el-col>
-                <el-col>
-                  <div class="group">
-                    <d2-count-up style="font-size: 50px" :end="100" :decimals="2"/>
-                  </div>
-                </el-col>
-              </el-row>
-            </el-card>
-            <el-card shadow="hover" class="d2-card" style="background-color: #A7C3D7;margin: 20px">
-              <el-row>
-                <el-col>
-                  <div>
-                    <span style="font-size: 23px">股票</span>
-                  </div>
-                </el-col>
-                <el-col>
-                  <div class="group">
-                    <d2-count-up style="font-size: 50px" :end="100" :decimals="2"/>
-                  </div>
-                </el-col>
-              </el-row>
-            </el-card>
-            <el-card shadow="hover" class="d2-card" style="background-color: #DFDFBD;margin: 20px">
-              <el-row>
-                <el-col>
-                  <div>
-                    <span style="font-size: 23px">股票</span>
-                  </div>
-                </el-col>
-                <el-col>
-                  <div class="group">
-                    <d2-count-up style="font-size: 50px" :end="100" :decimals="2"/>
-                  </div>
-                </el-col>
-              </el-row>
-            </el-card>
-          </div>
+    <d2-grid-layout
+      v-bind="layout"
+      @layout-updated="layoutUpdatedHandler">
+      <d2-grid-item
+        v-for="(item, index) in layout.layout"
+        :key="index"
+        v-bind="item"
+        @resize="resizeHandler"
+        @move="moveHandler"
+        @resized="resizedHandler"
+        @moved="movedHandler">
+        <template v-if="item.i === '4'">
+          <el-card shadow="hover" class="page_card">
+            {{item.i}}
+          </el-card>
         </template>
-        <template slot="paneR">
-          <SplitPane split="horizontal">
-            <template slot="paneL"><div style="margin: 10px;">右上</div></template>
-            <template slot="paneR"><div style="margin: 10px;">右下</div></template>
-          </SplitPane>
+        <template v-if="item.i === '5'">
+          <el-card shadow="hover" class="page_card">
+            {{item.i}}
+          </el-card>
         </template>
-      </SplitPane>
-    </div>
+        <template v-if="item.i === '6'">
+          <el-card shadow="hover" class="page_card">
+            {{item.i}}
+          </el-card>
+        </template>
+        <template v-if="item.i < '4'">
+          <el-card shadow="hover" class="page_card" :style="{'background-color': item.color}">
+            {{item.type}}
+            <div class="group">
+              <d2-count-up style="font-size: 50px" :end=item.amount :decimals="2"/>
+            </div>
+          </el-card>
+        </template>
+      </d2-grid-item>
+    </d2-grid-layout>
   </d2-container>
+
 </template>
 
 <script>
 import Vue from 'vue'
 import SplitPane from 'vue-splitpane'
+import { GridLayout, GridItem } from 'vue-grid-layout'
+Vue.component('d2-grid-layout', GridLayout)
+Vue.component('d2-grid-item', GridItem)
 Vue.component('SplitPane', SplitPane)
 export default {
+  data () {
+    return {
+      layout: {
+        layout: [
+          { x: 0, y: 0, w: 4, h: 3, i: '0', color: '#EACACA', type: '股票', amount: '100' },
+          { x: 0, y: 3, w: 4, h: 3, i: '1', color: '#F0DFB6', type: '股票', amount: '100' },
+          { x: 0, y: 6, w: 4, h: 3, i: '2', color: '#A7C3D7', type: '股票', amount: '100' },
+          { x: 0, y: 9, w: 4, h: 3, i: '3', color: '#DFDFBD', type: '股票', amount: '100' },
+          { x: 4, y: 0, w: 4, h: 6, i: '4' },
+          { x: 8, y: 5, w: 2, h: 5, i: '5' },
+          { x: 0, y: 10, w: 8, h: 5, i: '6' }
+        ],
+        colNum: 12,
+        rowHeight: 30,
+        isDraggable: true,
+        isResizable: true,
+        isMirrored: false,
+        verticalCompact: true,
+        margin: [20, 20],
+        useCssTransforms: true
+      }
+    }
+  },
+  mounted () {
+    // 加载完成后显示提示
+    this.showInfo()
+  },
+  methods: {
+    log (arg1 = 'log', ...logs) {
+      if (logs.length === 0) {
+        console.log(arg1)
+      } else {
+        console.group(arg1)
+        logs.forEach(e => {
+          console.log(e)
+        })
+        console.groupEnd()
+      }
+    },
+    // 显示提示
+    showInfo () {
+      this.$notify({
+        title: '提示',
+        message: '你可以按住卡片拖拽改变位置；或者在每个卡片的右下角拖动，调整卡片大小'
+      })
+    },
+    // 测试代码
+    layoutUpdatedHandler (newLayout) {
+      console.group('layoutUpdatedHandler')
+      newLayout.forEach(e => {
+        console.log(`{'x': ${e.x}, 'y': ${e.y}, 'w': ${e.w}, 'h': ${e.h}, 'i': '${e.i}'},`)
+      })
+      console.groupEnd()
+    },
+    resizeHandler (i, newH, newW) {
+      this.log('resizeHandler', `i: ${i}, newH: ${newH}, newW: ${newW}`)
+    },
+    moveHandler (i, newX, newY) {
+      this.log('moveHandler', `i: ${i}, newX: ${newX}, newY: ${newY}`)
+    },
+    resizedHandler (i, newH, newW, newHPx, newWPx) {
+      this.log('resizedHandler', `i: ${i}, newH: ${newH}, newW: ${newW}, newHPx: ${newHPx}, newWPx: ${newWPx}`)
+    },
+    movedHandler (i, newX, newY) {
+      this.log('movedHandler', `i: ${i}, newX: ${newX}, newY: ${newY}`)
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.page {
-  .logo {
-    width: 120px;
-  }
-  .btn-group {
-    color: $color-text-placehoder;
-    font-size: 12px;
-    line-height: 12px;
-    margin-top: 0px;
-    margin-bottom: 20px;
-    .btn-group__btn {
-      color: $color-text-sub;
-      &:hover {
-        color: $color-text-main;
+  .page {
+    .vue-grid-layout {
+      background-color: $color-bg;
+      border-radius: 4px;
+      margin: -10px;
+      .page_card {
+        height: 100%;
+        @extend %unable-select;
       }
-      &.btn-group__btn--link {
-        color: $color-primary;
+      .vue-resizable-handle {
+        opacity: .3;
+        &:hover{
+          opacity: 1;
+        }
       }
     }
   }
-}
 </style>
