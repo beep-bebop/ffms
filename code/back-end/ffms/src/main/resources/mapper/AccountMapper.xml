@@ -75,7 +75,6 @@
   </update>
 
     <select id="getAllAccount" resultType="Account">
-    SELECT
       SELECT
           SIGNON.USERID,
           SIGNON.PASSWORD,
@@ -104,8 +103,7 @@
   </delete>
 
 
-    <select id="getAllAccountByFamilyid" parameterType="String" resultType="Account">
-    SELECT
+    <select id="getAllAccountByFamilyid" parameterType="string" resultType="Account">
       SELECT
           SIGNON.USERID,
           SIGNON.PASSWORD,
@@ -114,9 +112,9 @@
           ACCOUNT.PHONE,
           RELATION.FAMILYID
     FROM ACCOUNT, RELATION, SIGNON
-    WHERE SIGNON.USERID = ACCOUNT.USERID
+    WHERE RELATION.FAMILYID = #{familyid}
+      AND SIGNON.USERID = ACCOUNT.USERID
       AND RELATION.USERID = ACCOUNT.USERID
-      AND RELATION.FAMILYID = #{familyid}
     </select>
 
 

@@ -39,7 +39,6 @@
   </delete>
 
     <select id="getAllAdmin" resultType="Admin">
-    SELECT
       SELECT
           ADMINID,
           PSAAWORD
