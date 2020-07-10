@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.csu.ffms.persistence.AdminMapper">
     <select id="getAdminByAdminid" parameterType="string" resultType="Admin">
-            SELECT
+    SELECT
           ADMINID,
           ADMINPSAAWORD
     FROM ADMIN
