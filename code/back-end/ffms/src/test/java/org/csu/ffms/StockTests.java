@@ -1,5 +1,6 @@
 package org.csu.ffms;
 
+import org.csu.ffms.domain.Security;
 import org.csu.ffms.domain.Stock;
 import org.csu.ffms.service.StockService;
 import org.junit.jupiter.api.Test;
@@ -36,7 +37,8 @@ class StockTests {
     @Test
     public void testGetStockByUserId(){
         System.out.println("get userid:1 all stocks");
-        List<Stock> stockList=stockService.getStockByUserId("1");
+        List<Stock> stockList=stockService.getStockByUserId("50");
+        System.out.println(stockList==null);
         for (Stock stock:stockList
              ) {
             System.out.println(stock.toString());

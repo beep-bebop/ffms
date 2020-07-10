@@ -2,6 +2,7 @@ package org.csu.ffms.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import org.csu.ffms.domain.Family;
+import org.csu.ffms.jwt.note.UserLoginToken;
 import org.csu.ffms.service.FamilyService;
 import org.csu.ffms.domain.Account;
 import org.csu.ffms.service.AccountService;
@@ -25,6 +26,7 @@ public class FamilyController {
     private FamilyService familyService;
 
     //创建新的家庭组
+    @UserLoginToken
     @PostMapping("newFamily")
     public String newFamily(Account account,Family family)
     {
@@ -49,6 +51,7 @@ public class FamilyController {
     }
 
     //加入家庭组
+    @UserLoginToken
     @PostMapping("joinFamily")
     public String joinFamily(Account account,String familyid,String familykey)
     {
@@ -76,6 +79,7 @@ public class FamilyController {
 
 
     //退出家庭组
+    @UserLoginToken
     @PostMapping("quitFamily")
     public String quitFamily(Account account)
     {

@@ -58,8 +58,6 @@ class AccountTest {
 
     @Test
     void getAllAccount() {
-        List <Account> list1=accountService.getAllAccount();
-        System.out.println(list1.size());
     }
 
     @Test
@@ -75,9 +73,11 @@ class AccountTest {
     }
 
     @Test
-    void getALLbyFamilyId(){
-        List <Account> list1=accountService.getAllAccountByFamilyid("1");
-        System.out.println(list1.size());
-    }
+    void getAllAccountByFamilyidTest(){
+        List<Account> accountList= accountService.getAllAccountByFamilyid("1");
+        for (Account a : accountList) {
+            System.out.println(a.toString());
+        }
 
+    }
 }
