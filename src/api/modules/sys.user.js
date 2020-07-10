@@ -44,5 +44,12 @@ export default ({ request }) => ({
       method: 'post',
       data
     })
+  },
+  SYS_USER_CHANGEPWD (data = {}) {
+    return request({
+      url: '/forgetPwd',
+      method: 'post',
+      data
+    })
   }
 })
