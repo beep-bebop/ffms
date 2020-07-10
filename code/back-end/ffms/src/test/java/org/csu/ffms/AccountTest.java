@@ -1,5 +1,6 @@
 package org.csu.ffms;
 
+import org.csu.ffms.persistence.AccountMapper;
 import org.junit.jupiter.api.Test;
 import org.csu.ffms.domain.Account;
 import org.csu.ffms.service.AccountService;
@@ -57,6 +58,8 @@ class AccountTest {
 
     @Test
     void getAllAccount() {
+        List <Account> list1=accountService.getAllAccount();
+        System.out.println(list1.size());
     }
 
     @Test
@@ -70,4 +73,11 @@ class AccountTest {
     @Test
     void deleteSignon() {
     }
+
+    @Test
+    void getALLbyFamilyId(){
+        List <Account> list1=accountService.getAllAccountByFamilyid("1");
+        System.out.println(list1.size());
+    }
+
 }
