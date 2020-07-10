@@ -31,8 +31,8 @@ public class DisburseController {
     }
 
     @UserLoginToken
-    @PostMapping("new")
-    public String newDisburse(Disburse disburse) {
+    @RequestMapping(value="insert",method = RequestMethod.POST)
+    public String newDisburse(@RequestBody Disburse disburse) {
         long time = System.currentTimeMillis();
         java.sql.Date date = new java.sql.Date(time);
         disburse.setTime(date);
@@ -44,8 +44,8 @@ public class DisburseController {
     }
 
     @UserLoginToken
-    @DeleteMapping("delete")
-    public String deleteDisburse(int disburseId){
+    @RequestMapping(value="delete",method = RequestMethod.DELETE)
+    public String deleteDisburse(@RequestParam("disburseid") int disburseId){
         disburseService.deleteDisburse(disburseId);
         JSONObject json = new JSONObject();
         json.put("status",0);
@@ -54,8 +54,8 @@ public class DisburseController {
     }
 
     @UserLoginToken
-    @PutMapping("update")
-    public String updateDisburse(Disburse disburse){
+    @RequestMapping(value="update",method = RequestMethod.PUT)
+    public String updateDisburse(@RequestBody Disburse disburse){
         disburseService.updateDisburse(disburse);
         JSONObject json = new JSONObject();
         json.put("status",0);
@@ -64,8 +64,8 @@ public class DisburseController {
     }
 
     @UserLoginToken
-    @GetMapping(value="query",produces = "application/Json;charset=UTF-8")
-    public String findDisburseList(Disburse disburse){
+    @RequestMapping(value="query",method = RequestMethod.GET)
+    public String findDisburseList(@RequestBody Disburse disburse){
         List<Disburse> disburseList=disburseService.findDisburseList(disburse);
         JSONObject json = new JSONObject();
         json.put("status",0);

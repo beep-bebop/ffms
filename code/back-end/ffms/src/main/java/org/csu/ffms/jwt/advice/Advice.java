@@ -42,10 +42,10 @@ public class Advice implements ResponseBodyAdvice<Object> {
 
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        List<String> passPath= new ArrayList<>(Arrays.asList("/account/login"));
+        List<String> passPath= new ArrayList<>(Arrays.asList("/account/signon"));
 
         System.out.println(request.getURI().getPath());
-        System.out.println( Pattern.matches(".*/account/login", request.getURI().toString()));
+        System.out.println( Pattern.matches(".*/account/signon", request.getURI().toString()));
         if(!passPath.contains(request.getURI().getPath()) ){
             HttpHeaders headers = request.getHeaders();
             String token=headers.get("token").get(0);

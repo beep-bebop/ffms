@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @创建人 ： 李振豪
@@ -50,7 +51,9 @@ public class SecurityController {
      */
     @UserLoginToken
     @GetMapping("/securityInfo")
-    public String getSecurity(String userid,String number){
+    public String getSecurity(@RequestBody Map<String,String>map){
+        String number=map.get("number");
+        String userid=map.get("userid");
         JSONObject jsonObject = new JSONObject();
         try{
             Security security = securityService.getSecurityBySecurityNumber(number,userid);
@@ -74,7 +77,8 @@ public class SecurityController {
      */
     @UserLoginToken
     @GetMapping("/ownSecurity")
-    public String getAllSecurity(String userid){
+    public String getAllSecurity(@RequestBody Map<String,String>map){
+        String userid = map.get("userid");
         JSONObject jsonObject = new JSONObject();
         try{
             List<Security> securityList =securityService.getSecurityByUserId(userid);
@@ -98,7 +102,8 @@ public class SecurityController {
      */
     @UserLoginToken
     @GetMapping("/familySecuritys")
-    public String getFamilySecuritys(String familyid){
+    public String getFamilySecuritys(@RequestBody Map<String,String>map){
+        String familyid=map.get("familyid");
         JSONObject jsonObject = new JSONObject();
         try{
             List<Account> accountList= accountService.getAllAccountByFamilyid(familyid);
@@ -129,7 +134,7 @@ public class SecurityController {
      */
     @UserLoginToken
     @PostMapping("/insertSecurity")
-    public String insertSecurity(Security security){
+    public String insertSecurity(@RequestBody Security security){
         JSONObject jsonObject = new JSONObject();
         try{
             securityService.insertSecurity(security);
@@ -152,7 +157,9 @@ public class SecurityController {
      */
     @UserLoginToken
     @DeleteMapping("/deleteSecurity")
-    public String deleteSecurity(String userid,String number){
+    public String deleteSecurity(@RequestBody Map<String,String>map){
+        String userid=map.get("userid");
+        String number=map.get("number");
         JSONObject jsonObject = new JSONObject();
         try{
             securityService.deleteSecurity(securityService.getSecurityBySecurityNumber(number, userid));
@@ -175,7 +182,7 @@ public class SecurityController {
      */
     @UserLoginToken
     @PutMapping("/updateSecurity")
-    public String updateSecurity(Security security){
+    public String updateSecurity(@RequestBody Security security){
         JSONObject jsonObject = new JSONObject();
         try{
             securityService.updateSecurity(security);
@@ -190,7 +197,10 @@ public class SecurityController {
 
     @UserLoginToken
     @PostMapping("/time")
-    public String getSecurityByTime(String userid,String starttime,String endtime){
+    public String getSecurityByTime(@RequestBody Map<String,String>map){
+        String userid=map.get("userid");
+        String starttime=map.get("starttime");
+        String endtime=map.get("endtime");
         JSONObject jsonObject = new JSONObject();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -209,7 +219,9 @@ public class SecurityController {
 
     @UserLoginToken
     @PostMapping("/type")
-    public String getSecurityByType(String userid,String type){
+    public String getSecurityByType(@RequestBody Map<String,String>map){
+        String userid=map.get("userid");
+        String type=map.get("type");
         JSONObject jsonObject = new JSONObject();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
