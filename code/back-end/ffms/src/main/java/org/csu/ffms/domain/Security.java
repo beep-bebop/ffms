@@ -1,5 +1,7 @@
 package org.csu.ffms.domain;
 
+import com.alibaba.fastjson.JSONObject;
+
 import java.util.Date;
 
 /**
@@ -82,5 +84,9 @@ public class Security {
                 ", date=" + date +
                 ", income=" + income +
                 '}';
+    }
+
+    public String toJSONString(){
+        return  JSONObject.toJSONString(this);
     }
 }

@@ -1,5 +1,6 @@
 package org.csu.ffms.domain;
 
+
 public class Account {
     private String userid;
     private String password;
@@ -7,6 +8,18 @@ public class Account {
     private String email;
     private String phone;
     private String familyid;
+
+    public Account() {
+    }
+
+    public Account(String userid, String password, String username, String email, String phone, String familyid) {
+        this.userid = userid;
+        this.password = password;
+        this.username = username;
+        this.email = email;
+        this.phone = phone;
+        this.familyid = familyid;
+    }
 
     public String getUserid() {
         return userid;
@@ -54,5 +67,17 @@ public class Account {
 
     public void setFamilyid(String familyid) {
         this.familyid = familyid;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "userid='" + userid + '\'' +
+                ", password='" + password + '\'' +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", phone='" + phone + '\'' +
+                ", familyid='" + familyid + '\'' +
+                '}';
     }
 }

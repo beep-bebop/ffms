@@ -11,7 +11,7 @@
           ACCOUNT.USERNAME,
           ACCOUNT.EMAIL,
           ACCOUNT.PHONE,
-          RELATION.FAMILYID,
+          RELATION.FAMILYID
     FROM ACCOUNT, RELATION, SIGNON
     WHERE ACCOUNT.USERID = #{userid}
       AND SIGNON.USERID = ACCOUNT.USERID
@@ -25,7 +25,7 @@
           ACCOUNT.USERNAME,
           ACCOUNT.EMAIL,
           ACCOUNT.PHONE,
-          RELATION.FAMILYID,
+          RELATION.FAMILYID
     FROM ACCOUNT, RELATION, SIGNON
     WHERE ACCOUNT.USERID = #{userid}
       AND SIGNON.PASSWORD = #{password}
@@ -42,8 +42,8 @@
   </insert>
 
     <insert id="insertRelation" parameterType="Account">
-    INSERT INTO RELATION (FAMILYID, USERID)
-    VALUES (#{familyid}, #{userid})
+    INSERT INTO RELATION (USERID,FAMILYID)
+    VALUES (#{userid},#{familyid})
   </insert>
 
     <insert id="insertSignon" parameterType="Account">
@@ -53,7 +53,7 @@
 
     <update id="updateAccount" parameterType="Account">
     UPDATE ACCOUNT SET
-      USERID = #{userid}
+      USERID = #{userid},
       USERNAME = #{username},
       EMAIL = #{email},
       PHONE = #{phone}
@@ -62,27 +62,26 @@
 
     <update id="updateRelation" parameterType="Account">
     UPDATE RELATION SET
+      USERID = #{userid},
       FAMILYID = #(familyid)
-      USERID = #{userid}
     WHERE USERID = #{userid}
   </update>
 
     <update id="updateSignon" parameterType="Account">
     UPDATE SIGNON SET
-    USERNAME = #{userid}
+    USERNAME = #{userid},
     PASSWORD = #{password}
     WHERE USERNAME = #{userid}
   </update>
 
     <select id="getAllAccount" resultType="Account">
-    SELECT
       SELECT
           SIGNON.USERID,
           SIGNON.PASSWORD,
           ACCOUNT.USERNAME,
           ACCOUNT.EMAIL,
           ACCOUNT.PHONE,
-          RELATION.FAMILYID,
+          RELATION.FAMILYID
     FROM ACCOUNT, RELATION, SIGNON
     WHERE SIGNON.USERID = ACCOUNT.USERID
       AND RELATION.USERID = ACCOUNT.USERID
@@ -102,6 +101,21 @@
     DELETE FROM signon
     WHERE userid=#{userid}
   </delete>
+
+
+    <select id="getAllAccountByFamilyid" parameterType="String" resultType="Account">
+    SELECT
+          SIGNON.USERID,
+          SIGNON.PASSWORD,
+          ACCOUNT.USERNAME,
+          ACCOUNT.EMAIL,
+          ACCOUNT.PHONE,
+          RELATION.FAMILYID
+    FROM ACCOUNT, RELATION, SIGNON
+    WHERE SIGNON.USERID = ACCOUNT.USERID
+      AND RELATION.USERID = ACCOUNT.USERID
+      AND RELATION.FAMILYID = #{familyid}
+    </select>
 
 
 

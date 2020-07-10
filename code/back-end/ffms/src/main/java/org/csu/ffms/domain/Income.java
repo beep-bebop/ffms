@@ -8,7 +8,7 @@ import java.util.Date;
 @Component("Income")
 public class Income {
     private int incomeId;
-    private int income;
+    private float income;
     private String userId;
     @JSONField(format = "yyyy-MM-dd")
     private Date time;
@@ -23,11 +23,11 @@ public class Income {
         this.incomeId = incomeId;
     }
 
-    public int getIncome() {
+    public float getIncome() {
         return income;
     }
 
-    public void setIncome(int income) {
+    public void setIncome(float income) {
         this.income = income;
     }
 

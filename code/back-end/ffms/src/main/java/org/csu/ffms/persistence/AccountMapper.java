@@ -10,6 +10,8 @@ public interface AccountMapper {
 
     Account getAccountByUseridAndPassword(Account account);
 
+    List<Account> getAllAccountByFamilyid(String familyid);
+
     void insertAccount(Account account);
 
     void insertRelation(Account account);
