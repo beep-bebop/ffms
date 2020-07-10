@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.csu.ffms.persistence.FamilyMapper">
     <select id="getFamilyByFamilyid" parameterType="string" resultType="Family">
-            SELECT
+    SELECT
           FAMILY.FAMILYID,
           FAMILY.FAMILYNAME,
           FAMILY.FAMILYKEY
@@ -12,7 +12,7 @@
     </select>
 
     <select id="getFamilyByFamilyandFamilykey" parameterType="Family" resultType="Family">
-            SELECT
+    SELECT
           FAMILY.FAMILYID,
           FAMILY.FAMILYNAME,
           FAMILY.FAMILYKEY
@@ -44,7 +44,6 @@
 
     <select id="getAllFamily" resultType="Family">
     SELECT
-      SELECT
           FAMILYID,
           FAMILYNAME,
           FAMILY.FAMILYKEY

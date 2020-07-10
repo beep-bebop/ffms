@@ -13,23 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 @MapperScan("org.csu.ffms.persistence")
 class FfmsApplicationTests {
-    @Autowired
-    Disburse disburse;
-    @Autowired
-    DisburseController disburseController;
-    @Autowired
-    Income income;
-    @Autowired
-    IncomeController incomeController;
 
-   @Test
-    void contextLoads() {
-        disburse.setAmount_paid(100);
-        disburse.setDescription("吃饭");
-        disburse.setType("eat");
-        disburse.setUserId("11111");
-        disburseController.newDisburse(disburse);
-    }
 
     @Test
     void contextLoads1() {

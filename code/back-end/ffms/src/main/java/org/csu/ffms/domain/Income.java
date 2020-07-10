@@ -1,5 +1,6 @@
 package org.csu.ffms.domain;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -9,6 +10,7 @@ public class Income {
     private int incomeId;
     private float income;
     private String userId;
+    @JSONField(format = "yyyy-MM-dd")
     private Date time;
     private String description;
     private String type;

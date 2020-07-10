@@ -5,7 +5,7 @@
 <mapper namespace="org.csu.ffms.persistence.DisburseMapper">
     <insert id="newDisburse" parameterType="Disburse">
         INSERT INTO DISBURSE (AMOUNT_PAID,USERID,TIME,DESCRIPTION,TYPE)
-        VALUES (#{amount_paid},#{userId},#{time},#{description},#{type})
+        VALUES (-#{amount_paid},#{userId},#{time},#{description},#{type})
     </insert>
     
     <delete id="deleteDisburse" parameterType="int" >
@@ -14,10 +14,19 @@
 
     <update id="updateDisburse" parameterType="Disburse">
         UPDATE DISBURSE
-        SET AMOUNT_PAID = #{amount_paid},
-            TIME = #{time},
-            DESCRIPTION = #{description},
-            TYPE = #{type}
+        SET DISBURSEID = #{disburseId}
+        <if test="amount_paid != null">
+            ,AMOUNT_PAID = -#{amount_paid}
+        </if>
+        <if test="time != null">
+            ,TIME = #{time}
+        </if>
+        <if test="description != null">
+            ,DESCRIPTION = #{description}
+        </if>
+        <if test="type != null">
+            ,TYPE = #{type}
+        </if>
         WHERE DISBURSEID = #{disburseId}
     </update>
     
@@ -26,7 +35,15 @@
         FROM DISBURSE
         WHERE 1=1
         <if test="userId != null">
-            AND Userid = #{userId}
+            AND USERID IN (
+                SELECT userid
+                FROM relation
+                WHERE
+                FAMILYID = (
+                  SELECT FAMILYID
+                  FROM RELATION
+                  WHERE USERID = #{userId}
+            ))
         </if>
         <if test="time != null">
             AND TIME = #{time}
@@ -35,5 +52,29 @@
             AND TYPE = #{type}
         </if>
     </select>
+
+    <select id="findFamilyMember" parameterType="String" resultType="String">
+        SELECT userid
+        FROM relation
+        WHERE
+        FAMILYID = (
+          SELECT FAMILYID
+          FROM RELATION
+          WHERE USERID = #{userId}
+        )
+    </select>
+
+    <select id="findFamily" parameterType="String" resultType="String">
+        SELECT FAMILYNAME
+          FROM RELATION,FAMILY
+          WHERE RELATION.FAMILYID = FAMILY.FAMILYID AND USERID = #{userId}
+    </select>
+
+    <select id="totalDisbursement" parameterType="Disburse" resultType="int">
+        SELECT IFNULL(SUM(AMOUNT_PAID),0)
+        FROM DISBURSE
+        WHERE  USERID = #{userId} AND TIME =#{time,jdbcType=DATE}
+    </select>
+
 
 </mapper>
