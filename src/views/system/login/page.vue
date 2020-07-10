@@ -72,12 +72,12 @@
               class="page-login--options"
               flex="main:justify cross:center">
               <span><d2-icon name="question-circle"/> 忘记密码</span>
-              <span>注册用户</span>
+              <span @click="handleCommand()">注册用户</span>
             </p>
-            <!-- quick login -->
-            <el-button class="page-login--quick" size="default" type="info" @click="dialogVisible = true">
-              快速选择用户（测试功能）
-            </el-button>
+<!--            &lt;!&ndash; quick login &ndash;&gt;-->
+<!--            <el-button class="page-login&#45;&#45;quick" size="default" type="info" @click="dialogVisible = true">-->
+<!--              快速选择用户（测试功能）-->
+<!--            </el-button>-->
           </div>
         </div>
         <div class="page-login--content-footer">
@@ -98,19 +98,19 @@
         </div>
       </div>
     </div>
-    <el-dialog
-      title="快速选择用户"
-      :visible.sync="dialogVisible"
-      width="400px">
-      <el-row :gutter="10" style="margin: -20px 0px -10px 0px;">
-        <el-col v-for="(user, index) in users" :key="index" :span="8">
-          <div class="page-login--quick-user" @click="handleUserBtnClick(user)">
-            <d2-icon name="user-circle-o"/>
-            <span>{{user.name}}</span>
-          </div>
-        </el-col>
-      </el-row>
-    </el-dialog>
+<!--    <el-dialog-->
+<!--      title="快速选择用户"-->
+<!--      :visible.sync="dialogVisible"-->
+<!--      width="400px">-->
+<!--      <el-row :gutter="10" style="margin: -20px 0px -10px 0px;">-->
+<!--        <el-col v-for="(user, index) in users" :key="index" :span="8">-->
+<!--          <div class="page-login&#45;&#45;quick-user" @click="handleUserBtnClick(user)">-->
+<!--            <d2-icon name="user-circle-o"/>-->
+<!--            <span>{{user.name}}</span>-->
+<!--          </div>-->
+<!--        </el-col>-->
+<!--      </el-row>-->
+<!--    </el-dialog>-->
   </div>
 </template>
 
@@ -192,21 +192,22 @@ export default {
     refreshTime () {
       this.time = dayjs().format('HH:mm:ss')
     },
-    /**
-     * @description 接收选择一个用户快速登录的事件
-     * @param {Object} user 用户信息
-     */
-    handleUserBtnClick (user) {
-      this.formLogin.username = user.username
-      this.formLogin.password = user.password
-      this.submit()
-    },
+    // /**
+    //  * @description 接收选择一个用户快速登录的事件
+    //  * @param {Object} user 用户信息
+    //  */
+    // handleUserBtnClick (user) {
+    //   this.formLogin.username = user.username
+    //   this.formLogin.password = user.password
+    //   this.submit()
+    // },
     /**
      * @description 提交表单
      */
     // 提交登录信息
     submit () {
       this.$refs.loginForm.validate((valid) => {
+        console.log('fail')
         if (valid) {
           // 登录
           // 注意 这里的演示没有传验证码
@@ -217,8 +218,6 @@ export default {
           })
             .then(() => {
               // 重定向对象不存在则返回顶层路径
-              console.log('aaaaaaaaaaa')
-              console.log(this.$route.query.redirect)
               this.$router.replace(this.$route.query.redirect || '/')
             })
         } else {
@@ -226,6 +225,9 @@ export default {
           this.$message.error('表单校验失败，请检查')
         }
       })
+    },
+    handleCommand () {
+      this.$router.push('/logon')
     }
   }
 }

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import menu from '@/menu/modules/cash'
+import menu from '@/menu/modules/stocks'
 export default {
   menu
 }

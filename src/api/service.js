@@ -26,14 +26,17 @@ function createService () {
       const dataAxios = response.data
       console.log(dataAxios)
       // 这个状态码是和后端约定的
-      const { code } = dataAxios
+      // eslint-disable-next-line camelcase
+      const { status_code } = dataAxios
       // 根据 code 进行判断
-      if (code === undefined) {
+      // eslint-disable-next-line camelcase
+      if (status_code === undefined) {
         // 如果没有 code 代表这不是项目后端开发的接口 比如可能是 D2Admin 请求最新版本
         return dataAxios
       } else {
         // 有 code 代表这是一个后端接口 可以进行进一步的判断
-        switch (code) {
+        // eslint-disable-next-line camelcase
+        switch (status_code) {
           case 0:
             // [ 示例 ] code === 0 代表没有错误
             return dataAxios.data

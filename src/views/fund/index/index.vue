@@ -1,14 +1,14 @@
 <template>
-    <d2-container>
-      fund page
-      <d2-module-index-menu :menu="menu"/>
-    </d2-container>
+  <d2-container type="card">
+    <template slot="header">区域划分</template>
+    <div style="height: 400px; margin: -16px;">
+      gooooooooooood
+    </div>
+  </d2-container>
 </template>
 
 <script>
-import menu from '@/menu/modules/cash'
 export default {
-  menu
 }
 </script>
 

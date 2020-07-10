@@ -1,72 +1,106 @@
 <template>
-  <div class="page-login">
-    <div class="page-login--layer page-login--layer-area">
+  <div class="page-logon">
+    <div class="page-logon--layer page-logon--layer-area">
       <ul class="circles">
         <li v-for="n in 10" :key="n"></li>
       </ul>
     </div>
     <div
-      class="page-login--layer page-login--layer-time"
+      class="page-logon--layer page-logon--layer-time"
       flex="main:center cross:center">
       {{time}}
     </div>
-    <div class="page-login--layer">
+    <div class="page-logon--layer">
       <div
-        class="page-login--content"
+        class="page-logon--content"
         flex="dir:top main:justify cross:stretch box:justify">
-        <div class="page-login--content-header">
-          <p class="page-login--content-header-motto">
+        <div class="page-logon--content-header">
+          <p class="page-logon--content-header-motto">
             为人生更自由
           </p>
         </div>
         <div
-          class="page-login--content-main"
+          class="page-logon--content-main"
           flex="dir:top main:center cross:center">
           <!-- logo -->
-          <img class="page-login--logo" src="./image/logo@2x.png">
+          <img class="page-logon--logo" src="./image/logo@2x.png">
           <!-- form -->
-          <div class="page-login--form">
+          <div class="page-logon--form">
             <el-card shadow="never">
               <el-form
-                ref="loginForm"
+                ref="logonForm"
                 label-position="top"
                 :rules="rules"
-                :model="formLogin"
+                :model="formLogon"
                 size="default">
                 <el-form-item prop="username">
                   <el-input
                     type="text"
-                    v-model="formLogin.username"
+                    v-model="formLogon.username"
                     placeholder="用户名">
                     <i slot="prepend" class="fa fa-user-circle-o"></i>
+                  </el-input>
+                </el-form-item>
+                <el-form-item prop="tel">
+                  <el-input
+                    type="tel"
+                    v-model="formLogon.tel"
+                    placeholder="手机号">
+                    <i slot="prepend" class="fa fa-keyboard-o">+86</i>
+                  </el-input>
+                </el-form-item>
+                <el-form-item prop="email">
+                  <el-input
+                    type="email"
+                    v-model="formLogon.email"
+                    placeholder="邮箱">
+                    <i slot="prepend" class="fa fa-keyboard-o"></i>
                   </el-input>
                 </el-form-item>
                 <el-form-item prop="password">
                   <el-input
                     type="password"
-                    v-model="formLogin.password"
+                    v-model="formLogon.password"
                     placeholder="密码">
                     <i slot="prepend" class="fa fa-keyboard-o"></i>
+                  </el-input>
+                </el-form-item>
+                <el-form-item prop="chkPassword">
+                  <el-input
+                    type="password"
+                    v-model="formLogon.chkPassword"
+                    placeholder="确认密码">
+                    <i slot="prepend" class="fa fa-keyboard-o"></i>
+                  </el-input>
+                </el-form-item>
+                <el-form-item prop="code">
+                  <el-input
+                    type="text"
+                    v-model="formLogon.code"
+                    placeholder="验证码">
+                    <template slot="append">
+                      <img class="logon-code" src="./image/login-code.png">
+                    </template>
                   </el-input>
                 </el-form-item>
                 <el-button
                   size="default"
                   @click="submit"
                   type="primary"
-                  class="button-login">
-                  登录
+                  class="button-logon">
+                  注册
                 </el-button>
               </el-form>
             </el-card>
             <p
-              class="page-login--options"
+              class="page-logon--options"
               flex="main:justify cross:center">
-              <span>注册用户</span>
+              <span @click="handleCommand()">登录</span>
             </p>
           </div>
         </div>
-        <div class="page-login--content-footer">
-          <p class="page-login--content-footer-locales">
+        <div class="page-logon--content-footer">
+          <p class="page-logon--content-footer-locales">
             <a
               v-for="language in $languages"
               :key="language.value"
@@ -74,7 +108,7 @@
               {{ language.label }}
             </a>
           </p>
-          <p class="page-login--content-footer-copyright">
+          <p class="page-logon--content-footer-copyright">
             2020 cover D2
             <a href="https://gitee.com/summer_camp">
               @summer_camp
@@ -95,32 +129,37 @@ export default {
     localeMixin
   ],
   data () {
+    const validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.formLogon.chkPassword !== '') {
+          if (!(value === this.formLogon.chkPassword)) {
+            callback(new Error('两次输入密码不一致!'))
+          }
+        }
+        callback()
+      }
+    }
+    const validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.formLogon.password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
       timeInterval: null,
       time: dayjs().format('HH:mm:ss'),
-      // 快速选择用户
-      dialogVisible: false,
-      users: [
-        {
-          name: 'Admin',
-          username: 'admin',
-          password: 'admin'
-        },
-        {
-          name: 'Editor',
-          username: 'editor',
-          password: 'editor'
-        },
-        {
-          name: 'User1',
-          username: 'user1',
-          password: 'user1'
-        }
-      ],
       // 表单
-      formLogin: {
-        username: 'admin',
-        password: 'admin',
+      formLogon: {
+        username: '',
+        tel: '',
+        email: '',
+        password: '',
+        chkPassword: '',
         code: 'v9am'
       },
       // 表单校验
@@ -135,8 +174,15 @@ export default {
         password: [
           {
             required: true,
-            message: '请输入密码',
-            trigger: 'blur'
+            validator: validatePass,
+            trigger: 'change'
+          }
+        ],
+        chkPassword: [
+          {
+            required: true,
+            validator: validatePass2,
+            trigger: 'change'
           }
         ],
         code: [
@@ -159,37 +205,39 @@ export default {
   },
   methods: {
     ...mapActions('d2admin/account', [
-      'login'
+      'logon'
     ]),
     refreshTime () {
       this.time = dayjs().format('HH:mm:ss')
     },
-    /**
-     * @description 接收选择一个用户快速登录的事件
-     * @param {Object} user 用户信息
-     */
-    handleUserBtnClick (user) {
-      this.formLogin.username = user.username
-      this.formLogin.password = user.password
-      this.submit()
-    },
+    // /**
+    //  * @description 接收选择一个用户快速登录的事件
+    //  * @param {Object} user 用户信息
+    //  */
+    // handleUserBtnClick (user) {
+    //   this.formLogon.username = user.username
+    //   this.formLogon.password = user.password
+    //   this.submit()
+    // },
     /**
      * @description 提交表单
      */
-    // 提交登录信息
+    // 提交注册信息
     submit () {
-      this.$refs.loginForm.validate((valid) => {
+      this.$refs.logonForm.validate((valid) => {
         if (valid) {
           // 登录
           // 注意 这里的演示没有传验证码
           // 具体需要传递的数据请自行修改代码
-          this.login({
-            username: this.formLogin.username,
-            password: this.formLogin.password
+          this.logon({
+            username: this.formLogon.username,
+            password: this.formLogon.password,
+            tel: this.formLogon.tel,
+            email: this.formLogon.email
           })
             .then(() => {
               // 重定向对象不存在则返回顶层路径
-              console.log('不存在')
+              this.$message.success('注册成功')
               this.$router.replace(this.$route.query.redirect || '/')
             })
         } else {
@@ -197,13 +245,16 @@ export default {
           this.$message.error('表单校验失败，请检查')
         }
       })
+    },
+    handleCommand () {
+      this.$router.push('/login')
     }
   }
 }
 </script>
 
 <style lang="scss">
-.page-login {
+.page-logon {
   @extend %unable-select;
   $backgroundColor: #F0F2F5;
   // ---
@@ -211,29 +262,29 @@ export default {
   height: 100%;
   position: relative;
   // 层
-  .page-login--layer {
+  .page-logon--layer {
     @extend %full;
     overflow: auto;
   }
-  .page-login--layer-area {
+  .page-logon--layer-area {
     overflow: hidden;
   }
   // 时间
-  .page-login--layer-time {
+  .page-logon--layer-time {
     font-size: 24em;
     font-weight: bold;
     color: rgba(0, 0, 0, 0.03);
     overflow: hidden;
   }
   // 登陆页面控件的容器
-  .page-login--content {
+  .page-logon--content {
     height: 100%;
     min-height: 500px;
   }
   // header
-  .page-login--content-header {
+  .page-logon--content-header {
     padding: 1em 0;
-    .page-login--content-header-motto {
+    .page-logon--content-header-motto {
       margin: 0px;
       padding: 0px;
       color: $color-text-normal;
@@ -242,27 +293,27 @@ export default {
     }
   }
   // main
-  .page-login--logo {
+  .page-logon--logo {
     width: 240px;
     margin-bottom: 2em;
     margin-top: -2em;
   }
   // 登录表单
-  .page-login--form {
+  .page-logon--form {
     width: 280px;
     // 卡片
     .el-card {
       margin-bottom: 15px;
     }
     // 登录按钮
-    .button-login {
+    .button-logon {
       width: 100%;
     }
     // 输入框左边的图表区域缩窄
     .el-input-group__prepend {
       padding: 0px 14px;
     }
-    .login-code {
+    .logon-code {
       height: 40px - 2px;
       display: block;
       margin: 0px -20px;
@@ -270,7 +321,7 @@ export default {
       border-bottom-right-radius: 2px;
     }
     // 登陆选项
-    .page-login--options {
+    .page-logon--options {
       margin: 0px;
       padding: 0px;
       font-size: 14px;
@@ -278,12 +329,12 @@ export default {
       margin-bottom: 15px;
       font-weight: bold;
     }
-    .page-login--quick {
+    .page-logon--quick {
       width: 100%;
     }
   }
   // 快速选择用户面板
-  .page-login--quick-user {
+  .page-logon--quick-user {
     @extend %flex-center-col;
     padding: 10px 0px;
     border-radius: 4px;
@@ -307,9 +358,9 @@ export default {
     }
   }
   // footer
-  .page-login--content-footer {
+  .page-logon--content-footer {
     padding: 1em 0;
-    .page-login--content-footer-locales {
+    .page-logon--content-footer-locales {
       padding: 0px;
       margin: 0px;
       margin-bottom: 15px;
@@ -325,7 +376,7 @@ export default {
         }
       }
     }
-    .page-login--content-footer-copyright {
+    .page-logon--content-footer-copyright {
       padding: 0px;
       margin: 0px;
       margin-bottom: 10px;
@@ -337,7 +388,7 @@ export default {
         color: $color-text-normal;
       }
     }
-    .page-login--content-footer-options {
+    .page-logon--content-footer-options {
       padding: 0px;
       margin: 0px;
       font-size: 12px;

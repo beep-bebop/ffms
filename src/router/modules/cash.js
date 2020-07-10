@@ -12,7 +12,8 @@ export default {
   redirect: { name: 'cash-index' },
   component: layoutHeaderAside,
   children: (pre => [
-    { path: 'index', name: `${pre}index`, component: _import('cash/index'), meta: { ...meta, title: '现金概况' } }
+    { path: 'index', name: `${pre}index`, component: _import('cash/index'), meta: { ...meta, title: '概况' } },
+    { path: 'plan', name: `${pre}plan`, component: _import('cash/plan'), meta: { ...meta, title: '计划' } }
     // { path: 'html', name: `${pre}html`, component: _import('demo/frame/html'), meta: { ...meta, title: '静态 HTML' } },
     // { path: 'report', name: `${pre}report`, component: _import('demo/frame/report'), meta: { ...meta, title: 'Size report' } },
     // { path: 'd2-doc', name: `${pre}d2-doc`, component: _import('demo/frame/d2-doc'), meta: { ...meta, title: 'D2Admin 中文文档' } }

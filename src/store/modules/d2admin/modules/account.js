@@ -31,6 +31,15 @@ export default {
       // 用户登录后从持久化数据加载一系列的设置
       await dispatch('load')
     },
+    logon ({ dispatch }, {
+      username = '',
+      tel = '',
+      email = '',
+      password = ''
+    } = {}) {
+      const res = api.SYS_USER_LOGON({ username, tel, email, password })
+      console.log(res)
+    },
     /**
      * @description 注销用户并返回登录页面
      * @param {Object} context

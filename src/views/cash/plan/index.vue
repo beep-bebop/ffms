@@ -13,8 +13,8 @@
       </el-card>
     </template>
     <div style="height: 800px; margin: -16px;">
-      <SplitPane :min-percent='20' :default-percent='40' split="vertical">
-        <template slot="paneL" style="width: 400px">
+      <SplitPane :min-percent='20' :default-percent='50' split="vertical">
+        <template slot="paneL" style="width: 55%">
           <div class="inner">
             <d2-crud
               ref="d2Crud"
@@ -25,11 +25,14 @@
           </div>
         </template>
         <template slot="paneR">
-          <div style="margin: 10px;">
-            <div class="inner">
-              <ve-bar :data="chartData" v-bind="pubSetting" :settings="chartSettings"></ve-bar>
-            </div>
-          </div>
+          <SplitPane split="horizontal">
+            <template slot="paneL"><div style="margin: 10px;">右上</div></template>
+            <template slot="paneR">
+              <div style="margin: 10px;vertical-align: middle">
+                <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
+              </div>
+            </template>
+          </SplitPane>
         </template>
       </SplitPane>
     </div>
@@ -40,23 +43,19 @@
 export default {
   data () {
     this.chartSettings = {
-      labelMap: {
-        date: '日期',
-        in: '收入',
-        out: '支出',
-        profit: '净值'
-      }
+      roseType: 'radius',
+      radius: 150
     }
     return {
       chartData: {
-        columns: ['date', 'in', 'out', 'profit'],
+        columns: ['日期', '访问用户'],
         rows: [
-          { date: '1/1', in: 1393, out: 1093, profit: 0.32 },
-          { date: '1/2', in: 3530, out: 3230, profit: 0.26 },
-          { date: '1/3', in: 2923, out: 2623, profit: 0.76 },
-          { date: '1/4', in: 1723, out: 1423, profit: 0.49 },
-          { date: '1/5', in: 3792, out: 3492, profit: 0.323 },
-          { date: '1/6', in: 4593, out: 4293, profit: 0.78 }
+          { 日期: '1/1', 访问用户: 1393 },
+          { 日期: '1/2', 访问用户: 3530 },
+          { 日期: '1/3', 访问用户: 2923 },
+          { 日期: '1/4', 访问用户: 1723 },
+          { 日期: '1/5', 访问用户: 3792 },
+          { 日期: '1/6', 访问用户: 4593 }
         ]
       },
       columns: [

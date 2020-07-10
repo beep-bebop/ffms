@@ -9,13 +9,13 @@
               <el-row>
                 <el-col>
                   <div>
-                <span style="font-size: 23px">股票</span>
+                    <span style="font-size: 23px">股票</span>
                   </div>
                 </el-col>
                 <el-col>
-              <div class="group">
-                <d2-count-up style="font-size: 50px" :end="100" :decimals="2"/>
-              </div>
+                  <div class="group">
+                    <d2-count-up style="font-size: 50px" :end="100" :decimals="2"/>
+                  </div>
                 </el-col>
               </el-row>
             </el-card>
