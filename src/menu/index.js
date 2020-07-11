@@ -3,6 +3,7 @@ import cash from './modules/cash'
 import bonds from './modules/bonds'
 import fund from './modules/fund'
 import stocks from './modules/stocks'
+import family from './modules/family'
 /**
  * @description 给菜单数据补充上 path 字段
  * @description https://github.com/d2-projects/d2-admin/issues/209
@@ -24,6 +25,7 @@ export const menuHeader = supplementPath([
   bonds,
   fund,
   stocks,
+  family,
   {
     title: '页面',
     icon: 'folder-o',
@@ -40,7 +42,8 @@ export const menuAside = supplementPath([
   cash,
   bonds,
   fund,
-  stocks
+  stocks,
+  family
   // {
   //   title: '页面',
   //   icon: 'folder-o',
