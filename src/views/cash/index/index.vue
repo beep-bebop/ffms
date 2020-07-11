@@ -1,12 +1,16 @@
 <template>
   <d2-container type="card">
     <template slot="header">
-      <el-button shadow="hover" slot="header" type="primary">新增收入</el-button>
-      <el-button shadow="hover" slot="header" type="info" style="margin-right: 15px">新增支出</el-button>
+      <el-button shadow="hover" slot="header" type="primary" @click="addInRow">新增收入</el-button>
+      <el-button shadow="hover" slot="header" type="info" style="margin-right: 15px" @click="addOutRow">新增支出</el-button>
       <el-input slot="header" placeholder="请输入内容" style="width: 300px">
         <template slot="prepend"></template>
       </el-input>
       <el-button slot="header" style="margin-bottom: 5px">搜索</el-button>
+      <el-button type="primary" @click="exportExcel">
+        <d2-icon name="download"/>
+        导出 Excel
+      </el-button>
       <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 200px;height: 40px;padding-bottom: 16px">
         总金额
         <d2-count-up style="font-size: 30px;" :end="100" :decimals="2"/>
@@ -14,13 +18,17 @@
     </template>
     <div style="height: 800px; margin: -16px;">
       <SplitPane :min-percent='20' :default-percent='40' split="vertical">
-        <template slot="paneL" style="width: 400px">
+        <template slot="paneL" style="width: 400px;">
           <div class="inner">
             <d2-crud
               ref="d2Crud"
+              add-title="新增"
               :columns="columns"
               :data="data"
-              :options="options">
+              :options="options"
+              :form-options="formOptions"
+              @row-add="handleRowAdd"
+              @dialog-cancel="handleDialogCancel">
             </d2-crud>
           </div>
         </template>
@@ -37,7 +45,16 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import pluginExport from '@d2-projects/vue-table-export'
+import { mapState } from 'vuex'
+Vue.use(pluginExport)
 export default {
+  computed: {
+    ...mapState('d2admin/user', [
+      'info'
+    ])
+  },
   data () {
     this.chartSettings = {
       labelMap: {
@@ -97,6 +114,13 @@ export default {
           width: '100'
         }
       ],
+      exportColumn: [
+        { label: '日期', prop: 'time' },
+        { label: '姓名', prop: 'userId' },
+        { label: '金额', prop: 'amount_paid' },
+        { label: '描述', prop: 'description' },
+        { label: '类型', prop: 'type' }
+      ],
       data: [
         {
           time: '2016-05-02',
@@ -127,26 +151,117 @@ export default {
           type: 'eat'
         }
       ],
+      formOptions: {
+        saveLoading: false
+      },
       options: {
-        // eslint-disable-next-line camelcase
-        rowClassName ({ row, amount_paid }) {
-          // eslint-disable-next-line camelcase
-          if (amount_paid < 0) {
+        rowClassName ({ row }) {
+          if (row.amount_paid < 0) {
             return 'warning-row'
-            // eslint-disable-next-line camelcase
-          } else if (amount_paid > 0) {
-            console.log('判断！！！')
+          } else if (row.amount_paid > 0) {
             return 'success-row'
           }
           return ''
         }
       }
     }
+  },
+  methods: {
+    // addRow () {
+    //   this.$refs.d2Crud.showDialog({
+    //     mode: 'add'
+    //   })
+    // },
+    exportExcel () {
+      this.$export.excel({
+        columns: this.exportColumn,
+        data: this.data
+        // header: '导出 Excel',
+        // merges: ['A1', 'E1']
+      })
+        .then(() => {
+          this.$message('导出表格成功')
+        })
+    },
+    addInRow () {
+      this.$refs.d2Crud.showDialog({
+        mode: 'add',
+        template: {
+          userId: {
+            title: '姓名',
+            value: this.info.username
+          },
+          time: {
+            title: '日期',
+            value: '2020-7-15'
+          },
+          description: {
+            title: '描述',
+            value: ''
+          },
+          type: {
+            title: '类型',
+            value: ''
+          },
+          amount_paid: {
+            title: '金额',
+            value: ''
+          }
+        }
+      })
+    },
+    addOutRow () {
+      this.$refs.d2Crud.showDialog({
+        mode: 'add',
+        template: {
+          userId: {
+            title: '姓名',
+            value: this.info.username
+          },
+          time: {
+            title: '日期',
+            value: '2020-7-15'
+          },
+          description: {
+            title: '描述',
+            value: ''
+          },
+          type: {
+            title: '类型',
+            value: ''
+          },
+          amount_paid: {
+            title: '金额',
+            value: '-'
+          }
+        }
+      })
+    },
+    handleRowAdd (row, done) {
+      this.formOptions.saveLoading = true
+      setTimeout(() => {
+        console.log(row)
+        this.$message({
+          message: '保存成功',
+          type: 'success'
+        })
+        done({
+        })
+        this.formOptions.saveLoading = false
+      }, 300)
+    },
+    handleDialogCancel (done) {
+      this.$message({
+        message: '取消保存',
+        type: 'warning'
+      })
+      done()
+    }
   }
 }
 </script>
 
-<style scoped>
+<style>
   .inner {
     position: absolute;
     top: 0;
@@ -165,10 +280,9 @@ export default {
     border-color: #ffffff;
   }
   .el-table .warning-row {
-    background: #5ab1ef;
+    background: rgba(90, 177, 239, 0.5);
   }
-
   .el-table .success-row {
-    background: #19d4ae;
+    background: rgba(25, 212, 174, 0.5);
   }
 </style>
