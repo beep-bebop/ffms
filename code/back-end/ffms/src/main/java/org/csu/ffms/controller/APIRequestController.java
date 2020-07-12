@@ -16,20 +16,25 @@ import java.util.Map;
 public class APIRequestController {
     @RequestMapping("/api")
     public JSONObject GetAPI(@RequestBody Map<String,Object> map){
-        System.out.println(map);
+//        System.out.println(map);
         String url=(String)map.get("url");
         String method=(String)map.get("method");
         Map<String,String> jsonObject=(Map<String,String>) map.get("body");
-        String body=JSONObject.toJSONString(jsonObject);
-        System.out.println(url);
-        System.out.println(method);
-        System.out.println(body==null);
         JSONObject json;
         try{
             if(method.equals("get")){
+                if(jsonObject.size()>0){
+                    url=url+"?";
+                    for(Map.Entry<String,String>entry:jsonObject.entrySet()){
+                        url=url+entry.getKey()+"="+entry.getValue()+"&";
+                    }
+                    url=url.substring(0,url.length()-1);
+                }
+                //System.out.println("url is : "+url);
                 json = GetJsonFromUrl.GET(url);
             }
             else if(method.equals("post")){
+                String body=JSONObject.toJSONString(jsonObject);
                 System.out.println(body);
                 json=GetJsonFromUrl.POST(url,body);
             }
