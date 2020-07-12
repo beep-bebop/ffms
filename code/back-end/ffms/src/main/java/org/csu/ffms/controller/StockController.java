@@ -1,5 +1,7 @@
 package org.csu.ffms.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import org.csu.ffms.domain.Account;
 import org.csu.ffms.domain.Security;
@@ -12,6 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.*;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -27,6 +34,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/stock")
 public class StockController {
+    private static final String basicUrl="https://api.doctorxiong.club";
 
     @Autowired
     StockService stockService;
@@ -189,5 +197,4 @@ public class StockController {
         }
         return JSONObject.toJSONString(jsonObject);
     }
-
 }
