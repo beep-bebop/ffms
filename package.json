@@ -25,6 +25,8 @@
     "flex.css": "^1.1.7",
     "fuse.js": "^5.2.3",
     "hotkeys-js": "^3.7.3",
+    "hqchart": "^1.1.8663",
+    "jquery": "^3.5.1",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.19",
     "lowdb": "^1.0.0",

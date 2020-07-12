@@ -4,6 +4,6 @@ export default {
   icon: 'flask',
   children: (pre => [
     { path: `${pre}index`, title: '概况', icon: 'home' },
-    { path: `${pre}index`, title: '概况', icon: 'home' }
+    { path: `${pre}market`, title: '大盘', icon: 'home' }
   ])('/stocks/')
 }
