@@ -1,5 +1,7 @@
 package org.csu.ffms;
 
+import com.alibaba.fastjson.JSONArray;
+import org.csu.ffms.controller.FundController;
 import org.csu.ffms.domain.Fund;
 import org.csu.ffms.service.FundService;
 import org.junit.jupiter.api.Test;
@@ -7,7 +9,9 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @创建人 ： 李振豪
@@ -77,4 +81,16 @@ class FundTests {
         System.out.println("after update"+fundService.getFundByFundCode("1","1").toString());
     }
 
+    @Autowired
+    FundController fundController;
+
+    @Test
+    public void testGetAPIJSON(){
+        Map<String,String> map=new HashMap<>();
+        map.put("userid","1");
+        System.out.println(fundController.getTotal(map));
+        map.put("queryid","1");
+        System.out.println(fundController.getTotal(map));
+
+    }
 }
