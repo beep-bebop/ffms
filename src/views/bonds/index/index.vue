@@ -15,10 +15,10 @@
 </template>
 
 <script>
-import menu from '@/menu/modules/bonds'
-export default {
-  menu
-}
+// import menu from '@/menu/modules/bonds'
+// export default {
+//   menu
+// }
 </script>
 
 <style scoped>

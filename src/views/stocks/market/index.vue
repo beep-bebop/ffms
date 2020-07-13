@@ -22,7 +22,7 @@ DefaultData.GetMinuteOption = function () {
           ],
 
         IsAutoUpdate: true, // 是自动更新数据
-        DayCount: 1, // 1 最新交易日数据 >1 多日走势图
+        DayCount: 2, // 1 最新交易日数据 >1 多日走势图
         IsShowCorssCursorInfo: true, // 是否显示十字光标的刻度信息
         IsShowRightMenu: true, // 是否显示右键菜单
         CorssCursorTouchEnd: true,
