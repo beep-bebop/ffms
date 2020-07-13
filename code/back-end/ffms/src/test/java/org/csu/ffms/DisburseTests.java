@@ -18,13 +18,13 @@ public class DisburseTests {
 
     @Test
     public void findDisburseByFamily(){
-        disburseController.findDisburseByFamily("33333");
+        disburseController.findDisburseByFamily("S1");
     }
 
     @Test
     public void findDisburseList(){
-        disburse.setUserId("11111");
-        disburse.setType("eat");
+        disburse.setUserId("S1");
+        disburse.setType("餐饮");
         disburseController.findDisburseList(disburse);
     }
 
