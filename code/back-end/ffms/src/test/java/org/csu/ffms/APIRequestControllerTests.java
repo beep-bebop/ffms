@@ -42,4 +42,11 @@ public class APIRequestControllerTests {
 //        JSONObject json=apiRequestController.GetAPI(map);
 //        System.out.println(json);
     }
+
+    @Test
+    void getBond(){
+        Map<String,String> map=new HashMap<>();
+        map.entrySet();
+
+    }
 }
