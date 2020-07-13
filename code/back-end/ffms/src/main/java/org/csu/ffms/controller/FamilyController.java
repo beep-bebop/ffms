@@ -93,5 +93,23 @@ public class FamilyController {
         return "JSONObject.toJSONString(json)";
     }
 
+    //返回四个资产部分的类型和总额
+    @UserLoginToken
+    @GetMapping("searchFamily")
+    public String searchFamily(String userid,String searchId)
+    {
+        JSONObject json = new JSONObject();
+        json.put("status_code",1);
+        System.out.println(JSONObject.toJSONString(json));
+        return "JSONObject.toJSONString(json)";
+    }
+
+    //家庭总资产折线图
+
+
+
+    //债券api接口
+
+
 
 }
