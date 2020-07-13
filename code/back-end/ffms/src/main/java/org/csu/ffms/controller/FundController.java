@@ -1,15 +1,18 @@
 package org.csu.ffms.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.csu.ffms.domain.Account;
 import org.csu.ffms.domain.Fund;
 import org.csu.ffms.domain.Security;
 import org.csu.ffms.jwt.note.UserLoginToken;
 import org.csu.ffms.service.AccountService;
+import org.csu.ffms.service.FamilyService;
 import org.csu.ffms.service.FundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,6 +32,9 @@ public class FundController {
 
     @Autowired
     AccountService accountService;
+    
+    @Autowired
+    FamilyService familyService;
 
     /**
      *@描述 返回该用户所拥有的基金的具体信息
@@ -184,6 +190,67 @@ public class FundController {
         return JSONObject.toJSONString(jsonObject);
     }
 
+    @RequestMapping(value="/table",method=RequestMethod.GET)
+    public JSONArray getFundTable(@RequestBody Map<String,String>map){
+        String userid=map.get("userid");
+        String queryid=map.get("queryid");
+        if (queryid==null || queryid.equals("")){
+            Account account=accountService.getAccount(userid);
+            try{
+                String familyid= account.getFamilyid();
+                List<Account> accountList=accountService.getAllAccountByFamilyid(familyid);
+                JSONArray funds=new JSONArray();
+                for (Account familyMember : accountList) {
+                    JSONArray jsonArray=fundService.getFundAPIInfoByUserid(familyMember.getUserid());
+                    funds.addAll(jsonArray);
+                }
+                JSONObject json = new JSONObject();
+                return funds;
+            }
+            catch (Exception e){
+                return  fundService.getFundAPIInfoByUserid(userid);
+            }
+        }
+        return fundService.getFundAPIInfoByUserid(queryid);
+    }
 
+    @RequestMapping(value="/total",method=RequestMethod.POST)
+    public JSONObject getTotal(@RequestBody Map<String,String>map){
+        String userid=map.get("userid");
+        String queryid=map.get("queryid");
+        BigDecimal total=new BigDecimal(0);
+        JSONObject jsonObject=new JSONObject();
+        if(queryid==null || queryid.equals("")){
+            Account user = accountService.getAccount(userid);
+            if(user.getFamilyid()!=null){
+                List<Account> accountList = accountService.getAllAccountByFamilyid(user.getFamilyid());
+                for (Account account : accountList) {
+                    JSONArray jsonArray=fundService.getFundAPIInfoByUserid(account.getUserid());
+                    for (int i = 0; i <jsonArray.size() ; i++) {
+                        System.out.println("currentValue : "+jsonArray.getJSONObject(i).get("currentValue"));
+                        BigDecimal currentvalue = new BigDecimal(jsonArray.getJSONObject(i).get("currentValue").toString());
+                        total=total.add(currentvalue);
+                    }
+                }
+            }
+            else{
+                JSONArray jsonArray=fundService.getFundAPIInfoByUserid(userid);
+                for (int i = 0; i <jsonArray.size() ; i++) {
+                    total=total.add(new BigDecimal(jsonArray.getJSONObject(i).get("currentValue").toString()));
+                }
+            }
+            jsonObject.put("type","family fund total");
+        }
+        else{
+            JSONArray jsonArray=fundService.getFundAPIInfoByUserid(userid);
+            for (int i = 0; i <jsonArray.size() ; i++) {
+                total=total.add(new BigDecimal(jsonArray.getJSONObject(i).get("currentValue").toString()));
+            }
+            jsonObject.put("type","person fund total");
+        }
+        jsonObject.put("userid",userid);
+        jsonObject.put("total",total);
+        return jsonObject;
+    }
 
 }

@@ -1,5 +1,6 @@
 package org.csu.ffms.controller;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 
@@ -98,7 +99,6 @@ public class GetJsonFromUrl {
         }
         return sb.toString();
     }
-
 
 
 }
