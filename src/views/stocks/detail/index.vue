@@ -1,5 +1,16 @@
 <template>
     <d2-container>
+      <template slot="header">
+        <el-input slot="header" placeholder="请输入加/减仓金额" style="width: 300px;margin-right: 10px">
+          <template slot="prepend"></template>
+        </el-input>
+        <el-button shadow="hover" slot="header" type="primary" @click="addInRow">加仓</el-button>
+        <el-button shadow="hover" slot="header" type="info" style="margin-right: 15px" @click="addOutRow">减仓</el-button>
+        <el-card style="background-color: #DFDFBD;float: right;width: 200px;height: 40px;padding-bottom: 16px">
+          持有金额
+          <d2-count-up style="font-size: 29px;" :end="100" :decimals="2"/>
+        </el-card>
+      </template>
       <div id="app2">
         <div id="kline" ref='kline'></div>
       </div>
@@ -78,7 +89,7 @@ export default
       {
         OnSize () {
           // var chartHeight = window.innerHeight - 30
-          var chartHeight = 800
+          var chartHeight = 700
           // var chartWidth = window.innerWidth - 30
           var chartWidth = 1660
 
