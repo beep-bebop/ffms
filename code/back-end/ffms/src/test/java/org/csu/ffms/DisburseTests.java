@@ -33,4 +33,10 @@ public class DisburseTests {
         disburseController.total_paid("S1");
     }
 
+    @Test
+    public void totalDisburseByTypeAndWeek(){
+        disburseController.totalDisburseByTypeAndWeek("S1");
+    }
+
+
 }

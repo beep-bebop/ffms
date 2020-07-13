@@ -101,4 +101,30 @@ public class IncomeController {
         return JSONObject.toJSONString(json);
     }
 
+    @UserLoginToken
+    @RequestMapping(value="type",method = RequestMethod.GET)
+    public String totalIncomeByTypeAndWeek(String userId){
+        List<Income> incomeList = new ArrayList<>();
+        Income income1 = new Income();
+        Income income2 = new Income();
+
+        income1.setUserId(userId);
+        income1.setType("工资");
+        int out1 = incomeService.totalIncomeByTypeAndWeek(income1);
+        income1.setIncome(out1);
+        incomeList.add(income1);
+
+        income2.setUserId(userId);
+        income2.setType("其他");
+        int out2 = incomeService.totalIncomeByTypeAndWeek(income2);
+        income2.setIncome(out2);
+        incomeList.add(income2);
+
+        JSONObject json = new JSONObject();
+        json.put("status",0);
+        json.put("data",incomeList);
+        System.out.println(JSONObject.toJSONString(json));
+        return JSONObject.toJSONString(json);
+    }
+
 }

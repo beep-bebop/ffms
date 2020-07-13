@@ -15,5 +15,6 @@ public interface DisburseMapper {
     List<String> findFamilyMember(String userId);
     String findFamily(String userId);
     int totalDisbursement(Disburse disburse);
+    int totalDisburseByTypeAndWeek(Disburse disburse);
 
 }

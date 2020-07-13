@@ -1,11 +1,14 @@
 package org.csu.ffms;
 
 import org.csu.ffms.controller.CashController;
+import org.csu.ffms.persistence.CashMapper;
 import org.csu.ffms.service.CashService;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ContextConfiguration;
+
 
 @SpringBootTest
 @MapperScan("org.csu.ffms.persistence")
@@ -17,7 +20,6 @@ CashService cashService;
 
     @Test
     void totalCash(){
-        CashService cashService = new CashService();
         String userId = "S1";
         int out = cashService.totalDisbursement(userId);
         int out1 = cashService.totalDisbursementByFamily(userId);
@@ -28,9 +30,8 @@ CashService cashService;
     }
 
     @Test
-    void total(){
-        CashController cashController = new CashController();
-        cashController.totalCash("S1");
+    void totalByWeek(){
+        cashController.totalByWeek("S1");
     }
 
 

@@ -5,10 +5,7 @@ import org.csu.ffms.persistence.DisburseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class DisburseService {
@@ -28,6 +25,7 @@ public class DisburseService {
         return disburse;
     }
 
+    //查找某用户的支出列表
     public List<Disburse> findDisburseList(Disburse disburse){
         return disburseMapper.findDisburseList(disburse);
     }
@@ -58,24 +56,50 @@ public class DisburseService {
         });
     }
 
-    //单用户某天的支出总额
+    //单用户某天的支出总额，disburse中time为这一天
     public void totalDisbursement(Disburse disburse){
         disburseMapper.totalDisbursement(disburse);
     }
 
-    //家庭组某天的支出总额
+    //家庭组某天的支出总额,disburse中time为这一天
     public int totalFamilyDisbursement(Disburse disburse){
         List<String> memberList = disburseMapper.findFamilyMember(disburse.getUserId());
         int out = 0;
         Date date = disburse.getTime();
+        System.out.println(date.toString());
         for(int i =0;i<memberList.size();i++){
             Disburse dis = new Disburse();
             dis.setTime(date);
             dis.setUserId(memberList.get(i));
             out = out+disburseMapper.totalDisbursement(dis);
+            System.out.println("333333333333333333out="+out);
         }
        return out;
     }
 
+    //家庭组一周的总支出，disburse中的time为这一周的最后一天
+    public int totalFamilyDisbursementByWeek(Disburse disburse){
+        int out1 = 0,sum = 0;
+        Date date = new Date();
+        for(int i = 0;i< 7;i++){
+            out1 = totalFamilyDisbursement(disburse);
+            System.out.println("out =" + out1);
+            sum = sum + out1;
+
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            c.add(Calendar.DAY_OF_MONTH, -1);
+            java.util.Date yesterday =  c.getTime();//这是昨天
+            date = new java.sql.Date(yesterday.getTime());
+            disburse.setTime(date);
+            System.out.println("第"+i+"天："+sum);
+        }
+        return sum;
+    }
+
+    //家庭组一周内某一类型的总支出，disburse中的type为该类型
+    public int totalDisburseByTypeAndWeek(Disburse disburse){
+        return disburseMapper.totalDisburseByTypeAndWeek(disburse);
+    }
 
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 
-<mapper namespace="org.csu.ffms.persistence.DisburseMapper">
+<mapper namespace="org.csu.ffms.persistence.CashMapper">
 
     <select id="totalDisbursement" parameterType="String" resultType="int">
         SELECT IFNULL(SUM(AMOUNT_PAID),0)
@@ -37,5 +37,7 @@
                 AND T.USERID = #{userId}
         )
     </select>
+
+
 
 </mapper>
