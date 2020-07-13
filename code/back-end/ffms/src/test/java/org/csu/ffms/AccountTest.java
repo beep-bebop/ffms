@@ -44,15 +44,20 @@ class AccountTest {
     void insertSignon() {
     }
 
+    @Autowired
+    AccountMapper accountMapper;
+
     @Test
     void updateAccount() {
         Account account = new Account();
         account.setUserid("1");
-        account.setPassword("111");
-        account.setUsername("a");
-        account.setEmail("123@qq");
+        account.setPassword("11");
+        account.setUsername("lzh");
+        account.setEmail("1@qq.com");
         account.setPhone("123");
-        accountService.updateAccount(account);
+        accountMapper.updateAccount(account);
+        accountMapper.updateRelation(account);
+        accountMapper.updateSignon(account);
     }
 
     @Test

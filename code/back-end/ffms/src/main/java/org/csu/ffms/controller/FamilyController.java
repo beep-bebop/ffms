@@ -1,21 +1,21 @@
 package org.csu.ffms.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import org.csu.ffms.domain.Family;
 import org.csu.ffms.jwt.note.UserLoginToken;
 import org.csu.ffms.service.FamilyService;
 import org.csu.ffms.domain.Account;
 import org.csu.ffms.service.AccountService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
-@Controller
+@RestController
 @RequestMapping("/family/")
 public class FamilyController {
     @Autowired
@@ -25,11 +25,33 @@ public class FamilyController {
     @Autowired
     private FamilyService familyService;
 
+
     //创建新的家庭组
-    @UserLoginToken
-    @PostMapping("newFamily")
-    public String newFamily(Account account,Family family)
+    /*    参数形式：
     {
+        "account":{
+            "userid":"1",
+            "password":"1",
+            "username":"lzh",
+            "email":"1@qq.com",
+            "phone":"1234567",
+            "familyid":"1"
+        },
+        "family":{
+            "familyid":"",
+            "familyname":""
+        },
+    }
+
+ */
+    @UserLoginToken
+    @RequestMapping(value="insert",method = RequestMethod.POST)
+    public String newFamily(@RequestBody Map<String,JSONObject>p)
+    {
+        JSONObject accountJson = p.get("account");
+        JSONObject familyJson = p.get("family");
+        Account account=(Account) JSONObject.parseObject(JSONObject.toJSONString(accountJson),Account.class);
+        Family family=(Family) JSONObject.parseObject(JSONObject.toJSONString(familyJson), Family.class);
         accountService.updateAccount(account);
         //生成密钥
         String str="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
@@ -44,17 +66,38 @@ public class FamilyController {
         familyService.insertFamily(family);
 
         JSONObject json = new JSONObject();//新建一个json对象
-        json.put("status_code",200);//放入键值对
+        json.put("status_code",0);//放入键值对
         json.put("data",family);
         System.out.println(JSONObject.toJSONString(json));//输出JSONObject对象转化成的json字符串
-        return "JSONObject.toJSONString(json)";
+        return JSONObject.toJSONString(json);
     }
 
     //加入家庭组
-    @UserLoginToken
-    @PostMapping("joinFamily")
-    public String joinFamily(Account account,String familyid,String familykey)
+ /*        参数形式：
     {
+        "account":{
+            "userid":"1",
+            "password":"1",
+            "username":"lzh",
+            "email":"1@qq.com",
+            "phone":"1234567",
+            "familyid":"1"
+        },
+        "family":{
+            "familyid":"123",
+            "familykey":"123"
+        },
+    }
+ */
+    @UserLoginToken
+    @RequestMapping(value="joinFamily",method = RequestMethod.POST)
+    public String joinFamily(@RequestBody Map<String,JSONObject>p)
+    {
+        JSONObject accountJson = p.get("account");
+        JSONObject familyJson = p.get("family");
+        Account account=(Account) JSONObject.parseObject(JSONObject.toJSONString(accountJson),Account.class);
+        String familyid=familyJson.getString("familyid");
+        String familykey=familyJson.getString("familykey");
 
         Family family = familyService.getFamily(familyid,familykey);
         if(family != null)  //加入成功
@@ -62,35 +105,32 @@ public class FamilyController {
             account.setFamilyid(familyid);
             accountService.updateAccount(account);
             JSONObject json = new JSONObject();
-            json.put("status_code",200);
+            json.put("status_code",0);
             json.put("data",account);
             System.out.println(JSONObject.toJSONString(json));
-            return "JSONObject.toJSONString(json)";
+            return JSONObject.toJSONString(json);
         }
         else  //家庭组id或者密钥不正确
         {
             JSONObject json = new JSONObject();
-            json.put("status_code",403);
-            json.put("data",account);
-            System.out.println(JSONObject.toJSONString(json));
-            return "JSONObject.toJSONString(json)";
+            json.put("status_code",-2);
+            return JSONObject.toJSONString(json);
         }
     }
 
 
     //退出家庭组
     @UserLoginToken
-    @PostMapping("quitFamily")
-    public String quitFamily(Account account)
+    @RequestMapping(value="quitFamily",method = RequestMethod.POST)
+    public String quitFamily(@RequestBody Account account)
     {
         accountService.quitFamily(account.getUserid());
         account.setFamilyid(null);
         accountService.updateAccount(account);
         JSONObject json = new JSONObject();
-        json.put("status_code",200);
+        json.put("status_code",0);
         json.put("data",account);
-        System.out.println(JSONObject.toJSONString(json));
-        return "JSONObject.toJSONString(json)";
+        return JSONObject.toJSONString(json);
     }
 
     //返回四个资产部分的类型和总额

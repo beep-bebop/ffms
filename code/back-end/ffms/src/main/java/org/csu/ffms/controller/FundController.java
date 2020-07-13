@@ -3,6 +3,7 @@ package org.csu.ffms.controller;
 import com.alibaba.fastjson.JSONObject;
 import org.csu.ffms.domain.Account;
 import org.csu.ffms.domain.Fund;
+import org.csu.ffms.domain.Security;
 import org.csu.ffms.jwt.note.UserLoginToken;
 import org.csu.ffms.service.AccountService;
 import org.csu.ffms.service.FundService;
@@ -13,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @创建人 ： 李振豪
@@ -37,8 +39,10 @@ public class FundController {
      *@修改人和其它信息
      */
     @UserLoginToken
-    @GetMapping("/fundInfo")
-    public String getFund(String userid,String fundcode){
+    @RequestMapping(value="fundInfo",method = RequestMethod.GET)
+    public String getFund(@RequestBody Map<String,String> map){
+        String fundcode = map.get("fundcode");
+        String userid = map.get("userid");
         JSONObject jsonObject = new JSONObject();
         try{
             Fund fund = fundService.getFundByFundCode(fundcode,userid);
@@ -61,8 +65,9 @@ public class FundController {
      *@修改人和其它信息
      */
     @UserLoginToken
-    @GetMapping("/ownFund")
-    public String getAllFund(String userid){
+    @RequestMapping(value="/ownFund",method = RequestMethod.GET)
+    public String getAllFund(@RequestBody Map<String,String> map){
+        String userid=map.get("userid");
         JSONObject jsonObject = new JSONObject();
         try{
             List<Fund> fundList =fundService.getFundByUserId(userid);
@@ -85,8 +90,9 @@ public class FundController {
      *@修改人和其它信息
      */
     @UserLoginToken
-    @GetMapping("/familyFunds")
-    public String getFamilyFunds(String familyid){
+    @RequestMapping(value="/familyFunds",method = RequestMethod.GET)
+    public String getFamilyFunds(@RequestBody Map<String,String> map){
+        String familyid=map.get("familyid");
         JSONObject jsonObject = new JSONObject();
         try{
             List<Account> accountList= accountService.getAllAccountByFamilyid(familyid);
@@ -116,8 +122,8 @@ public class FundController {
      *@修改人和其它信息
      */
     @UserLoginToken
-    @PostMapping("/insertFund")
-    public String insertFund(Fund fund){
+    @RequestMapping(value="/insertFund",method = RequestMethod.POST)
+    public String insertFund(@RequestBody Fund fund){
         JSONObject jsonObject = new JSONObject();
         try{
             fundService.insertFund(fund);
@@ -139,8 +145,10 @@ public class FundController {
      *@修改人和其它信息
      */
     @UserLoginToken
-    @DeleteMapping("/deleteFund")
-    public String deleteFund(String userid,String fundcode){
+    @RequestMapping(value="/deleteFund",method = RequestMethod.DELETE)
+    public String deleteFund(@RequestBody Map<String,String>map){
+        String userid = map.get("userid");
+        String fundcode=map.get("fundcode");
         JSONObject jsonObject = new JSONObject();
         try{
             fundService.deleteFund(fundService.getFundByFundCode(fundcode, userid));
@@ -162,8 +170,8 @@ public class FundController {
      *@修改人和其它信息
      */
     @UserLoginToken
-    @PutMapping("/updateFund")
-    public String updateFund(Fund fund){
+    @RequestMapping(value="/updateFund",method = RequestMethod.PUT)
+    public String updateFund(@RequestBody Fund fund){
         JSONObject jsonObject = new JSONObject();
         try{
             fundService.updateFund(fund);
@@ -175,5 +183,7 @@ public class FundController {
         }
         return JSONObject.toJSONString(jsonObject);
     }
+
+
 
 }

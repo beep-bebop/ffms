@@ -4,31 +4,26 @@ import org.csu.ffms.controller.DisburseController;
 import org.csu.ffms.controller.IncomeController;
 import org.csu.ffms.domain.Disburse;
 import org.csu.ffms.domain.Income;
+import org.csu.ffms.service.IncomeService;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@MapperScan("org.csu.ffms.persistence")
+@MapperScan("org.csu.ffms.controller")
 class FfmsApplicationTests {
     @Autowired
-    Disburse disburse;
-    @Autowired
     DisburseController disburseController;
-    @Autowired
-    Income income;
+
     @Autowired
     IncomeController incomeController;
 
-   @Test
-    void contextLoads() {
-        disburse.setAmount_paid(100);
-        disburse.setDescription("吃饭");
-        disburse.setType("eat");
-        disburse.setUserId("11111");
-        disburseController.newDisburse(disburse);
-    }
+    @Autowired
+    Disburse disburse;
+
+    @Autowired
+    Income income;
 
     @Test
     void contextLoads1() {
@@ -63,9 +58,11 @@ class FfmsApplicationTests {
         incomeController.newIncome(income);
     }
 
+    @Autowired
+    IncomeService incomeService;
     @Test
     void contextLoads11() {
-        incomeController.deleteIncome(4);
+        incomeService.deleteIncome(1);
     }
 
     @Test

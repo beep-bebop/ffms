@@ -8,16 +8,25 @@
         VALUES (#{incomeId},#{income},#{userId},#{time},#{description},#{type})
     </insert>
 
-    <delete id="deleteIncome" parameterType="int" >
+    <delete id="deleteIncome" parameterType="int">
         delete FROM INCOME WHERE INCOMEID=#{incomeId}
     </delete>
 
     <update id="updateIncome" parameterType="Income">
         UPDATE INCOME
-        SET INCOME = #{income},
-            TIME = #{time},
-            DESCRIPTION = #{description},
-            TYPE = #{type}
+        SET INCOMEID = #{incomeId}
+        <if test="income != null">
+            ,INCOME = #{income}
+        </if>
+        <if test="time != null">
+            ,TIME = #{time}
+        </if>
+        <if test="description != null">
+            ,DESCRIPTION = #{description}
+        </if>
+        <if test="type != null">
+            ,TYPE = #{type}
+        </if>
         WHERE INCOMEID = #{incomeId}
     </update>
 
@@ -26,7 +35,15 @@
         FROM INCOME
         WHERE 1=1
         <if test="userId != null">
-            AND Userid = #{userId}
+            AND USERID IN (
+            SELECT userid
+            FROM relation
+            WHERE
+            FAMILYID = (
+            SELECT FAMILYID
+            FROM RELATION
+            WHERE USERID = #{userId}
+            ))
         </if>
         <if test="time != null">
             AND TIME = #{time}
@@ -34,6 +51,12 @@
         <if test="type != null">
             AND TYPE = #{type}
         </if>
+    </select>
+
+    <select id="totalIncome" parameterType="Income" resultType="int">
+        SELECT IFNULL(SUM(INCOME),0)
+        FROM INCOME
+        WHERE  USERID = #{userId} AND TIME =#{time,jdbcType=DATE}
     </select>
 
 </mapper>

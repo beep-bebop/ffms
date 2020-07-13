@@ -1,5 +1,7 @@
 package org.csu.ffms.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import org.csu.ffms.domain.Account;
 import org.csu.ffms.domain.Security;
@@ -12,10 +14,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.*;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.net.URLConnection;
+import java.nio.charset.Charset;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -26,6 +34,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/stock")
 public class StockController {
+    private static final String basicUrl="https://api.doctorxiong.club";
 
     @Autowired
     StockService stockService;
@@ -43,7 +52,9 @@ public class StockController {
      */
     @UserLoginToken
     @GetMapping("/stockInfo")
-    public String getStock(String userid,String code){
+    public String getStock(@RequestBody Map<String,String> map){
+        String userid=map.get("userid");
+        String code=map.get("code");
         JSONObject jsonObject = new JSONObject();
         try{
             Stock stock = stockService.getStockByStockCode(code,userid);
@@ -67,7 +78,8 @@ public class StockController {
      */
     @UserLoginToken
     @GetMapping("/ownStock")
-    public String getAllStock(String userid){
+    public String getAllStock(@RequestBody Map<String,String>map){
+        String userid=map.get("userid");
         JSONObject jsonObject = new JSONObject();
         try{
             List<Stock> stockList =stockService.getStockByUserId(userid);
@@ -91,7 +103,9 @@ public class StockController {
      */
     @UserLoginToken
     @GetMapping("/familyStocks")
-    public String getFamilyStocks(String familyid){
+    public String getFamilyStocks(@RequestBody Map<String,String>map){
+        String familyid=map.get("familyid");
+
         JSONObject jsonObject = new JSONObject();
         try{
             List<Account> accountList= accountService.getAllAccountByFamilyid(familyid);
@@ -123,7 +137,7 @@ public class StockController {
      */
     @UserLoginToken
     @PostMapping("/insertStock")
-    public String insertStock(Stock stock){
+    public String insertStock(@RequestBody Stock stock){
         JSONObject jsonObject = new JSONObject();
         try{
             stockService.insertStock(stock);
@@ -146,7 +160,9 @@ public class StockController {
      */
     @UserLoginToken
     @DeleteMapping("/deleteStock")
-    public String deleteStock(String userid,String code){
+    public String deleteStock(@RequestBody Map<String,String>map){
+        String userid=map.get("userid");
+        String code=map.get("code");
         JSONObject jsonObject = new JSONObject();
         try{
             stockService.deleteStock(stockService.getStockByStockCode(code, userid));
@@ -169,7 +185,7 @@ public class StockController {
      */
     @UserLoginToken
     @PutMapping("/updateStock")
-    public String updateStock(Stock stock){
+    public String updateStock(@RequestBody Stock stock){
         JSONObject jsonObject = new JSONObject();
         try{
             stockService.updateStock(stock);
@@ -181,5 +197,4 @@ public class StockController {
         }
         return JSONObject.toJSONString(jsonObject);
     }
-
 }
