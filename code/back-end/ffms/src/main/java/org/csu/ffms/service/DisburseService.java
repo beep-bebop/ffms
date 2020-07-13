@@ -13,9 +13,7 @@ public class DisburseService {
     DisburseMapper disburseMapper;
 
     public void newDisburse(Disburse disburse){
-        System.out.println("111111");
         disburseMapper.newDisburse(disburse);
-        System.out.println("222222");
     }
 
     public void deleteDisburse(int disburseId){

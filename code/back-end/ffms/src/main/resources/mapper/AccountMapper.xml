@@ -100,8 +100,8 @@
   </delete>
 
 
-    <select id="getAllAccountByFamilyid" parameterType="string" resultType="Account">
-      SELECT
+    <select id="getAllAccountByFamilyid" parameterType="String" resultType="Account">
+    SELECT
           SIGNON.USERID,
           SIGNON.PASSWORD,
           ACCOUNT.USERNAME,
@@ -109,9 +109,9 @@
           ACCOUNT.PHONE,
           RELATION.FAMILYID
     FROM ACCOUNT, RELATION, SIGNON
-    WHERE RELATION.FAMILYID = #{familyid}
-      AND SIGNON.USERID = ACCOUNT.USERID
+    WHERE SIGNON.USERID = ACCOUNT.USERID
       AND RELATION.USERID = ACCOUNT.USERID
+      AND RELATION.FAMILYID = #{familyid}
     </select>
 
 
