@@ -11,19 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@MapperScan("org.csu.ffms.controller")
+@MapperScan("org.csu.ffms.persistence")
 class FfmsApplicationTests {
-    @Autowired
-    DisburseController disburseController;
 
-    @Autowired
-    IncomeController incomeController;
-
-    @Autowired
-    Disburse disburse;
-
-    @Autowired
-    Income income;
 
     @Test
     void contextLoads1() {

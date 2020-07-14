@@ -13,4 +13,5 @@ public interface IncomeMapper {
     void updateIncome(Income income);
     List<Income> findIncomeList(Income income);
     int totalIncome(Income income);
+    int totalIncomeByTypeAndWeek(Income income);
 }

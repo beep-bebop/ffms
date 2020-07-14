@@ -1,5 +1,6 @@
 package org.csu.ffms;
 
+import org.csu.ffms.controller.StockController;
 import org.csu.ffms.domain.Security;
 import org.csu.ffms.domain.Stock;
 import org.csu.ffms.service.StockService;
@@ -8,7 +9,10 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @创建人 ： 李振豪
@@ -69,4 +73,26 @@ class StockTests {
         System.out.println("after update"+stockService.getStockByStockCode("1","1").toString());
     }
 
+
+
+    @Autowired
+    StockController stockController;
+
+    @Test
+    public void testStockAPI(){
+        Map<String,String>map=new HashMap<>();
+        map.put("userid","1");
+        System.out.println(stockController.getStockTable(map));
+        map.put("queryid","1");
+        System.out.println(stockController.getStockTable(map));
+    }
+
+    @Test
+    public void testStockController(){
+        Map<String,String>map=new HashMap<>();
+        map.put("userid","1");
+        System.out.println(stockController.getTotal(map));
+        map.put("queryid","1");
+        System.out.println(stockController.getTotal(map));
+    }
 }

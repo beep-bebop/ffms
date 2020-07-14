@@ -1,11 +1,18 @@
 package org.csu.ffms.service;
 
 import ch.qos.logback.classic.spi.STEUtil;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import org.csu.ffms.controller.GetJsonFromUrl;
+import org.csu.ffms.domain.Account;
+import org.csu.ffms.domain.Fund;
 import org.csu.ffms.domain.Stock;
 import org.csu.ffms.persistence.StockMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,5 +51,29 @@ public class StockService {
         return stockList;
     }
 
+    public JSONArray getStockAPIInfoByUserid(String userid) {
+        String basicUrl="https://api.doctorxiong.club/v1/stock/detail?code=";
+        List<Stock> stockList=this.getStockByUserId(userid);
+        JSONArray jsonArray=new JSONArray();
+        for (Stock stock : stockList) {
+            JSONObject stockInfoJson;
+            try {
+                stockInfoJson = (JSONObject) GetJsonFromUrl.GET(basicUrl+stock.getCode()).get("data");
+                if(stockInfoJson!=null){
+                    int quantity = stock.getQuantity();
+                    stockInfoJson.put("userid",userid);
+                    stockInfoJson.put("quantity",quantity);
+                    BigDecimal price = new BigDecimal(stockInfoJson.get("price").toString());
+                    stockInfoJson.put("currentValue",price.multiply(new BigDecimal(quantity)));
+                    stockInfoJson.remove("dayMinData");
+                    stockInfoJson.remove("dailyData");
+                    jsonArray.add(stockInfoJson);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return jsonArray;
+    }
 
 }

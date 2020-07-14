@@ -1,5 +1,6 @@
 package org.csu.ffms.service;
 
+import com.alibaba.fastjson.JSONArray;
 import org.csu.ffms.domain.Security;
 import org.csu.ffms.persistence.SecurityMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +46,8 @@ public class SecurityService {
     public List<Security> getSecurityByTime(String userid,String starttime,String endtime){
         return securityMapper.getSecurityByTime(userid,starttime,endtime);
     }
+
+
+
 
 }

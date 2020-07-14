@@ -21,7 +21,6 @@ import java.util.*;
 @RestController
 @RequestMapping("/disbursement/")
 public class DisburseController {
-
     @Autowired
     DisburseService disburseService;
     @Autowired
@@ -141,6 +140,54 @@ public class DisburseController {
         JSONObject json = new JSONObject();
         json.put("status",0);
         json.put("data",total);
+        System.out.println(JSONObject.toJSONString(json));
+        return JSONObject.toJSONString(json);
+    }
+
+    @UserLoginToken
+    @RequestMapping(value="type",method = RequestMethod.GET)
+    public String totalDisburseByTypeAndWeek(String userId){
+        List<Disburse> disburseList = new ArrayList<>();
+        Disburse disburse1 = new Disburse();
+        Disburse disburse2 = new Disburse();
+        Disburse disburse3 = new Disburse();
+        Disburse disburse4 = new Disburse();
+        Disburse disburse5 = new Disburse();
+
+        disburse1.setUserId(userId);
+        disburse1.setType("餐饮");
+        int out1 = disburseService.totalDisburseByTypeAndWeek(disburse1);
+        disburse1.setAmount_paid(out1);
+        disburseList.add(disburse1);
+
+        disburse2.setUserId(userId);
+        disburse2.setType("逛街");
+        int out2 = disburseService.totalDisburseByTypeAndWeek(disburse2);
+        disburse2.setAmount_paid(out2);
+        disburseList.add(disburse2);
+
+        disburse3.setUserId(userId);
+        disburse3.setType("游玩");
+        int out3 = disburseService.totalDisburseByTypeAndWeek(disburse3);
+        disburse3.setAmount_paid(out3);
+        disburseList.add(disburse3);
+
+        disburse4.setUserId(userId);
+        disburse4.setType("学习");
+        int out4 = disburseService.totalDisburseByTypeAndWeek(disburse4);
+        disburse4.setAmount_paid(out4);
+        disburseList.add(disburse4);
+
+        disburse5.setUserId(userId);
+        disburse5.setType("其他");
+        int out5 = disburseService.totalDisburseByTypeAndWeek(disburse5);
+        disburse5.setAmount_paid(out5);
+        disburseList.add(disburse5);
+
+
+        JSONObject json = new JSONObject();
+        json.put("status",0);
+        json.put("data",disburseList);
         System.out.println(JSONObject.toJSONString(json));
         return JSONObject.toJSONString(json);
     }
