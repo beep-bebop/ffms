@@ -31,7 +31,7 @@ public class AccountService {
     public void insertAccount(Account account) {
         accountMapper.insertAccount(account);
         accountMapper.insertSignon(account);
-        accountMapper.updateRelation(account);
+        accountMapper.insertRelation(account);
     }
 
     @Transactional
