@@ -257,9 +257,9 @@ public class StockController {
             }
             jsonObject.put("type", "person stock total");
         }
-
         jsonObject.put("userid",userid);
         jsonObject.put("total",total);
         return jsonObject;
     }
+
 }
