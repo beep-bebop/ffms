@@ -9,11 +9,6 @@ import org.csu.ffms.persistence.IncomeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-<<<<<<< HEAD
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-=======
->>>>>>> daed8738c68f319566be5a20d7da9926468ce990
 import java.util.*;
 
 @Service
@@ -59,11 +54,7 @@ public class IncomeService {
         });
     }
 
-<<<<<<< HEAD
-    //单用户某天的收入总额
-=======
     //单用户某天的收入总额，income中time为这一天
->>>>>>> daed8738c68f319566be5a20d7da9926468ce990
     public int totalIncome(Income income){
         return incomeMapper.totalIncome(income);
     }
@@ -82,22 +73,6 @@ public class IncomeService {
         return in;
     }
 
-<<<<<<< HEAD
-    //单用户本周的收入总额
-    public int totalWeekIncome(String userid){
-        Income income=new Income();
-        income.setUserId(userid);
-//        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
-        Calendar calendar= Calendar.getInstance();
-        income.setTime(calendar.getTime());
-        int total = totalIncome(income);
-        for (int i=0 ; i<6 ; ++i){
-            calendar.set(Calendar.HOUR_OF_DAY,-24);
-            income.setTime(calendar.getTime());
-            total=total+totalIncome(income);
-        }
-        return total;
-=======
     //家庭组一周的收入总额，income中time为该周的最后一天
     public int totalFamilyIncomeByWeek(Income income){
         int in = 0,sum = 0;
@@ -121,7 +96,6 @@ public class IncomeService {
     //家庭组一周内某一类型的收入总额
     public int totalIncomeByTypeAndWeek(Income income){
         return incomeMapper.totalIncomeByTypeAndWeek(income);
->>>>>>> daed8738c68f319566be5a20d7da9926468ce990
     }
 
 }
