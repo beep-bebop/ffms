@@ -219,13 +219,12 @@ public class FamilyController {
 
         JSONObject json = new JSONObject();
         json.put("status_code",1);
-        json.put("family",new String[][]{{"类型","现金", "总金额"+moneyQuantity},
-                {"类型","股票", "总金额"+stockQuantity},
-                {"类型","基金", "总金额"+fundQuantity}});
-        json.put("user",new String[][]{{"类型","现金", "总金额"+OnemoneyQuantity},
-                {"类型","股票", "总金额"+OnestockQuantity},
-                {"类型","基金", "总金额"+OnefundQuantity}});
-        System.out.println(JSONObject.toJSONString(json));
+        json.put("family",new String[][]{{"现金", ""+moneyQuantity},
+                {"股票", ""+stockQuantity},
+                {"基金", ""+fundQuantity}});
+        json.put("user",new String[][]{{"现金", ""+OnemoneyQuantity},
+                {"股票", ""+OnestockQuantity},
+                {"基金", ""+OnefundQuantity}});
         return "JSONObject.toJSONString(json)";
     }
 
@@ -288,8 +287,8 @@ public class FamilyController {
         String[][] str = new String[52][2];
         for(int i=0;i<52;i++)
         {
-            str[i][0] = "第"+(i+1)+"周";
-            str[i][1] = "总金额："+totalQuantity[i+1];
+            str[i][0] = (i+1)+"";
+            str[i][1] = totalQuantity[i+1]+"";
         }
         json.put("data",str);
         System.out.println(JSONObject.toJSONString(json));
