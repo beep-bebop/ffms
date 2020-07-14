@@ -98,4 +98,19 @@ public class IncomeService {
         return incomeMapper.totalIncomeByTypeAndWeek(income);
     }
 
+    //单用户一周的收入总额
+    public int totalWeekIncome(String userid) {
+        Income income = new Income();
+        income.setUserId(userid);
+        Calendar calendar = Calendar.getInstance();
+        income.setTime(calendar.getTime());
+        int total = totalIncome(income);
+        for (int i = 0; i < 6; ++i) {
+            calendar.set(Calendar.HOUR_OF_DAY, -24);
+            income.setTime(calendar.getTime());
+            total = total + totalIncome(income);
+        }
+        return total;
+    }
 }
+
