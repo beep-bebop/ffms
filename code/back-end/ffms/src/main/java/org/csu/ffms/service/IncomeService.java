@@ -8,10 +8,9 @@ import org.csu.ffms.persistence.IncomeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class IncomeService {
@@ -53,8 +52,8 @@ public class IncomeService {
     }
 
     //单用户某天的收入总额
-    public void totalIncome(Income income){
-        incomeMapper.totalIncome(income);
+    public int totalIncome(Income income){
+        return incomeMapper.totalIncome(income);
     }
 
     //家庭组某天的收入总额
@@ -71,6 +70,20 @@ public class IncomeService {
         return in;
     }
 
-
+    //单用户本周的收入总额
+    public int totalWeekIncome(String userid){
+        Income income=new Income();
+        income.setUserId(userid);
+//        DateFormat dateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar= Calendar.getInstance();
+        income.setTime(calendar.getTime());
+        int total = totalIncome(income);
+        for (int i=0 ; i<6 ; ++i){
+            calendar.set(Calendar.HOUR_OF_DAY,-24);
+            income.setTime(calendar.getTime());
+            total=total+totalIncome(income);
+        }
+        return total;
+    }
 
 }

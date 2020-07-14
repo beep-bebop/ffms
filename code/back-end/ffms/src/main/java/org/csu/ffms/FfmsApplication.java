@@ -9,10 +9,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ComponentScans;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @ComponentScans(value = { @ComponentScan(value = "org.csu.ffms.*") })
 @MapperScans(value = @MapperScan("org.csu.ffms.persistence"))
+@EnableScheduling
 public class FfmsApplication {
 
     public static void main(String[] args) {
