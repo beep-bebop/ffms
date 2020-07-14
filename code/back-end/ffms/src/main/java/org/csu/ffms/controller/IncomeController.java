@@ -34,12 +34,10 @@ public class IncomeController {
         binder.registerCustomEditor(Date.class, dateEditor);
     }
 
+    //新增收入款项
     @UserLoginToken
     @RequestMapping(value="new",method = RequestMethod.POST)
     public String newIncome(@RequestBody Income income) {
-        long time = System.currentTimeMillis();
-        java.sql.Date date = new java.sql.Date(time);
-        income.setTime(date);
         incomeService.newIncome(income);
         JSONObject json = new JSONObject();
         json.put("status",0);
@@ -47,6 +45,7 @@ public class IncomeController {
         return JSONObject.toJSONString(json);
     }
 
+    //删除收入款项
     @UserLoginToken
     @DeleteMapping("delete")
     public String deleteIncome(@RequestBody Map<String,String>map){
@@ -58,6 +57,7 @@ public class IncomeController {
         return JSONObject.toJSONString(json);
     }
 
+    //更新收入款项
     @UserLoginToken
     @PutMapping("update")
     public String updateIncome(@RequestBody Income income){
@@ -68,6 +68,7 @@ public class IncomeController {
         return JSONObject.toJSONString(json);
     }
 
+    //可根据userId，date，type属性筛选收入列表，并排序
     @UserLoginToken
     @GetMapping("query")
     public String findIncomeList(@RequestBody Income income){
@@ -80,6 +81,7 @@ public class IncomeController {
         return JSONObject.toJSONString(json);
     }
 
+    //通过userId查询改家庭组的所有收入列表，并排序
     @UserLoginToken
     @GetMapping(value = "familyList", produces = "application/Json;charset=UTF-8")
     public String findIncomeByFamily(String userid) {
@@ -98,6 +100,33 @@ public class IncomeController {
         json.put("data", familyList);
         json.put("familyName", familyName);
         json.put("status", 0);
+        return JSONObject.toJSONString(json);
+    }
+
+    //查询各个类型的总收入，类型有“工资”，“其他”
+    @UserLoginToken
+    @RequestMapping(value="type",method = RequestMethod.GET)
+    public String totalIncomeByTypeAndWeek(String userId){
+        List<Income> incomeList = new ArrayList<>();
+        Income income1 = new Income();
+        Income income2 = new Income();
+
+        income1.setUserId(userId);
+        income1.setType("工资");
+        int out1 = incomeService.totalIncomeByTypeAndWeek(income1);
+        income1.setIncome(out1);
+        incomeList.add(income1);
+
+        income2.setUserId(userId);
+        income2.setType("其他");
+        int out2 = incomeService.totalIncomeByTypeAndWeek(income2);
+        income2.setIncome(out2);
+        incomeList.add(income2);
+
+        JSONObject json = new JSONObject();
+        json.put("status",0);
+        json.put("data",incomeList);
+        System.out.println(JSONObject.toJSONString(json));
         return JSONObject.toJSONString(json);
     }
 

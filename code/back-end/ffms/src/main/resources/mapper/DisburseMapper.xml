@@ -76,5 +76,18 @@
         WHERE  USERID = #{userId} AND TIME =#{time,jdbcType=DATE}
     </select>
 
+    <select id="totalDisburseByTypeAndWeek" parameterType="Disburse" resultType="int">
+        SELECT IFNULL(SUM(AMOUNT_PAID),0)
+        FROM DISBURSE
+        WHERE USERID IN (
+        SELECT S.USERID
+        FROM RELATION AS S,RELATION AS T
+        WHERE S.FAMILYID = T.FAMILYID
+        AND T.USERID = #{userId}
+        )
+        And TYPE = #{type}
+        AND TIME >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+    </select>
+
 
 </mapper>

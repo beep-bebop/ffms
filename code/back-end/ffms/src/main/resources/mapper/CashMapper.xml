@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="org.csu.ffms.persistence.CashMapper">
+
+    <select id="totalDisbursement" parameterType="String" resultType="int">
+        SELECT IFNULL(SUM(AMOUNT_PAID),0)
+        FROM DISBURSE
+        WHERE  USERID = #{userId}
+    </select>
+
+    <select id="totalDisbursementByFamily" parameterType="String" resultType="int">
+        SELECT IFNULL(SUM(AMOUNT_PAID),0)
+        FROM DISBURSE
+        WHERE USERID IN (
+          SELECT S.USERID
+          FROM RELATION AS S,RELATION AS T
+          WHERE S.FAMILYID = T.FAMILYID
+                AND T.USERID = #{userId}
+        )
+    </select>
+
+    <select id="totalIncome" parameterType="String" resultType="int">
+        SELECT IFNULL(SUM(INCOME),0)
+        FROM INCOME
+        WHERE  USERID = #{userId}
+    </select>
+
+    <select id="totalIncomeByFamily" parameterType="String" resultType="int">
+        SELECT IFNULL(SUM(INCOME),0)
+        FROM INCOME
+        WHERE USERID IN (
+          SELECT S.USERID
+          FROM RELATION AS S,RELATION AS T
+          WHERE S.FAMILYID = T.FAMILYID
+                AND T.USERID = #{userId}
+        )
+    </select>
+
+
+
+</mapper>

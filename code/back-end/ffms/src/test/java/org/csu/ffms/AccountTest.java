@@ -29,7 +29,7 @@ class AccountTest {
     @Test
     void getAccountByUseridAndPassword() {
         Account account=accountService.getAccount("1","123");
-        System.out.println(account.toString());
+        System.out.println(account.getUsername());
     }
 
     @Test

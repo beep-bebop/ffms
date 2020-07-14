@@ -26,10 +26,16 @@ public class IncomeTests {
         incomeController.findIncomeList(income);
     }
 
+<<<<<<< HEAD
 
     @Test
     public void testWeekTotal(){
        System.out.println(incomeService.totalWeekIncome("1"));
+=======
+    @Test
+    public void totalIncomeByTypeAndWeek(){
+        incomeController.totalIncomeByTypeAndWeek("S1");
+>>>>>>> daed8738c68f319566be5a20d7da9926468ce990
     }
 
 }
