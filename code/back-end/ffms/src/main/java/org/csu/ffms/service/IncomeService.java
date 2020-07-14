@@ -43,7 +43,6 @@ public class IncomeService {
     public void sortByDate(List<Income> incomeList) {
         Collections.sort(incomeList, new Comparator<Income>() {
             public int compare(Income o1, Income o2) {
-                //按照CityModel的city_code字段进行降序排列
                 if (o1.getTime().before(o2.getTime())) {
                     return -1;
                 }
@@ -55,22 +54,21 @@ public class IncomeService {
         });
     }
 
-    //单用户某天的收入总额
-    public void totalIncome(Income income){
-        incomeMapper.totalIncome(income);
+    //单用户某天的收入总额，income中time为这一天
+    public int totalIncome(Income income){
+        return incomeMapper.totalIncome(income);
     }
 
-    //家庭组某天的收入总额
+    //家庭组某天的收入总额，income中time为这一天
     public int totalFamilyIncome(Income income){
         List<String> memberList = disburseMapper.findFamilyMember(income.getUserId());
         int in = 0;
         Date date = income.getTime();
-        for(int i =0;i<memberList.size();i++){
+        for(int i =0;i<memberList.size();i++) {
             Income inco = new Income();
             inco.setTime(date);
             inco.setUserId(memberList.get(i));
-            in = in+incomeMapper.totalIncome(inco);
-            System.out.println("11111111111in = "+in);
+            in = in + incomeMapper.totalIncome(inco);
         }
         return in;
     }
@@ -78,7 +76,7 @@ public class IncomeService {
     //家庭组一周的收入总额，income中time为该周的最后一天
     public int totalFamilyIncomeByWeek(Income income){
         int in = 0,sum = 0;
-        Date date = new Date();
+        Date date = income.getTime();
         for(int i = 0;i< 7;i++){
             in = totalFamilyIncome(income);
             System.out.println("in =" + in);
