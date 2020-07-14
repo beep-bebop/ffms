@@ -288,8 +288,8 @@ public class FamilyController {
         String[][] str = new String[52][2];
         for(int i=0;i<52;i++)
         {
-            str[i][0] = "第"+(i+1)+"周";
-            str[i][1] = "总金额："+totalQuantity[i+1];
+            str[i][0] = (i+1)+"";
+            str[i][1] = totalQuantity[i+1]+"";
         }
         json.put("data",str);
         System.out.println(JSONObject.toJSONString(json));
