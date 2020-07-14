@@ -1,5 +1,6 @@
 package org.csu.ffms;
 
+import org.csu.ffms.crontab.CalculateAssert;
 import org.csu.ffms.domain.AccountAssert;
 import org.csu.ffms.service.AccountAssertService;
 import org.junit.jupiter.api.Test;
@@ -42,5 +43,11 @@ public class AssertTests {
 
     }
 
+    @Autowired
+    CalculateAssert calculateAssert;
 
+    @Test
+    public void test(){
+        calculateAssert.updateAssert();
+    }
 }
