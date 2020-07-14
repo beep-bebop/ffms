@@ -144,6 +144,7 @@ public class DisburseController {
         return JSONObject.toJSONString(json);
     }
 
+    //查询各个类型的总支出，类型有“餐饮”，“游玩”，“逛街”，“学习”，“其他”
     @UserLoginToken
     @RequestMapping(value="type",method = RequestMethod.GET)
     public String totalDisburseByTypeAndWeek(String userId){
@@ -183,7 +184,6 @@ public class DisburseController {
         int out5 = disburseService.totalDisburseByTypeAndWeek(disburse5);
         disburse5.setAmount_paid(out5);
         disburseList.add(disburse5);
-
 
         JSONObject json = new JSONObject();
         json.put("status",0);

@@ -44,7 +44,6 @@ public class DisburseService {
     public void sortByDate(List<Disburse> disburseList) {
         Collections.sort(disburseList, new Comparator<Disburse>() {
             public int compare(Disburse o1, Disburse o2) {
-                //按照CityModel的city_code字段进行降序排列
                 if (o1.getTime().before(o2.getTime())) {
                     return -1;
                 }
@@ -66,13 +65,11 @@ public class DisburseService {
         List<String> memberList = disburseMapper.findFamilyMember(disburse.getUserId());
         int out = 0;
         Date date = disburse.getTime();
-        System.out.println(date.toString());
         for(int i =0;i<memberList.size();i++){
             Disburse dis = new Disburse();
             dis.setTime(date);
             dis.setUserId(memberList.get(i));
             out = out+disburseMapper.totalDisbursement(dis);
-            System.out.println("333333333333333333out="+out);
         }
        return out;
     }
@@ -80,7 +77,7 @@ public class DisburseService {
     //家庭组一周的总支出，disburse中的time为这一周的最后一天
     public int totalFamilyDisbursementByWeek(Disburse disburse){
         int out1 = 0,sum = 0;
-        Date date = new Date();
+        Date date = disburse.getTime();
         for(int i = 0;i< 7;i++){
             out1 = totalFamilyDisbursement(disburse);
             System.out.println("out =" + out1);
