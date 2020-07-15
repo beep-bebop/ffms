@@ -26,6 +26,9 @@ public class DisburseService {
     }
 
     //查找某用户的支出列表
+    public List<Disburse> findDisburseListByUser(Disburse disburse){return disburseMapper.findDisburseListByUser(disburse);}
+
+    //查找某用户家庭组的支出列表
     public List<Disburse> findDisburseList(Disburse disburse){
         return disburseMapper.findDisburseList(disburse);
     }

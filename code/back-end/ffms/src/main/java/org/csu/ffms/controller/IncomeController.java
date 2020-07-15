@@ -72,7 +72,7 @@ public class IncomeController {
     @UserLoginToken
     @GetMapping("query")
     public String findIncomeList(@RequestBody Income income){
-        List<Income> incomeList=incomeService.findIncomeList(income);
+        List<Income> incomeList=incomeService.findIncomeListByUser(income);
         JSONObject json = new JSONObject();
         json.put("status", 0);
         json.put("data", incomeList);
@@ -85,21 +85,27 @@ public class IncomeController {
     @UserLoginToken
     @GetMapping(value = "familyList", produces = "application/Json;charset=UTF-8")
     public String findIncomeByFamily(String userid) {
-        List<String> familyMemberList = disburseService.findFamilyMember(userid);
         List<Income> familyList = new ArrayList<>();
         String familyName = disburseService.findFamily(userid);
+        Income income = new Income();
+        income.setUserId(userid);
+        familyList = incomeService.findIncomeList(income);
 
+        /*
         for (int i = 0; i < familyMemberList.size(); i++) {
             Income income = new Income();
             income.setUserId(familyMemberList.get(i));
             familyList = incomeService.findIncomeList(income);
         }
+*/
         incomeService.sortByDate(familyList);
 
         JSONObject json = new JSONObject();
         json.put("data", familyList);
         json.put("familyName", familyName);
         json.put("status", 0);
+        System.out.println(JSONObject.toJSONString(json));
+
         return JSONObject.toJSONString(json);
     }
 

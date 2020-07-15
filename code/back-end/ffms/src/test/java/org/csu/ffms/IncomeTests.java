@@ -21,21 +21,19 @@ public class IncomeTests {
 
     @Test
     public void findIncomeList(){
-        income.setUserId("11111");
-        income.setType("salary");
-        incomeController.findIncomeList(income);
+        incomeController.findIncomeByFamily("S1");
     }
 
-<<<<<<< HEAD
 
     @Test
-    public void testWeekTotal(){
-       System.out.println(incomeService.totalWeekIncome("1"));
-=======
+    public void testWeekTotal() {
+        income.setUserId("S1");
+        System.out.println(incomeService.findIncomeList(income));
+    }
+
     @Test
     public void totalIncomeByTypeAndWeek(){
         incomeController.totalIncomeByTypeAndWeek("S1");
->>>>>>> daed8738c68f319566be5a20d7da9926468ce990
     }
 
 }

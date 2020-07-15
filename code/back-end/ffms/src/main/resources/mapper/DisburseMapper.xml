@@ -29,7 +29,21 @@
         </if>
         WHERE DISBURSEID = #{disburseId}
     </update>
-    
+
+    <select id="findDisburseListByUser" parameterType="Disburse" resultType="Disburse">
+        SELECT *
+        FROM DISBURSE
+        WHERE 1=1
+        <if test="userId != null">
+            AND USERID = #{userId}
+        </if>
+        <if test="time != null">
+            AND TIME = #{time}
+        </if>
+        <if test="type != null">
+            AND TYPE = #{type}
+        </if>
+    </select>
     <select id="findDisburseList" parameterType="Disburse" resultType="Disburse">
         SELECT *
         FROM DISBURSE

@@ -12,6 +12,7 @@ public interface DisburseMapper {
     void deleteDisburse(int disburseId);
     void updateDisburse(Disburse disburse);
     List<Disburse> findDisburseList(Disburse disburse);
+    List<Disburse> findDisburseListByUser(Disburse disburse);
     List<String> findFamilyMember(String userId);
     String findFamily(String userId);
     int totalDisbursement(Disburse disburse);
