@@ -34,10 +34,16 @@ public class IncomeService {
         return income;
     }
 
-    //查找某用户的收入列表
+    //查找某用户家庭组的收入列表
     public List<Income> findIncomeList(Income income){
         return incomeMapper.findIncomeList(income);
     }
+
+    //查找某用户的收入列表
+    public List<Income> findIncomeListByUser(Income income){
+        return incomeMapper.findIncomeListByUser(income);
+    }
+
 
     //对收入列表依据time进行排序
     public void sortByDate(List<Income> incomeList) {

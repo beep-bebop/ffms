@@ -27,4 +27,15 @@ public class IncomeTests {
     }
 
 
+    @Test
+    public void testWeekTotal() {
+        income.setUserId("S1");
+        System.out.println(incomeService.findIncomeList(income));
+    }
+
+    @Test
+    public void totalIncomeByTypeAndWeek(){
+        incomeController.totalIncomeByTypeAndWeek("S1");
+    }
+
 }

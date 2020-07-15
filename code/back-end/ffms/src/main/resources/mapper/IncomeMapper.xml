@@ -53,6 +53,21 @@
         </if>
     </select>
 
+    <select id="findIncomeListByUser" parameterType="Income" resultType="Income">
+        SELECT *
+        FROM INCOME
+        WHERE 1=1
+        <if test="userId != null">
+            AND USERID = #{userId}
+        </if>
+        <if test="time != null">
+            AND TIME = #{time}
+        </if>
+        <if test="type != null">
+            AND TYPE = #{type}
+        </if>
+    </select>
+
     <select id="totalIncome" parameterType="Income" resultType="int">
         SELECT IFNULL(SUM(INCOME),0)
         FROM INCOME
