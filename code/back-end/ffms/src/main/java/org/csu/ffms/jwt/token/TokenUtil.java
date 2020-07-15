@@ -18,7 +18,7 @@ public class TokenUtil {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("userid",account.getUserid());
         //过期时间
-        jsonObject.put("exp",System.currentTimeMillis()+1000*600);
+        jsonObject.put("exp",System.currentTimeMillis()+1000*6000);
         //签发时间
         jsonObject.put("iat",System.currentTimeMillis());
         String json = JSONObject.toJSONString(jsonObject);

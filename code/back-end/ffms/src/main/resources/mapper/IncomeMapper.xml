@@ -4,8 +4,8 @@
 
 <mapper namespace="org.csu.ffms.persistence.IncomeMapper">
     <insert id="newIncome" parameterType="Income">
-        INSERT INTO INCOME (INCOMEID,INCOME,USERID,TIME,DESCRIPTION,TYPE)
-        VALUES (#{incomeId},#{income},#{userId},#{time},#{description},#{type})
+        INSERT INTO INCOME (INCOME,USERID,TIME,DESCRIPTION,TYPE)
+        VALUES (#{income},#{userId},#{time},#{description},#{type})
     </insert>
 
     <delete id="deleteIncome" parameterType="int">
