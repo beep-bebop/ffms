@@ -95,13 +95,15 @@ public class FamilyTest {
             Income income = new Income();
             income.setUserId(List.get(i).getUserid());
             List<Income> List3 = incomeService.findIncomeList(income);
+            System.out.println("收入有多少条："+List3.size());
             for(int c=0;c<List3.size();c++)
             {
-                moneyQuantity = moneyQuantity + (int)List3.get(c).getIncome();
+                if(List3.get(c).getUserId().equals(List.get(i).getUserid())) {
+                    moneyQuantity = moneyQuantity + (int) List3.get(c).getIncome();
 
-                if(List.get(i).getUserid().equals(searchId))
-                {
-                    OnemoneyQuantity = OnemoneyQuantity + (int)List3.get(c).getIncome();
+                    if (List.get(i).getUserid().equals(searchId)) {
+                        OnemoneyQuantity = OnemoneyQuantity + (int) List3.get(c).getIncome();
+                    }
                 }
             }
 
@@ -110,11 +112,12 @@ public class FamilyTest {
             List<Disburse> List4 = disburseService.findDisburseList(disburse);
             for(int d=0;d<List4.size();d++)
             {
-                moneyQuantity = moneyQuantity + List4.get(d).getAmount_paid();
+                if(List4.get(d).getUserId().equals(List.get(i).getUserid())) {
+                    moneyQuantity = moneyQuantity + List4.get(d).getAmount_paid();
 
-                if(List.get(i).getUserid().equals(searchId))
-                {
-                    OnemoneyQuantity = OnemoneyQuantity + List4.get(d).getAmount_paid();
+                    if (List.get(i).getUserid().equals(searchId)) {
+                        OnemoneyQuantity = OnemoneyQuantity + List4.get(d).getAmount_paid();
+                    }
                 }
             }
 
