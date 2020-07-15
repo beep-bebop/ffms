@@ -59,8 +59,8 @@ public class DisburseService {
     }
 
     //单用户某天的支出总额，disburse中time为这一天
-    public void totalDisbursement(Disburse disburse){
-        disburseMapper.totalDisbursement(disburse);
+    public int totalDisbursement(Disburse disburse){
+        return disburseMapper.totalDisbursement(disburse);
     }
 
     //家庭组某天的支出总额,disburse中time为这一天
@@ -102,4 +102,18 @@ public class DisburseService {
         return disburseMapper.totalDisburseByTypeAndWeek(disburse);
     }
 
+    //单用户一周的支出总额
+    public int totalWeekDisburse(String userid) {
+        Disburse disburse = new Disburse();
+        disburse.setUserId(userid);
+        Calendar calendar = Calendar.getInstance();
+        disburse.setTime(calendar.getTime());
+        int total = totalDisbursement(disburse);
+        for (int i = 0; i < 6; ++i) {
+            calendar.set(Calendar.HOUR_OF_DAY, -24);
+            disburse.setTime(calendar.getTime());
+            total = total + totalDisbursement(disburse);
+        }
+        return total;
+    }
 }

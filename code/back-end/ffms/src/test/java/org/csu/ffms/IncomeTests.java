@@ -21,7 +21,9 @@ public class IncomeTests {
 
     @Test
     public void findIncomeList(){
-        incomeController.findIncomeByFamily("S1");
+        income.setUserId("11111");
+        income.setType("salary");
+        incomeController.findIncomeList(income);
     }
 
 
