@@ -59,6 +59,32 @@ public class FamilyController {
     }
 
  */
+    //查询用户现有家庭组
+    @UserLoginToken
+    @RequestMapping(value="findFamily",method = RequestMethod.POST)
+    public String findFamily(@RequestBody Map<String, String> map)
+    {
+        String userid=map.get("userid");
+        Account account = accountService.getAccount(userid);
+        if(account.getFamilyid() != null)  //返回用户现有家庭组
+        {
+           String familyid = account.getFamilyid();
+            JSONObject json = new JSONObject();
+            json.put("status_code",0);
+            json.put("data",familyid);
+            System.out.println(JSONObject.toJSONString(json));
+            return JSONObject.toJSONString(json);
+        }
+        else  //用户现在没有家庭组
+        {
+            JSONObject json = new JSONObject();
+            json.put("status_code",-2);
+            return JSONObject.toJSONString(json);
+        }
+    }
+
+
+
     @UserLoginToken
     @RequestMapping(value="insert",method = RequestMethod.POST)
     public String newFamily(@RequestBody Map<String,JSONObject>p)
