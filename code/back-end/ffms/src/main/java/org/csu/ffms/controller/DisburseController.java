@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@CrossOrigin
 @ResponseBody
 @RestController
 @RequestMapping("/disbursement/")

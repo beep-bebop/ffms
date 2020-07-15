@@ -93,4 +93,11 @@ class FundTests {
         System.out.println(fundController.getTotal(map));
 
     }
+
+    @Test
+    public void testGetName(){
+        System.out.println(fundService.getFundAPIInfoByCode("0001"));
+        Fund fund=new Fund();
+        fund.setName(null);
+    }
 }

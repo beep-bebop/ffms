@@ -9,8 +9,11 @@ public class Fund {
     private String code;
     private String userid;
     private String name;
-    private int quantity;
+    private float quantity;
     private float income;
+
+    public Fund() {
+    }
 
     public Fund(String code, String userid, String name, int quantity, float income) {
         this.code = code;
@@ -44,11 +47,11 @@ public class Fund {
         this.name = name;
     }
 
-    public int getQuantity() {
+    public float getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(float quantity) {
         this.quantity = quantity;
     }
 
