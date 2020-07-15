@@ -219,11 +219,12 @@ public class FamilyController {
             List<Income> List3 = incomeService.findIncomeList(income);
             for(int c=0;c<List3.size();c++)
             {
-                moneyQuantity = moneyQuantity + (int)List3.get(c).getIncome();
+                if(List3.get(c).getUserId().equals(List.get(i).getUserid())) {
+                    moneyQuantity = moneyQuantity + (int) List3.get(c).getIncome();
 
-                if(List.get(i).getUserid().equals(searchId))
-                {
-                    OnemoneyQuantity = OnemoneyQuantity + (int)List3.get(c).getIncome();
+                    if (List.get(i).getUserid().equals(searchId)) {
+                        OnemoneyQuantity = OnemoneyQuantity + (int) List3.get(c).getIncome();
+                    }
                 }
             }
 
@@ -232,11 +233,12 @@ public class FamilyController {
             List<Disburse> List4 = disburseService.findDisburseList(disburse);
             for(int d=0;d<List4.size();d++)
             {
-                moneyQuantity = moneyQuantity + List4.get(d).getAmount_paid();
+                if(List4.get(d).getUserId().equals(List.get(i).getUserid())) {
+                    moneyQuantity = moneyQuantity + List4.get(d).getAmount_paid();
 
-                if(List.get(i).getUserid().equals(searchId))
-                {
-                    OnemoneyQuantity = OnemoneyQuantity + List4.get(d).getAmount_paid();
+                    if (List.get(i).getUserid().equals(searchId)) {
+                        OnemoneyQuantity = OnemoneyQuantity + List4.get(d).getAmount_paid();
+                    }
                 }
             }
 
@@ -287,9 +289,11 @@ public class FamilyController {
             List<Income> List3 = incomeService.findIncomeList(income);
             for(int c=0;c<List3.size();c++)
             {
-                calendar.setTime(List3.get(c).getTime());
-                int weekno=calendar.get(Calendar.WEEK_OF_YEAR);
-                changeQuantity[weekno] = changeQuantity[weekno] + (int)List3.get(c).getIncome();
+                if(List3.get(c).getUserId().equals(List.get(i).getUserid())) {
+                    calendar.setTime(List3.get(c).getTime());
+                    int weekno = calendar.get(Calendar.WEEK_OF_YEAR);
+                    changeQuantity[weekno] = changeQuantity[weekno] + (int) List3.get(c).getIncome();
+                }
             }
 
             Disburse disburse = new Disburse();
@@ -297,9 +301,11 @@ public class FamilyController {
             List<Disburse> List4 = disburseService.findDisburseList(disburse);
             for(int d=0;d<List4.size();d++)
             {
-                calendar.setTime(List4.get(d).getTime());
-                int weekno=calendar.get(Calendar.WEEK_OF_YEAR);
-                changeQuantity[weekno] = changeQuantity[weekno] + List4.get(d).getAmount_paid();
+                if(List4.get(d).getUserId().equals(List.get(i).getUserid())) {
+                    calendar.setTime(List4.get(d).getTime());
+                    int weekno = calendar.get(Calendar.WEEK_OF_YEAR);
+                    changeQuantity[weekno] = changeQuantity[weekno] + List4.get(d).getAmount_paid();
+                }
             }
         }
         totalQuantity[0] =  fundQuantity + stockQuantity;
