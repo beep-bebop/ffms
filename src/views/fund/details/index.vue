@@ -7,7 +7,7 @@
       <el-button shadow="hover" slot="header" type="primary" @click="addInRow">加仓</el-button>
       <el-button shadow="hover" slot="header" type="info" style="margin-right: 15px" @click="addOutRow">减仓</el-button>
       <el-card style="background-color: #DFDFBD;float: right;width: 200px;height: 40px;padding-bottom: 16px">
-        持有金额
+        该基金
         <d2-count-up style="font-size: 29px;" :end="100" :decimals="2"/>
       </el-card>
     </template>
@@ -16,7 +16,7 @@
         <template slot="paneL">
           <div class="inner">
             <el-card>
-              基金  <el-divider direction="vertical"></el-divider>
+              基金  <el-divider direction="vertical"></el-divider> {{this.card.code}}{{this.card.name}}
               <el-divider></el-divider>
               单位净值  <el-divider direction="vertical"></el-divider> {{ this.card.netWorth }}
               <el-divider></el-divider>
@@ -59,6 +59,7 @@ export default {
   },
   data () {
     return {
+      code: '519678',
       myChart: null,
       chartData: [],
       dates: [],
@@ -78,6 +79,8 @@ export default {
   },
   methods: {
     getCardData (res) {
+      this.card.name = res.data.name
+      this.card.code = res.data.code
       this.card.netWorth = res.data.netWorth
       this.card.dayGrowth = res.data.dayGrowth
       this.card.expectWorth = res.data.expectWorth
@@ -88,7 +91,8 @@ export default {
     },
     async getChartData () {
       try {
-        const res = await this.$api.FETCH_FUND(202015)
+        console.log('aaaaaaaaaaaaa' + this.$route.params.code)
+        const res = await this.$api.FETCH_FUND(this.code)
         setTimeout(function () {}, 20000)
         this.chartData = res.data.netWorthData
         this.dates = this.chartData.map(function (item) {

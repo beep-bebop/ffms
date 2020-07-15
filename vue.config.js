@@ -41,7 +41,7 @@ module.exports = {
     // disableHostCheck: process.env.NODE_ENV === 'development' // 关闭 host check，方便使用 ngrok 之类的内网转发工具
     proxy: {
       '/': {
-        target: 'https://4c4302dc-6016-4da3-8d99-6a2d7d975b49.mock.pstmn.io',
+        target: 'http://localhost:8080',
         ws: true,
         changeOrigin: true,
         pathRewrite: {

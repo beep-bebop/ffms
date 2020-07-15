@@ -12,32 +12,56 @@
         导出 Excel
       </el-button>
       <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 200px;height: 40px;padding-bottom: 16px">
-        总金额
+        我的现金
         <d2-count-up style="font-size: 30px;" :end="100" :decimals="2"/>
       </el-card>
     </template>
     <div style="height: 800px; margin: -16px;">
       <SplitPane :min-percent='20' :default-percent='40' split="vertical">
         <template slot="paneL" style="width: 400px;">
-          <div class="inner">
-            <d2-crud
-              ref="d2Crud"
-              add-title="新增"
-              :columns="columns"
-              :data="data"
-              :options="options"
-              :form-options="formOptions"
-              @row-add="handleRowAdd"
-              @dialog-cancel="handleDialogCancel">
-            </d2-crud>
-          </div>
-        </template>
+              <div class="inner">
+                <el-scrollbar>
+                <d2-crud
+                  ref="d2Crud"
+                  add-title="新增"
+                  :columns="columns1"
+                  :data="data1"
+                  :options="options"
+                  :form-options="formOptions"
+                  :pagination="pagination1"
+                  @pagination-current-change="paginationCurrentChange1"
+                  :loading="loading1"
+                  @row-add="handleRowAdd"
+                  @dialog-cancel="handleDialogCancel">
+                </d2-crud>
+                </el-scrollbar>
+              </div>
+            </template>
         <template slot="paneR">
-          <div style="margin: 10px;">
-            <div class="inner">
-              <ve-bar :data="chartData" v-bind="pubSetting" :settings="chartSettings"></ve-bar>
-            </div>
-          </div>
+          <SplitPane split="horizontal">
+            <template slot="paneL">
+              <div class="inner">
+                <ve-bar :data="chartData" v-bind="pubSetting" :settings="chartSettings"></ve-bar>
+              </div>
+            </template>
+            <template slot="paneR">
+              <div style="margin: 10px">
+                <d2-crud
+                  ref="d2Crud"
+                  add-title="新增"
+                  :columns="columns"
+                  :data="data"
+                  :options="options"
+                  :form-options="formOptions"
+                  :pagination="pagination"
+                  @pagination-current-change="paginationCurrentChange"
+                  :loading="loading"
+                  @row-add="handleRowAdd"
+                  @dialog-cancel="handleDialogCancel">
+                </d2-crud>
+              </div>
+            </template>
+          </SplitPane>
         </template>
       </SplitPane>
     </div>
@@ -65,17 +89,66 @@ export default {
       }
     }
     return {
+      pagination1: {
+        currentPage: 1,
+        pageSize: 12,
+        total: 0
+      },
+      pagination: {
+        currentPage: 1,
+        pageSize: 5,
+        total: 0
+      },
       chartData: {
         columns: ['date', 'in', 'out', 'profit'],
         rows: [
-          { date: '1/1', in: 1393, out: 1093, profit: 0.32 },
-          { date: '1/2', in: 3530, out: 3230, profit: 0.26 },
-          { date: '1/3', in: 2923, out: 2623, profit: 0.76 },
-          { date: '1/4', in: 1723, out: 1423, profit: 0.49 },
-          { date: '1/5', in: 3792, out: 3492, profit: 0.323 },
-          { date: '1/6', in: 4593, out: 4293, profit: 0.78 }
+          { date: '1', in: 1393, out: 1093, profit: 0.32 },
+          { date: '2', in: 3530, out: 3230, profit: 0.26 },
+          { date: '3', in: 2923, out: 2623, profit: 0.76 },
+          { date: '4', in: 1723, out: 1423, profit: 0.49 },
+          { date: '5', in: 3792, out: 3492, profit: 0.323 },
+          { date: '6', in: 4593, out: 4293, profit: 0.78 },
+          { date: '7', in: 4593, out: 4293, profit: 0.78 }
         ]
       },
+      columns1: [
+        {
+          title: '日期',
+          key: 'time',
+          width: '100'
+        },
+        {
+          title: '成员',
+          key: 'userId',
+          width: '100'
+        },
+        {
+          title: '描述',
+          key: 'description',
+          width: '180'
+        },
+        {
+          title: '类型',
+          key: 'type',
+          filters: [
+            { text: '饮食', value: '饮食' },
+            { text: '购物', value: '购物' },
+            { text: '游玩', value: '游玩' },
+            { text: '学习', value: '学习' },
+            { text: '其他', value: '其他' }
+          ],
+          filterMethod (value, row) {
+            return row.type === value
+          },
+          filterPlacement: 'bottom-end',
+          width: '100'
+        },
+        {
+          title: '金额',
+          key: 'amount_paid',
+          width: '100'
+        }
+      ],
       columns: [
         {
           title: '日期',
@@ -96,11 +169,9 @@ export default {
           title: '类型',
           key: 'type',
           filters: [
-            { text: '饮食', value: 'eat' },
-            { text: '购物', value: 'shopping' },
-            { text: '游玩', value: 'play' },
-            { text: '学习', value: 'learn' },
-            { text: '其他', value: 'etc' }
+            { text: '工资', value: '工资' },
+            { text: '奖金', value: '奖金' },
+            { text: '其他', value: '其他' }
           ],
           filterMethod (value, row) {
             return row.type === value
@@ -110,55 +181,34 @@ export default {
         },
         {
           title: '金额',
-          key: 'amount_paid',
+          key: 'income',
           width: '100'
         }
       ],
-      exportColumn: [
+      exportColumn1: [
         { label: '日期', prop: 'time' },
         { label: '姓名', prop: 'userId' },
         { label: '金额', prop: 'amount_paid' },
         { label: '描述', prop: 'description' },
         { label: '类型', prop: 'type' }
       ],
-      data: [
-        {
-          time: '2016-05-02',
-          userId: '王小虎',
-          amount_paid: '123',
-          description: 'lalala',
-          type: 'eat'
-        },
-        {
-          time: '2016-05-02',
-          userId: '王小虎',
-          amount_paid: '123',
-          description: 'lalala',
-          type: 'eat'
-        },
-        {
-          time: '2016-05-02',
-          userId: '王小虎',
-          amount_paid: '123',
-          description: 'lalala',
-          type: 'eat'
-        },
-        {
-          time: '2016-05-02',
-          userId: '王小虎',
-          amount_paid: '-123',
-          description: 'lalala',
-          type: 'eat'
-        }
+      exportColumn: [
+        { label: '日期', prop: 'time' },
+        { label: '姓名', prop: 'userId' },
+        { label: '金额', prop: 'income' },
+        { label: '描述', prop: 'description' },
+        { label: '类型', prop: 'type' }
       ],
+      data1: [],
+      data: [],
       formOptions: {
         saveLoading: false
       },
       options: {
         rowClassName ({ row }) {
-          if (row.amount_paid < 0) {
+          if (row.disburseId > 0) {
             return 'warning-row'
-          } else if (row.amount_paid > 0) {
+          } else if (row.income > 0) {
             return 'success-row'
           }
           return ''
@@ -172,7 +222,42 @@ export default {
     //     mode: 'add'
     //   })
     // },
+    paginationCurrentChange1 (currentPage) {
+      this.pagination1.currentPage = currentPage
+      this.getOutcome()
+    },
+    paginationCurrentChange (currentPage) {
+      this.pagination.currentPage = currentPage
+      this.getIncome()
+    },
+    async getIncome () {
+      const res = await this.$api.FAMILY_INCOME(this.info.username)
+      this.data = res.data.reverse()
+      this.pagination.total = res.data.total
+    },
+    async getOutcome () {
+      const res = await this.$api.FAMILY_OUTCOME(this.info.username)
+      this.data1 = res.data.reverse()
+      this.pagination1.total = res.data.total
+    },
+    async getChart () {
+      const res = await this.$api.DAYS_CASH(this.info.username)
+      for (var i = 0; i < this.chartData.rows.length; i++) {
+        this.chartData.rows[i].out = res.data[i][1]
+        this.chartData.rows[i].in = res.data[i][2]
+        this.chartData.rows[i].profit = res.data[i][3]
+      }
+    },
     exportExcel () {
+      this.$export.excel({
+        columns: this.exportColumn1,
+        data: this.data1
+        // header: '导出 Excel',
+        // merges: ['A1', 'E1']
+      })
+        .then(() => {
+          this.$message('导出表格成功')
+        })
       this.$export.excel({
         columns: this.exportColumn,
         data: this.data
@@ -193,7 +278,7 @@ export default {
           },
           time: {
             title: '日期',
-            value: '2020-7-15'
+            value: '2020-07-15'
           },
           description: {
             title: '描述',
@@ -203,9 +288,19 @@ export default {
             title: '类型',
             value: ''
           },
-          amount_paid: {
+          income: {
             title: '金额',
-            value: ''
+            value: '',
+            options: [{
+              value: '选项1',
+              label: '黄金糕'
+            }, {
+              value: '选项2',
+              label: '双皮奶'
+            }, {
+              value: '选项3',
+              label: '蚵仔煎'
+            }]
           }
         }
       })
@@ -220,7 +315,7 @@ export default {
           },
           time: {
             title: '日期',
-            value: '2020-7-15'
+            value: '2020-07-15'
           },
           description: {
             title: '描述',
@@ -237,14 +332,44 @@ export default {
         }
       })
     },
+    async addIncome (row) {
+      const res = await this.$api.ADD_INCOME({
+        income: row.income,
+        userId: this.info.username,
+        time: row.time,
+        description: row.description,
+        type: row.type
+      })
+      console.log(res)
+    },
+    async addOutcome (row) {
+      const res = await this.$api.ADD_OUTCOME({
+        amount_paid: row.amount_paid,
+        userId: this.info.username,
+        time: row.time,
+        description: row.description,
+        type: row.type
+      })
+      console.log(res)
+    },
     handleRowAdd (row, done) {
       this.formOptions.saveLoading = true
       setTimeout(() => {
-        console.log(row)
+        if (row.income > 0) {
+          console.log('添加收入')
+          this.addIncome(row)
+        }
+        if (row.amount_paid < 0) {
+          console.log('添加支出')
+          this.addOutcome(row)
+        }
         this.$message({
           message: '保存成功',
           type: 'success'
         })
+        this.getChart()
+        this.getIncome()
+        this.getOutcome()
         done({
         })
         this.formOptions.saveLoading = false
@@ -257,6 +382,11 @@ export default {
       })
       done()
     }
+  },
+  mounted () {
+    this.getChart()
+    this.getIncome()
+    this.getOutcome()
   }
 }
 </script>

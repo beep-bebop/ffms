@@ -1,6 +1,6 @@
 import { uniqueId } from 'lodash'
 import cash from './modules/cash'
-import bonds from './modules/bonds'
+import permanent from './modules/permanent'
 import fund from './modules/fund'
 import stocks from './modules/stocks'
 import family from './modules/family'
@@ -22,7 +22,7 @@ function supplementPath (menu) {
 export const menuHeader = supplementPath([
   { path: '/index', title: '首页', icon: 'home' },
   cash,
-  bonds,
+  permanent,
   fund,
   stocks,
   family,
@@ -40,7 +40,7 @@ export const menuHeader = supplementPath([
 export const menuAside = supplementPath([
   // { path: '/index', title: '首页', icon: 'home' },
   cash,
-  bonds,
+  permanent,
   fund,
   stocks,
   family

@@ -33,18 +33,18 @@
                 :rules="rules"
                 :model="formLogon"
                 size="default">
-                <el-form-item prop="username">
+                <el-form-item prop="userid">
                   <el-input
                     type="text"
-                    v-model="formLogon.username"
+                    v-model="formLogon.userid"
                     placeholder="用户名">
                     <i slot="prepend" class="fa fa-user-circle-o"></i>
                   </el-input>
                 </el-form-item>
-                <el-form-item prop="tel">
+                <el-form-item prop="phone">
                   <el-input
-                    type="tel"
-                    v-model="formLogon.tel"
+                    type="phone"
+                    v-model="formLogon.phone"
                     placeholder="手机号">
                     <i slot="prepend" class="fa fa-keyboard-o">+86</i>
                   </el-input>
@@ -155,8 +155,8 @@ export default {
       time: dayjs().format('HH:mm:ss'),
       // 表单
       formLogon: {
-        username: '',
-        tel: '',
+        userid: '',
+        phone: '',
         email: '',
         password: '',
         chkPassword: '',
@@ -164,7 +164,7 @@ export default {
       },
       // 表单校验
       rules: {
-        username: [
+        userid: [
           {
             required: true,
             message: '请输入用户名',
@@ -230,13 +230,15 @@ export default {
           // 注意 这里的演示没有传验证码
           // 具体需要传递的数据请自行修改代码
           this.logon({
-            username: this.formLogon.username,
+            userid: this.formLogon.userid,
+            username: this.formLogon.userid,
             password: this.formLogon.password,
-            tel: this.formLogon.tel,
-            email: this.formLogon.email
+            phone: this.formLogon.phone,
+            email: this.formLogon.email,
+            familyid: ''
           })
             .then(() => {
-              // 重定向对象不存在则返回顶层路径
+              // 重定向对象不存在则返回顶层路
               this.$message.success('注册成功')
               this.$router.replace(this.$route.query.redirect || '/')
             })

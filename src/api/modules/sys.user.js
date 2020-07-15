@@ -11,7 +11,7 @@ export default ({ request }) => ({
    * @description 登录
    * @param {Object} data 登录携带的信息
    */
-  SYS_USER_LOGIN (data = {}) {
+  SYS_USER_LOGIN (data) {
     // // 模拟数据
     // service
     //   .onAny('/login')
@@ -22,13 +22,14 @@ export default ({ request }) => ({
     //       : tools.responseError({}, '账号或密码不正确')
     //   })
     // 接口请求
+    console.log(data)
     return request({
-      url: '/login',
+      url: '/account/signon',
       method: 'post',
       data
     })
   },
-  SYS_USER_LOGON (data = {}) {
+  SYS_USER_LOGON (data) {
     // // 模拟数据
     // service
     //   .onAny('/login')
@@ -39,8 +40,9 @@ export default ({ request }) => ({
     //       : tools.responseError({}, '账号或密码不正确')
     //   })
     // 接口请求
+    console.log(data)
     return request({
-      url: '/logon',
+      url: '/account/newAccount',
       method: 'post',
       data
     })

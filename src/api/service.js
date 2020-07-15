@@ -1,7 +1,7 @@
 import axios from 'axios'
 // import Adapter from 'axios-mock-adapter'
 import { get } from 'lodash'
-// import util from '@/libs/util'
+import util from '@/libs/util'
 import { errorLog, errorCreate } from './tools'
 
 /**
@@ -39,10 +39,10 @@ function createService () {
         switch (status_code) {
           case 0:
             // [ 示例 ] code === 0 代表没有错误
-            return dataAxios.data
-          case 'xxx':
+            return dataAxios
+          case -2:
             // [ 示例 ] 其它和后台约定的 code
-            errorCreate(`[ code: xxx ] ${dataAxios.msg}: ${response.config.url}`)
+            errorCreate(`[ code: -2 ] ${'失败'}: ${response.config.url}`)
             break
           default:
             // 不是正确的 code
@@ -80,10 +80,28 @@ function createService () {
  */
 function createRequestFunction (service) {
   return function (config) {
-    // const token = util.cookies.get('token')
+    const token = util.cookies.get('token')
+    console.log(token)
     const configDefault = {
       headers: {
-        // Authorization: token,
+        token: token,
+        'Content-Type': get(config, 'headers.Content-Type', 'application/json')
+      },
+      timeout: 20000,
+      baseURL: process.env.VUE_APP_API,
+      crossDomain: true,
+      data: {}
+    }
+    return service(Object.assign(configDefault, config))
+  }
+}
+function createFormRequest (service) {
+  return function (config) {
+    // const token = util.cookies.get('token')
+    // console.log('FORM REWQUEST!!!!!!!!!!!!' + token)
+    const configDefault = {
+      headers: {
+        // token: token,
         'Content-Type': get(config, 'headers.Content-Type', 'application/json')
       },
       timeout: 20000,
@@ -97,6 +115,7 @@ function createRequestFunction (service) {
 // 用于真实网络请求的实例和请求方法
 export const service = createService()
 export const request = createRequestFunction(service)
+export const formRequest = createFormRequest(service)
 //
 // // 用于模拟网络请求的实例和请求方法
 // export const serviceForMock = createService()

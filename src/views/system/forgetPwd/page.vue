@@ -155,7 +155,7 @@ export default {
       time: dayjs().format('HH:mm:ss'),
       // 表单
       formLogon: {
-        username: '',
+        userid: '',
         tel: '',
         email: '',
         password: '',
@@ -164,7 +164,7 @@ export default {
       },
       // 表单校验
       rules: {
-        username: [
+        userid: [
           {
             required: true,
             message: '请输入用户名',
@@ -230,7 +230,7 @@ export default {
           // 注意 这里的演示没有传验证码
           // 具体需要传递的数据请自行修改代码
           this.logon({
-            username: this.formLogon.username,
+            userid: this.formLogon.userid,
             password: this.formLogon.password,
             tel: this.formLogon.tel,
             email: this.formLogon.email

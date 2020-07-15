@@ -1,9 +1,8 @@
 export default {
-  path: '/bonds',
-  title: '债券',
+  path: '/permanent',
+  title: '固定资产',
   icon: 'flask',
   children: (pre => [
-    { path: `${pre}index`, title: '概况', icon: 'home' },
     { path: `${pre}index`, title: '概况', icon: 'home' }
-  ])('/bonds/')
+  ])('/permanent/')
 }

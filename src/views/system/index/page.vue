@@ -5,7 +5,7 @@
         <template slot="paneL" style="width: 80%">
           <div :key="item.i" v-for="(item) in member" style="margin: 20px">
             <el-card shadow="hover" :style="{'background-color': item.color, 'height': item.height}">
-              {{item.i}}
+              {{item.type}}
               <d2-count-up style="font-size: 50px" :end=item.amount :decimals="2"/>
             </el-card>
           </div>
@@ -16,13 +16,23 @@
             <template slot="paneL" style="width: 55%">
               <SplitPane split="horizontal">
                 <template slot="paneL">
-                  <div style="margin: 10px;">
+                  <div style="margin: 10px">
+                    <el-row :gutter="20">
+                      <el-col :span="16"><div ><ve-pie style="float: inherit" :data="chartData0" :settings="chartSettings"></ve-pie></div></el-col>
+                      <el-col :span="7"><div>
+                        <el-button @click="getNews"></el-button>
+                        <el-card>
+                          aaaa
+                        </el-card>
+                      </div></el-col>
+                    </el-row>
                   </div>
                 </template>
                 <template slot="paneR">
                   <div style="margin: 10px">
                     <el-row :gutter="20">
                       <el-col :span="7"><div>
+                        <el-button @click="getNews"></el-button>
                         <el-card>
                           aaaa
                         </el-card>
@@ -35,60 +45,24 @@
             </template>
             <template slot="paneR">
               <ve-liquidfill :data="chartData1" :settings="chartSettings1"></ve-liquidfill>
+<!--              <el-col :span="8" v-for="(o, index) in 1" :key="o" :offset="index > 0 ? 2 : 0">-->
+                <el-card :body-style="{ padding: '0px' }">
+                  <img :src="newsData[indexX].img" class="image" style="width: 400px;height: 300px">
+                  <div style="padding: 14px;">
+                    <span>{{ newsData[indexX].title }}</span>
+                    <div class="bottom clearfix">
+                      <time class="time">{{ newsData[indexX].date }}</time>
+                      <el-link type="primary" :href="newsData[indexX].url" target="_blank">详情</el-link>
+                      <el-button type="text" class="button" @click="nextOne">下一条</el-button>
+                    </div>
+                  </div>
+                </el-card>
+<!--              </el-col>-->
             </template>
           </SplitPane>
         </template>
       </SplitPane>
     </div>
-<!--    <div style="height: 700px; margin: -16px;">-->
-<!--      <SplitPane :min-percent='20' :default-percent='80' split="vertical">-->
-<!--        <template slot="paneL">-->
-<!--          <div class="inner">-->
-<!--            <d2-grid-layout-->
-<!--              v-bind="layout"-->
-<!--              @layout-updated="layoutUpdatedHandler">-->
-<!--              <d2-grid-item-->
-<!--                v-for="(item, index) in layout.layout"-->
-<!--                :key="index"-->
-<!--                v-bind="item"-->
-<!--                @resize="resizeHandler"-->
-<!--                @move="moveHandler"-->
-<!--                @resized="resizedHandler"-->
-<!--                @moved="movedHandler">-->
-<!--                <template v-if="item.i === '4'">-->
-<!--                  <el-card shadow="hover" class="page_card">-->
-<!--                  </el-card>-->
-<!--                </template>-->
-<!--                <template v-if="item.i === '5'">-->
-<!--                  <el-card shadow="hover" class="page_card">-->
-<!--                  </el-card>-->
-<!--                </template>-->
-<!--                <template v-if="item.i === '6'">-->
-<!--                  <el-card shadow="hover" class="page_card">-->
-<!--                    &lt;!&ndash;            资产分配建议&ndash;&gt;-->
-<!--                    <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>-->
-<!--                  </el-card>-->
-<!--                </template>-->
-<!--                <template v-if="item.i < '4'">-->
-<!--                  <el-card shadow="hover" class="page_card" :style="{'background-color': item.color}">-->
-<!--                    {{item.type}}-->
-<!--                    <div class="group">-->
-<!--                      <d2-count-up style="font-size: 50px" :end=item.amount :decimals="2"/>-->
-<!--                    </div>-->
-<!--                  </el-card>-->
-<!--                </template>-->
-<!--              </d2-grid-item>-->
-<!--            </d2-grid-layout>-->
-<!--          </div>-->
-<!--        </template>-->
-<!--        <template slot="paneR">-->
-<!--          <div>-->
-<!--            <ve-liquidfill :data="chartData1" :settings="chartSettings1"></ve-liquidfill>-->
-<!--          </div>-->
-<!--        </template>-->
-<!--      </SplitPane>-->
-
-<!--    <ve-liquidfill :data="chartData1"></ve-liquidfill>-->
   </d2-container>
 
 </template>
@@ -96,8 +70,15 @@
 <script>
 import Vue from 'vue'
 import SplitPane from 'vue-splitpane'
+import { mapState } from 'vuex'
+// import echarts from 'echarts'
 Vue.component('SplitPane', SplitPane)
 export default {
+  computed: {
+    ...mapState('d2admin/user', [
+      'info'
+    ])
+  },
   data () {
     this.chartSettings1 = {
       seriesMap: {
@@ -128,14 +109,16 @@ export default {
       }
     }
     this.chartSettings = {
-      roseType: 'radius',
+      // roseType: 'radius',
       radius: 150
     }
     return {
+      newsData: [],
+      indexX: 0,
       member: [
         { i: '0', color: '#EACACA', type: '股票', amount: '100', height: '50' },
-        { i: '1', color: '#F0DFB6', type: '股票', amount: '100', height: '20' },
-        { i: '2', color: '#A7C3D7', type: '股票', amount: '100', height: '20' },
+        { i: '1', color: '#F0DFB6', type: '基金', amount: '100', height: '20' },
+        { i: '2', color: '#A7C3D7', type: '现金', amount: '100', height: '20' },
         { i: '3', color: '#DFDFBD', type: '股票', amount: '100', height: '20' }
       ],
       chartData1: {
@@ -146,28 +129,128 @@ export default {
         }]
       },
       chartData: {
-        columns: ['日期', '访问用户'],
+        columns: ['类型', '金额'],
         rows: [
-          { 日期: '1/1', 访问用户: 1393 },
-          { 日期: '1/2', 访问用户: 3530 },
-          { 日期: '1/3', 访问用户: 2923 },
-          { 日期: '1/4', 访问用户: 1723 },
-          { 日期: '1/5', 访问用户: 3792 },
-          { 日期: '1/6', 访问用户: 4593 }
+          { 类型: '1/1', 金额: 1393 },
+          { 类型: '1/2', 金额: 3530 },
+          { 类型: '1/3', 金额: 2923 }
+        ]
+      },
+      chartData0: {
+        columns: ['类型', '金额'],
+        rows: [
+          { 类型: '1/1', 金额: 1393 },
+          { 类型: '1/2', 金额: 3530 },
+          { 类型: '1/3', 金额: 2923 }
         ]
       }
     }
   },
   mounted () {
     // 加载完成后显示提示
+    // this.getAmount()
+    this.getPercent()
+    this.getNews()
     this.showInfo()
   },
   methods: {
     // 显示提示
+    // async getAmount () {
+    //   try {
+    //     const res1 = await this.$api.CASH_TOTAL(this.info.username)
+    //     this.member[2].amount = res1.family
+    //     const res2 = await this.$api.FUND_FAMILY({ userid: this.info.username, queryid: this.info.username })
+    //     this.member[1].amount = res2.family
+    //     const res3 = await this.$api.FAMILY_STOCK({ userid: this.info.username, queryid: '' })
+    //     this.member[0].amount = res3.family
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // },
+    getJSON (url) {
+      var promise = new Promise((resolve, reject) => {
+        var xhr = new XMLHttpRequest()
+        xhr.open('GET', url)
+        xhr.onreadystatechange = handler
+        xhr.responseType = 'json'
+        xhr.setRequestHeader('Accept', 'application/json')
+        xhr.send()
+        function handler () {
+          if (this.readyState !== 4) {
+            return
+          }
+          if (this.status === 200) {
+            resolve(this.response)
+          } else {
+            reject(new Error(this.statusText))
+          }
+        }
+      })
+      return promise
+    },
+    getNews () {
+      var url = 'http://newsapi.org/v2/top-headlines?country=us&apiKey=1da76f0b521746b0858e68f270836910'
+      this.getJSON(url).then((json) => {
+        console.log(json.articles[0])
+        for (var i = 0; i < json.articles.length; i++) {
+          this.newsData.push({
+            date: json.articles[i].publishedAt,
+            title: json.articles[i].title,
+            content: json.articles[i].content,
+            url: json.articles[i].url,
+            img: json.articles[i].urlToImage
+          })
+        }
+        console.log(this.newsData)
+      }, (error) => {
+        console.log(error)
+      })
+    },
+    // 新闻详情
+    detail () {
+
+    },
+    // 下一条新闻
+    nextOne () {
+      this.indexX = (this.indexX + 1) % 20
+    },
+    async getPercent () {
+      try {
+        const res = await this.$api.FAMILY_PERCENT({
+          userid: this.info.username,
+          searchId: this.info.username
+        })
+        this.chartData.rows[0].类型 = res.family[0][0]
+        this.chartData.rows[1].类型 = res.family[1][0]
+        this.chartData.rows[2].类型 = res.family[2][0]
+        this.chartData.rows[0].金额 = res.family[0][1]
+        this.chartData.rows[1].金额 = res.family[1][1]
+        this.chartData.rows[2].金额 = res.family[2][1]
+        this.member[2].amount = res.family[0][1]
+        this.member[1].amount = res.family[2][1]
+        this.member[0].amount = res.family[1][1]
+        this.chartData0.rows[0].类型 = res.user[0][0]
+        this.chartData0.rows[1].类型 = res.user[1][0]
+        this.chartData0.rows[2].类型 = res.user[2][0]
+        this.chartData0.rows[0].金额 = res.user[0][1]
+        this.chartData0.rows[1].金额 = res.user[1][1]
+        this.chartData0.rows[2].金额 = res.user[2][1]
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    // async getNews () {
+    //   try {
+    //     const res = await this.$api.FETCH_NEWS()
+    //     console.log(res)
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // },
     showInfo () {
       this.$notify({
-        title: '提示',
-        message: '你可以按住卡片拖拽改变位置；或者在每个卡片的右下角拖动，调整卡片大小'
+        title: '欢迎',
+        message: 'FFMS家庭理财系统提醒您：请理性投资'
       })
     }
   }

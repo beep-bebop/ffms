@@ -36,7 +36,7 @@
                 <el-form-item prop="username">
                   <el-input
                     type="text"
-                    v-model="formLogin.username"
+                    v-model="formLogin.userid"
                     placeholder="用户名">
                     <i slot="prepend" class="fa fa-user-circle-o"></i>
                   </el-input>
@@ -128,32 +128,15 @@ export default {
       time: dayjs().format('HH:mm:ss'),
       // 快速选择用户
       dialogVisible: false,
-      users: [
-        {
-          name: 'Admin',
-          username: 'admin',
-          password: 'admin'
-        },
-        {
-          name: 'Editor',
-          username: 'editor',
-          password: 'editor'
-        },
-        {
-          name: 'User1',
-          username: 'user1',
-          password: 'user1'
-        }
-      ],
       // 表单
       formLogin: {
-        username: 'admin',
+        userid: 'admin',
         password: 'admin',
         code: 'v9am'
       },
       // 表单校验
       rules: {
-        username: [
+        userid: [
           {
             required: true,
             message: '请输入用户名',
@@ -207,13 +190,12 @@ export default {
     // 提交登录信息
     submit () {
       this.$refs.loginForm.validate((valid) => {
-        console.log('fail')
         if (valid) {
           // 登录
           // 注意 这里的演示没有传验证码
           // 具体需要传递的数据请自行修改代码
           this.login({
-            username: this.formLogin.username,
+            userid: this.formLogin.userid,
             password: this.formLogin.password
           })
             .then(() => {

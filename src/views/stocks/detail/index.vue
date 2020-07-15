@@ -7,7 +7,7 @@
         <el-button shadow="hover" slot="header" type="primary" @click="addInRow">加仓</el-button>
         <el-button shadow="hover" slot="header" type="info" style="margin-right: 15px" @click="addOutRow">减仓</el-button>
         <el-card style="background-color: #DFDFBD;float: right;width: 200px;height: 40px;padding-bottom: 16px">
-          持有金额
+          该股票
           <d2-count-up style="font-size: 29px;" :end="100" :decimals="2"/>
         </el-card>
       </template>

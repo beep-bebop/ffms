@@ -1,6 +1,6 @@
 import layoutHeaderAside from '@/layout/header-aside'
 import cash from './modules/cash'
-import bonds from './modules/bonds'
+import permanent from './modules/permanent'
 import fund from './modules/fund'
 import stocks from './modules/stocks'
 import family from './modules/family'
@@ -80,7 +80,7 @@ const frameIn = [
     ]
   },
   cash,
-  bonds,
+  permanent,
   fund,
   stocks,
   family
