@@ -24,6 +24,7 @@ import java.util.Map;
  * @创建时间 2020/7/9
  * @描述
  **/
+@CrossOrigin
 @RestController
 @RequestMapping("/security")
 public class SecurityController {

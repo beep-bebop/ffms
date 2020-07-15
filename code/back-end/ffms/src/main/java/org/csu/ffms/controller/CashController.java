@@ -18,6 +18,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+@CrossOrigin
 @ResponseBody
 @RestController
 @RequestMapping("/cash/")

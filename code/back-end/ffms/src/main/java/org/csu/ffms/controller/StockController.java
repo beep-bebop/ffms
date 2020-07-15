@@ -4,13 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import org.csu.ffms.domain.Account;
-import org.csu.ffms.domain.Security;
-import org.csu.ffms.domain.Stock;
+import org.csu.ffms.domain.*;
 import org.csu.ffms.jwt.note.UserLoginToken;
-import org.csu.ffms.service.AccountService;
-import org.csu.ffms.service.FamilyService;
-import org.csu.ffms.service.StockService;
+import org.csu.ffms.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +29,7 @@ import java.util.Map;
  * @创建时间 2020/7/7
  * @描述
  **/
+@CrossOrigin
 @RestController
 @RequestMapping("/stock")
 public class StockController {
@@ -41,6 +38,12 @@ public class StockController {
 
     @Autowired
     AccountService accountService;
+
+    @Autowired
+    DisburseService disburseService;
+
+    @Autowired
+    IncomeService incomeService;
 
     /**
      *@描述 返回该用户所拥有的股票的具体信息
@@ -183,19 +186,93 @@ public class StockController {
      *@创建时间  2020/7/9
      *@修改人和其它信息
      */
-    @UserLoginToken
+    //@UserLoginToken
     @PutMapping("/updateStock")
-    public String updateStock(@RequestBody Stock stock){
-        JSONObject jsonObject = new JSONObject();
-        try{
-            stockService.updateStock(stock);
-            jsonObject.put("status_code",0);
+    public String updateStock(@RequestBody Map<String,String> map){
+        String userid=map.get("userid");
+        String code=map.get("stockid");
+        int quantity = Integer.parseInt(map.get("amount"));
+        BigDecimal price=new BigDecimal(map.get("price"));
+
+        JSONObject json = new JSONObject();
+
+        if(stockService.getStockAPIInfoByCode(code)==null){
+            json.put("status_code",-2);
+            json.put("msg","stock id is error");
+            return JSONObject.toJSONString(json);
         }
-        catch (Exception e){
-            System.out.println(new SimpleDateFormat().format(new Date()) + " 错误--[/stock/updateStock]");
-            jsonObject.put("status_code",-2);
+
+        //查看用户之前是否已购该股票
+        Stock stock=stockService.getStockByStockCode(code,userid);
+        //stock为空说明用户之前没有购买该股票，不为空说明该用户之前已购该股票
+        if(stock==null){
+            //数量小于0，说明是卖出股票,大于0，说明是买入股票
+            if(quantity<0){
+                json.put("status_code",-2);
+                json.put("msg","error , quantity<0 , the stock not exist in table,you can't sold it.");
+            }
+            else{
+                //插入股票信息
+                stock = new Stock();
+                stock.setUserid(userid);
+                stock.setCode(code);
+                String name=null;
+                name=(String)stockService.getStockAPIInfoByCode(code).get("name");
+                stock.setName(name);
+                stock.setQuantity(quantity);
+                stockService.insertStock(stock);
+                //新增支出信息
+                Disburse disburse = new Disburse();
+                disburse.setAmount_paid(price.multiply(new BigDecimal(quantity)).intValue());
+                disburse.setUserId(userid);
+                disburse.setTime(new Date());
+                disburse.setDescription("购入股票");
+                disburse.setType("股票");
+                disburseService.newDisburse(disburse);
+                json.put("status_code",0);
+                json.put("msg","success buy stock");
+            }
         }
-        return JSONObject.toJSONString(jsonObject);
+        else{
+            //数量小于0，说明是卖出股票,大于0，说明是买入股票
+            if(quantity<0){
+                Income income = new Income();
+                income.setUserId(userid);
+                income.setTime(new Date());
+                income.setDescription("卖出股票");
+                income.setType("股票");
+
+                if ((stock.getQuantity()+quantity)<=0){
+                    income.setIncome(price.multiply(new BigDecimal(stock.getQuantity())).floatValue());
+                    stockService.deleteStock(stock);
+                    json.put("msg","success sell stock,you can only sell stock quantity you have ");
+                }
+                else{
+                    income.setIncome(price.multiply(new BigDecimal(-quantity)).floatValue());
+                    stock.setQuantity(stock.getQuantity()+quantity);
+                    stockService.updateStock(stock);
+                    json.put("msg","success sell stock");
+                }
+                incomeService.newIncome(income);
+                json.put("status_code",0);
+            }
+            else{
+                stock.setQuantity(stock.getQuantity()+quantity);
+                stockService.updateStock(stock);
+
+                Disburse disburse = new Disburse();
+                disburse.setAmount_paid(price.multiply(new BigDecimal(quantity)).intValue());
+                disburse.setUserId(userid);
+                disburse.setTime(new Date());
+                disburse.setDescription("购入股票");
+                disburse.setType("股票");
+                disburseService.newDisburse(disburse);
+                json.put("status_code",0);
+                json.put("msg","success buy stock");
+            }
+
+        }
+        return JSONObject.toJSONString(json);
     }
 
     @RequestMapping(value="/table",method=RequestMethod.POST)
