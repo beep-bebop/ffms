@@ -20,7 +20,6 @@
                     <el-row :gutter="20">
                       <el-col :span="16"><div ><ve-pie style="float: inherit" :data="chartData0" :settings="chartSettings"></ve-pie></div></el-col>
                       <el-col :span="7"><div>
-                        <el-button @click="getNews"></el-button>
                         <el-card>
                           aaaa
                         </el-card>
@@ -32,7 +31,6 @@
                   <div style="margin: 10px">
                     <el-row :gutter="20">
                       <el-col :span="7"><div>
-                        <el-button @click="getNews"></el-button>
                         <el-card>
                           aaaa
                         </el-card>
@@ -119,7 +117,7 @@ export default {
         { i: '0', color: '#EACACA', type: '股票', amount: '100', height: '50' },
         { i: '1', color: '#F0DFB6', type: '基金', amount: '100', height: '20' },
         { i: '2', color: '#A7C3D7', type: '现金', amount: '100', height: '20' },
-        { i: '3', color: '#DFDFBD', type: '股票', amount: '100', height: '20' }
+        { i: '3', color: '#DFDFBD', type: '家庭基金', amount: '100', height: '20' }
       ],
       chartData1: {
         columns: ['risk', 'percent'],

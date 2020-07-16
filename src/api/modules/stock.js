@@ -11,5 +11,19 @@ export default ({ request }) => ({
       method: 'post',
       data
     })
+  },
+  STOCK_TABLE (data) {
+    return request({
+      url: '/stock/table',
+      method: 'post',
+      data
+    })
+  },
+  UPDATE_STOCK (data) {
+    return request({
+      url: '/stock/updateStock',
+      method: 'put',
+      data
+    })
   }
 })

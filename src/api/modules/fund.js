@@ -30,5 +30,12 @@ export default ({ request, formRequest }) => ({
       method: 'delete',
       data
     })
+  },
+  UPDATE_FUND (data) {
+    return request({
+      url: '/fund/updateFund',
+      method: 'put',
+      data
+    })
   }
 })

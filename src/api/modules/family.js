@@ -11,5 +11,34 @@ export default ({ request }) => ({
       method: 'post',
       data
     })
+  },
+  FAMILY_LINE (data) {
+    // 接口请求
+    return request({
+      url: '/family/getFamilyProperty',
+      method: 'post',
+      data
+    })
+  },
+  HAVE_FAMILY (data) {
+    return request({
+      url: '/family/findFamily',
+      method: 'post',
+      data
+    })
+  },
+  QUIT_FAMILY (data) {
+    return request({
+      url: '/family/quitFamily',
+      method: 'post',
+      data
+    })
+  },
+  JOIN_FAMILY (data) {
+    return request({
+      url: '/family/joinFamily',
+      method: 'post',
+      data
+    })
   }
 })

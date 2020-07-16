@@ -40,6 +40,9 @@ function createService () {
           case 0:
             // [ 示例 ] code === 0 代表没有错误
             return dataAxios
+          case -1:
+            // [ 示例 ] code === 0 代表没有错误
+            return dataAxios
           case -2:
             // [ 示例 ] 其它和后台约定的 code
             errorCreate(`[ code: -2 ] ${'失败'}: ${response.config.url}`)

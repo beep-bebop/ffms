@@ -91,7 +91,9 @@ export default {
     },
     async getChartData () {
       try {
-        console.log('aaaaaaaaaaaaa' + this.$route.params.code)
+        if (this.$route.query.code != null) {
+          this.code = this.$route.query.code
+        }
         const res = await this.$api.FETCH_FUND(this.code)
         setTimeout(function () {}, 20000)
         this.chartData = res.data.netWorthData

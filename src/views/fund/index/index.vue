@@ -1,11 +1,11 @@
 <template>
   <d2-container type="card">
     <template slot="header">
-      <el-button shadow="hover" slot="header" type="primary" @click="addInRow">买入基金</el-button>
-      <el-input slot="header" placeholder="请输入内容" style="width: 300px">
+      <el-button shadow="hover" slot="header" type="primary" @click="dialogFormVisible = true">买入基金</el-button>
+      <el-input v-model="searchInput" slot="header" placeholder="请输入内容" style="width: 300px">
         <template slot="prepend"></template>
       </el-input>
-      <el-button slot="header" style="margin-bottom: 5px">搜索</el-button>
+      <el-button slot="header" style="margin-bottom: 5px" @click="searchTable">搜索</el-button>
       <el-button type="primary" @click="exportExcel">
         <d2-icon name="download"/>
         导出 Excel
@@ -70,6 +70,23 @@
 <!--        @row-dbclick="getInfo"-->
 <!--        @row-remove="handleRowRemove"/>-->
     </div>
+    <el-dialog title="买入基金" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="基金ID" :label-width="formLabelWidth">
+          <el-input v-model="form.fundid" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="买入总价" :label-width="formLabelWidth">
+          <el-input v-model="form.quantity" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="买入时净值" :label-width="formLabelWidth">
+          <el-input v-model="form.price" autocomplete="off"></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addFund">确 定</el-button>
+      </div>
+    </el-dialog>
     </d2-container>
 </template>
 
@@ -84,36 +101,13 @@ export default {
   },
   data () {
     return {
-      columns: [
-        {
-          title: '代码',
-          key: 'code'
-        },
-        {
-          title: '名称',
-          key: 'name'
-        },
-        {
-          title: '购买人',
-          key: 'userid'
-        },
-        {
-          title: '认购份数',
-          key: 'quantity'
-        },
-        {
-          title: '当前单位净值',
-          key: 'netWorth'
-        },
-        {
-          title: '净值',
-          key: 'currentValue'
-        },
-        {
-          title: '日涨跌幅',
-          key: 'dayGrowth'
-        }
-      ],
+      dialogFormVisible: false,
+      form: {
+        name: '',
+        key: ''
+      },
+      formLabelWidth: '120px',
+      searchInput: '',
       data: [],
       rowHandle: {
         remove: {
@@ -123,56 +117,22 @@ export default {
           size: 'small',
           confirm: true
         }
-        // custom: [
-        //   {
-        //     text: '详情',
-        //     icon: 'el-icon-info',
-        //     size: 'small',
-        //     emit: 'getInfo'
-        //   }
-        // ]
       }
     }
   },
   methods: {
     getInfo (row) {
-      console.log('checkkkkkkkk' + row.code)
       this.$router.push({
         path: '/fund/details',
-        params: { code: row.code }
+        query: { code: row.code }
       })
     },
     async getTable () {
-      console.log('aaaaaaa' + this.info.username)
       const res = await this.$api.FUND_TABLE({ userid: this.info.username, queryid: '' })
       this.data = res
     },
-    addInRow () {
-      this.$refs.d2Crud.showDialog({
-        mode: 'add',
-        template: {
-          userId: {
-            title: '姓名',
-            value: this.info.username
-          },
-          time: {
-            title: '日期',
-            value: '2020-7-15'
-          },
-          description: {
-            title: '描述',
-            value: ''
-          },
-          type: {
-            title: '类型',
-            value: ''
-          },
-          amount_paid: {
-            title: '金额',
-            value: ''
-          }
-        }
-      })
+    async addFund () {
+      this.dialogFormVisible = false
     },
     handleRowRemove (row) {
       this.$confirm('确认清仓?', '提示', {
@@ -195,6 +155,10 @@ export default {
     async removeRow (row) {
       const res = this.$api.DEL_FUND({ userid: row.userid, fundcode: row.code })
       console.log(res)
+    },
+    async searchTable () {
+      const res = await this.$api.FUND_TABLE({ userid: this.info.username, queryid: this.searchInput })
+      this.data = res
     }
   },
   mounted () {
