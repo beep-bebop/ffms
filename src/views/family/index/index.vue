@@ -18,10 +18,10 @@
     <div style="height: 800px; margin: -16px;">
       <SplitPane :min-percent='20' :default-percent='30' split="vertical">
         <template slot="paneL" style="width: 55%">
-          <div :key="item.i" v-for="(item) in member" style="margin: 20px">
+          <div :key="item.userid" v-for="(item) in member" style="margin: 20px">
             <el-card shadow="hover" class="page_card" style="background-color: #ebf1f6">
-              <el-avatar shape="circle" src="https://v1.alapi.cn/api/avatar?email=weify369@gmail.com&size=200" ></el-avatar>
-              {{item.i}}
+              <el-avatar shape="circle" src='https://v1.alapi.cn/api/avatar?email=1143432728@qq.com&size=300' ></el-avatar>
+              用户名{{item.userid}}<el-divider direction="vertical"></el-divider>电话{{item.phone}}
             </el-card>
           </div>
           <img src="./image/family.svg" style="width: 500px">
@@ -35,6 +35,7 @@
               </div>
             </template>
             <template slot="paneR">
+              <el-card>家庭基金</el-card>
               <div style="margin: 10px;vertical-align: middle">
                 <d2-crud
                   ref="d2Crud"
@@ -152,9 +153,7 @@ export default {
       ],
       data: [],
       member: [
-        { i: '0', color: '#EACACA', type: '股票', amount: '100' },
-        { i: '1', color: '#F0DFB6', type: '股票', amount: '100' },
-        { i: '2', color: '#A7C3D7', type: '股票', amount: '100' }
+        { userid: ' ', color: '#EACACA', type: '股票', amount: '100' }
       ]
     }
   },
@@ -163,6 +162,7 @@ export default {
       const res = await this.$api.QUIT_FAMILY({ userid: this.info.username })
       console.log(res.status_code)
       this.isHaveFamily()
+      this.$forceUpdate()
     },
     async join () {
       this.dialogFormVisible = false
@@ -179,6 +179,7 @@ export default {
         this.isFamily = true
         this.familyId = res.data[0]
         this.familyKey = res.data[1]
+        this.member = res.users
         this.getChartData()
       }
     },

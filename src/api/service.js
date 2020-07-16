@@ -45,7 +45,7 @@ function createService () {
             return dataAxios
           case -2:
             // [ 示例 ] 其它和后台约定的 code
-            errorCreate(`[ code: -2 ] ${'失败'}: ${response.config.url}`)
+            errorCreate(`[ code: -2 ] ${'失败'}: ${response.config.url} ${dataAxios.msg}`)
             break
           default:
             // 不是正确的 code

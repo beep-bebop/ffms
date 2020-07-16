@@ -6,7 +6,7 @@ export default ({ request, formRequest }) => ({
   FETCH_FUND (data = {}) {
     // 接口请求
     return formRequest({
-      url: 'https://api.doctorxiong.club/v1/fund/detail?code=' + data,
+      url: 'https://api.doctorxiong.club/v1/fund/detail?code=' + data + '&token=OkPQjTlWtA',
       method: 'get'
     })
   },

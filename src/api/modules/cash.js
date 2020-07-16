@@ -43,5 +43,17 @@ export default ({ request }) => ({
       method: 'post',
       data
     })
+  },
+  WEEK_TOTAL (data) {
+    return request({
+      url: '/cash/totalbyweek?userId=' + data,
+      method: 'get'
+    })
+  },
+  OUT_TYPE (data) {
+    return request({
+      url: '/disbursement/type?userId=' + data,
+      method: 'get'
+    })
   }
 })

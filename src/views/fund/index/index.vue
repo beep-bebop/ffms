@@ -10,9 +10,9 @@
         <d2-icon name="download"/>
         导出 Excel
       </el-button>
-      <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 200px;height: 40px;padding-bottom: 16px">
+      <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 400px;height: 40px;padding-bottom: 16px;text-align: center">
         我的基金
-        <d2-count-up style="font-size: 29px;" :end="100" :decimals="2"/>
+        <d2-count-up style="font-size: 29px;" :end="1663.78" :decimals="2"/>
       </el-card>
     </template>
     <div style="height: 400px; margin: -16px;">
@@ -103,12 +103,16 @@ export default {
     return {
       dialogFormVisible: false,
       form: {
-        name: '',
-        key: ''
+        fundid: '',
+        quantity: '',
+        price: ''
       },
       formLabelWidth: '120px',
       searchInput: '',
-      data: [],
+      data: [{
+        code: 0,
+        currentValue: 0
+      }],
       rowHandle: {
         remove: {
           icon: 'el-icon-upload',
@@ -117,14 +121,41 @@ export default {
           size: 'small',
           confirm: true
         }
-      }
+      },
+      exportColumn: [
+        { label: '代码', prop: 'code' },
+        { label: '名称', prop: 'name' },
+        { label: '购买人', prop: 'userid' },
+        { label: '认购份数', prop: 'quantity' },
+        { label: '净值', prop: 'currentValue' }
+      ]
     }
   },
   methods: {
+    exportExcel () {
+      this.$export.excel({
+        columns: this.exportColumn,
+        data: this.data
+        // header: '导出 Excel',
+        // merges: ['A1', 'E1']
+      })
+        .then(() => {
+          this.$message('导出表格成功')
+        })
+      this.$export.excel({
+        columns: this.exportColumn,
+        data: this.data
+        // header: '导出 Excel',
+        // merges: ['A1', 'E1']
+      })
+        .then(() => {
+          this.$message('导出表格成功')
+        })
+    },
     getInfo (row) {
       this.$router.push({
         path: '/fund/details',
-        query: { code: row.code }
+        query: { code: row.code, total: row.currentValue }
       })
     },
     async getTable () {
@@ -133,6 +164,20 @@ export default {
     },
     async addFund () {
       this.dialogFormVisible = false
+      const res = this.$api.UPDATE_FUND({
+        userid: this.info.username,
+        fundid: this.form.fundid,
+        quantity: this.form.quantity,
+        price: this.form.price
+      })
+      if (res.status_code === '0') {
+        this.$message({
+          message: '已买入，请刷新后查看~',
+          type: 'success'
+        })
+      }
+      this.getTable()
+      this.$forceUpdate()
     },
     handleRowRemove (row) {
       this.$confirm('确认清仓?', '提示', {
@@ -153,7 +198,7 @@ export default {
       })
     },
     async removeRow (row) {
-      const res = this.$api.DEL_FUND({ userid: row.userid, fundcode: row.code })
+      const res = this.$api.DEL_FUND({ userid: row.userid, fundcode: row.code, price: row.netWorth })
       console.log(res)
     },
     async searchTable () {

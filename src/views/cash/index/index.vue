@@ -3,24 +3,23 @@
     <template slot="header">
       <el-button shadow="hover" slot="header" type="primary" @click="addInRow">新增收入</el-button>
       <el-button shadow="hover" slot="header" type="info" style="margin-right: 15px" @click="addOutRow">新增支出</el-button>
-      <el-input slot="header" placeholder="请输入内容" style="width: 300px">
+      <el-input v-model="searchInput" slot="header" placeholder="请输入内容" style="width: 300px">
         <template slot="prepend"></template>
       </el-input>
-      <el-button slot="header" style="margin-bottom: 5px">搜索</el-button>
+      <el-button slot="header" style="margin-bottom: 5px" @click="searchData">搜索</el-button>
       <el-button type="primary" @click="exportExcel">
         <d2-icon name="download"/>
         导出 Excel
       </el-button>
-      <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 200px;height: 40px;padding-bottom: 16px">
+      <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 400px;height: 40px;padding-bottom: 16px;text-align: center">
         我的现金
-        <d2-count-up style="font-size: 30px;" :end="100" :decimals="2"/>
+        <d2-count-up v-model=this.cash style="font-size: 28px;" :end=this.cash :decimals="2"/>
       </el-card>
     </template>
     <div style="height: 800px; margin: -16px;">
       <SplitPane :min-percent='20' :default-percent='40' split="vertical">
         <template slot="paneL" style="width: 400px;">
               <div class="inner">
-                <el-scrollbar>
                 <d2-crud
                   ref="d2Crud"
                   add-title="新增"
@@ -34,7 +33,6 @@
                   @row-add="handleRowAdd"
                   @dialog-cancel="handleDialogCancel">
                 </d2-crud>
-                </el-scrollbar>
               </div>
             </template>
         <template slot="paneR">
@@ -89,6 +87,10 @@ export default {
       }
     }
     return {
+      searchInput: '',
+      loading1: false,
+      loading: false,
+      cash: '0',
       pagination1: {
         currentPage: 1,
         pageSize: 12,
@@ -135,7 +137,9 @@ export default {
             { text: '购物', value: '购物' },
             { text: '游玩', value: '游玩' },
             { text: '学习', value: '学习' },
-            { text: '其他', value: '其他' }
+            { text: '其他', value: '其他' },
+            { text: '股票', value: '股票' },
+            { text: '基金', value: '基金' }
           ],
           filterMethod (value, row) {
             return row.type === value
@@ -171,6 +175,8 @@ export default {
           filters: [
             { text: '工资', value: '工资' },
             { text: '奖金', value: '奖金' },
+            { text: '股票', value: '股票' },
+            { text: '基金', value: '基金' },
             { text: '其他', value: '其他' }
           ],
           filterMethod (value, row) {
@@ -199,8 +205,14 @@ export default {
         { label: '描述', prop: 'description' },
         { label: '类型', prop: 'type' }
       ],
-      data1: [],
-      data: [],
+      data1: [{
+        code: 0,
+        currentValue: 0
+      }],
+      data: [{
+        code: 0,
+        currentValue: 0
+      }],
       formOptions: {
         saveLoading: false
       },
@@ -224,22 +236,57 @@ export default {
     // },
     paginationCurrentChange1 (currentPage) {
       this.pagination1.currentPage = currentPage
-      this.getOutcome()
+      this.fetchData1()
     },
     paginationCurrentChange (currentPage) {
       this.pagination.currentPage = currentPage
-      this.getIncome()
+      this.fetchData()
     },
-    async getIncome () {
-      const res = await this.$api.FAMILY_INCOME(this.info.username)
-      this.data = res.data.reverse()
-      this.pagination.total = res.data.total
+    fetchData () {
+      this.loading = true
+      this.$api.FAMILY_INCOME(this.info.username).then(res => {
+        this.data = res.data.reverse()
+        this.pagination.total = res.data.length
+        this.loading = false
+      }).catch(err => {
+        console.log('err', err)
+        this.loading = false
+      })
     },
-    async getOutcome () {
-      const res = await this.$api.FAMILY_OUTCOME(this.info.username)
-      this.data1 = res.data.reverse()
-      this.pagination1.total = res.data.total
+    fetchData1 () {
+      this.loading = true
+      this.$api.FAMILY_OUTCOME(this.info.username).then(res => {
+        this.data1 = res.data.reverse()
+        this.pagination1.total = res.data.length
+        this.loading1 = false
+      }).catch(err => {
+        console.log('err', err)
+        this.loading = false
+      })
     },
+    async totalCash () {
+      const res = await this.$api.CASH_TOTAL(this.info.username)
+      this.cash = res.user
+      console.log('cashhhhhhh' + this.cash)
+    },
+    searchData () {
+
+    },
+    // async getIncome () {
+    //   this.loading = true
+    //   const res = await this.$api.FAMILY_INCOME(this.info.username)
+    //   this.data = res.data.reverse()
+    //   this.pagination.total = res.data.length
+    //   this.loading = false
+    // },
+    // async getOutcome () {
+    //   this.loading1 = true
+    //   const res = await this.$api.FAMILY_OUTCOME(this.info.username)
+    //   this.data1 = res.data.reverse()
+    //   console.log('outttttttt' + res.data)
+    //   this.pagination1.total = res.data.length
+    //   this.loading1 = false
+    // },
     async getChart () {
       const res = await this.$api.DAYS_CASH(this.info.username)
       for (var i = 0; i < this.chartData.rows.length; i++) {
@@ -285,22 +332,12 @@ export default {
             value: ''
           },
           type: {
-            title: '类型',
+            title: '类型(工资|奖金|股票|基金|其他)',
             value: ''
           },
           income: {
             title: '金额',
-            value: '',
-            options: [{
-              value: '选项1',
-              label: '黄金糕'
-            }, {
-              value: '选项2',
-              label: '双皮奶'
-            }, {
-              value: '选项3',
-              label: '蚵仔煎'
-            }]
+            value: ''
           }
         }
       })
@@ -322,12 +359,12 @@ export default {
             value: ''
           },
           type: {
-            title: '类型',
+            title: '类型(饮食|购物|游玩|学习|其他)',
             value: ''
           },
           amount_paid: {
             title: '金额',
-            value: '-'
+            value: ''
           }
         }
       })
@@ -350,16 +387,16 @@ export default {
         description: row.description,
         type: row.type
       })
-      console.log(res)
+      console.log('out' + res)
     },
     handleRowAdd (row, done) {
       this.formOptions.saveLoading = true
       setTimeout(() => {
-        if (row.income > 0) {
+        if (row.income != null) {
           console.log('添加收入')
           this.addIncome(row)
         }
-        if (row.amount_paid < 0) {
+        if (row.amount_paid != null) {
           console.log('添加支出')
           this.addOutcome(row)
         }
@@ -368,8 +405,10 @@ export default {
           type: 'success'
         })
         this.getChart()
-        this.getIncome()
-        this.getOutcome()
+        // this.getIncome()
+        // this.getOutcome()
+        this.fetchData()
+        this.fetchData1()
         done({
         })
         this.formOptions.saveLoading = false
@@ -385,8 +424,11 @@ export default {
   },
   mounted () {
     this.getChart()
-    this.getIncome()
-    this.getOutcome()
+    // this.getIncome()
+    // this.getOutcome()
+    this.fetchData()
+    this.fetchData1()
+    this.totalCash()
   }
 }
 </script>

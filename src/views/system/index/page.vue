@@ -21,7 +21,7 @@
                       <el-col :span="16"><div ><ve-pie style="float: inherit" :data="chartData0" :settings="chartSettings"></ve-pie></div></el-col>
                       <el-col :span="7"><div>
                         <el-card>
-                          aaaa
+                          个人高风险资产较多，请谨慎投资
                         </el-card>
                       </div></el-col>
                     </el-row>
@@ -32,7 +32,7 @@
                     <el-row :gutter="20">
                       <el-col :span="7"><div>
                         <el-card>
-                          aaaa
+                          家庭高风险资产较多，请谨慎投资
                         </el-card>
                       </div></el-col>
                       <el-col :span="16"><div ><ve-pie style="float: inherit" :data="chartData" :settings="chartSettings"></ve-pie></div></el-col>
@@ -123,7 +123,7 @@ export default {
         columns: ['risk', 'percent'],
         rows: [{
           risk: '风控值',
-          percent: 0.6
+          percent: 0.89
         }]
       },
       chartData: {

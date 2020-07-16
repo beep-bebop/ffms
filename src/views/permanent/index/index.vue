@@ -1,7 +1,7 @@
 <template>
   <d2-container type="card">
     <template slot="header">
-      <el-button shadow="hover" slot="header" type="primary" @click="addInRow">买入基金</el-button>
+      <el-button shadow="hover" slot="header" type="primary" @click="addInRow">添加固定资产</el-button>
       <el-input slot="header" placeholder="请输入内容" style="width: 300px">
         <template slot="prepend"></template>
       </el-input>
@@ -10,9 +10,9 @@
         <d2-icon name="download"/>
         导出 Excel
       </el-button>
-      <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 200px;height: 40px;padding-bottom: 16px">
+      <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 200px;height: 40px;padding-bottom: 16px;text-align: center">
         总金额
-        <d2-count-up style="font-size: 30px;" :end="100" :decimals="2"/>
+        <d2-count-up style="font-size: 30px;" :end="566" :decimals="2"/>
       </el-card>
     </template>
     <div style="height: 400px; margin: -16px;">
@@ -39,36 +39,43 @@ export default {
           key: 'name'
         },
         {
-          title: '地址',
-          key: 'address'
+          title: '种类',
+          key: 'type'
+        },
+        {
+          title: '描述',
+          key: 'description'
+        },
+        {
+          title: '资产',
+          key: 'value'
         }
       ],
       data: [
         {
-          date: '2016-05-02',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1518 弄',
+          date: '2020-07-15',
+          name: 'wfy',
+          type: '房产',
+          description: '长沙市岳麓区麓山南路932号',
+          value: '123',
           forbidRemove: true,
           showRemoveButton: true
         },
         {
-          date: '2016-05-04',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1517 弄',
+          date: '2020-07-13',
+          name: 'wfy',
+          type: '房产',
+          description: '上海市普陀区金沙江路 1517 弄',
+          value: '321',
           forbidRemove: false,
           showRemoveButton: true
         },
         {
-          date: '2016-05-01',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1519 弄',
-          forbidRemove: false,
-          showRemoveButton: false
-        },
-        {
-          date: '2016-05-03',
-          name: '王小虎',
-          address: '上海市普陀区金沙江路 1516 弄',
+          date: '2020-07-12',
+          name: 'wfy',
+          type: '车辆',
+          description: '疾速斧头眼镜蛇',
+          value: '111',
           forbidRemove: false,
           showRemoveButton: true
         }
@@ -77,7 +84,7 @@ export default {
         remove: {
           icon: 'el-icon-upload',
           style: 'background-color: #5ab1ef; border-color: #5ab1ef',
-          text: '卖出',
+          text: '折现',
           size: 'small',
           fixed: 'right',
           confirm: true,

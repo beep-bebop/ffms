@@ -1,14 +1,15 @@
 <template>
   <d2-container type="card">
     <template slot="header">
-      <el-input slot="header" placeholder="请输入加/减仓金额" style="width: 300px;margin-right: 10px">
-        <template slot="prepend"></template>
+      <el-input slot="header" v-model="input" placeholder="请输入加/减仓金额" style="width: 200px;margin-right: 10px">
       </el-input>
-      <el-button shadow="hover" slot="header" type="primary" @click="addInRow">加仓</el-button>
-      <el-button shadow="hover" slot="header" type="info" style="margin-right: 15px" @click="addOutRow">减仓</el-button>
-      <el-card style="background-color: #DFDFBD;float: right;width: 200px;height: 40px;padding-bottom: 16px">
+      <el-input slot="header" v-model="perPrice" placeholder="输入交易基金单位净值" style="width: 200px;margin-right: 10px">
+      </el-input>
+      <el-button shadow="hover" slot="header" type="primary" @click="addIn">加仓</el-button>
+      <el-button shadow="hover" slot="header" type="info" style="margin-right: 15px" @click="addOut">减仓</el-button>
+      <el-card style="background-color: #DFDFBD;float: right;width: 300px;height: 40px;padding-bottom: 16px;text-align: center">
         该基金
-        <d2-count-up style="font-size: 29px;" :end="100" :decimals="2"/>
+        <d2-count-up style="font-size: 29px;" :end=this.$route.query.total :decimals="2"/>
       </el-card>
     </template>
     <div style="height: 700px; margin: -16px;">
@@ -59,6 +60,8 @@ export default {
   },
   data () {
     return {
+      input: '',
+      perPrice: '',
       code: '519678',
       myChart: null,
       chartData: [],
@@ -88,6 +91,22 @@ export default {
       this.card.lastThreeMonthsGrowth = res.data.lastThreeMonthsGrowth
       this.card.lastSixMonthsGrowth = res.data.lastSixMonthsGrowth
       this.data.lastYearGrowth = res.data.lastYearGrowth
+    },
+    async addIn () {
+      const res = this.$api.UPDATE_FUND({ userid: this.info.username, fundid: this.$route.query.code, quantity: this.input, price: this.perPrice })
+      console.log(res.msg + 'resssssssssssssssss')
+      this.$message({
+        message: '已加仓',
+        type: 'success'
+      })
+    },
+    async addOut () {
+      const res = this.$api.UPDATE_FUND({ userid: this.info.username, fundid: this.$route.query.code, quantity: -this.input, price: this.perPrice })
+      console.log(res.msg + 'resssssssssssssssss')
+      this.$message({
+        message: '已减仓',
+        type: 'success'
+      })
     },
     async getChartData () {
       try {

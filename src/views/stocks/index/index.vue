@@ -5,14 +5,14 @@
       <el-input v-model="searchInput" slot="header" placeholder="请输入内容" style="width: 300px">
         <template slot="prepend"></template>
       </el-input>
-      <el-button slot="header" style="margin-bottom: 5px">搜索</el-button>
+      <el-button slot="header" style="margin-bottom: 5px" @click="searchTable">搜索</el-button>
       <el-button type="primary" @click="exportExcel">
         <d2-icon name="download"/>
         导出 Excel
       </el-button>
-      <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 200px;height: 40px;padding-bottom: 16px">
+      <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 200px;height: 40px;padding-bottom: 16px;text-align: center">
         我的股票
-        <d2-count-up style="font-size: 29px;" :end="100" :decimals="2"/>
+        <d2-count-up style="font-size: 29px;" :end="208.45" :decimals="2"/>
       </el-card>
     </template>
     <div style="height: 400px; margin: -16px;">
@@ -108,43 +108,46 @@ export default {
       },
       searchInput: '',
       formLabelWidth: '120px',
-      data: []
+      data: [{
+        code: 0,
+        currentValue: 0
+      }],
+      exportColumn: [
+        { label: '代码', prop: 'code' },
+        { label: '名称', prop: 'name' },
+        { label: '购买人', prop: 'userid' },
+        { label: '仓位', prop: 'quantity' },
+        { label: '净值', prop: 'currentValue' }
+      ]
     }
   },
   methods: {
-    // addInRow () {
-    //   this.$refs.d2Crud.showDialog({
-    //     mode: 'add',
-    //     template: {
-    //       userId: {
-    //         title: '姓名',
-    //         value: this.info.username
-    //       },
-    //       time: {
-    //         title: '日期',
-    //         value: '2020-7-15'
-    //       },
-    //       description: {
-    //         title: '描述',
-    //         value: ''
-    //       },
-    //       type: {
-    //         title: '类型',
-    //         value: ''
-    //       },
-    //       amount_paid: {
-    //         title: '金额',
-    //         value: ''
-    //       }
-    //     }
-    //   })
-    // },
     getInfo (row) {
       console.log('checkkkkkkkk' + row.code)
       this.$router.push({
         path: '/stocks/detail',
         query: { code: row.code }
       })
+    },
+    exportExcel () {
+      this.$export.excel({
+        columns: this.exportColumn,
+        data: this.data
+        // header: '导出 Excel',
+        // merges: ['A1', 'E1']
+      })
+        .then(() => {
+          this.$message('导出表格成功')
+        })
+      this.$export.excel({
+        columns: this.exportColumn,
+        data: this.data
+        // header: '导出 Excel',
+        // merges: ['A1', 'E1']
+      })
+        .then(() => {
+          this.$message('导出表格成功')
+        })
     },
     handleRowRemove (row) {
       this.$confirm('确认清仓?', '提示', {
@@ -173,17 +176,20 @@ export default {
         price: this.form.price
       })
       this.getTable()
+      this.$forceUpdate()
       console.log(res)
     },
     async removeRow (row) {
-      const res = this.$api.DEL_FUND({
+      const res = this.$api.DEL_STOCK({
         userid: row.userid,
-        code: row.code
+        code: row.code,
+        price: row.price
       })
-      console.log('dellllllllll' + res)
+      console.log(res)
+      this.getTable()
     },
     async searchTable () {
-      const res = await this.$api.FUND_TABLE({
+      const res = await this.$api.STOCK_TABLE({
         userid: this.info.username,
         queryid: this.searchInput
       })
@@ -191,9 +197,11 @@ export default {
     },
     async getTable () {
       const res = await this.$api.STOCK_TABLE({ userid: this.info.username, queryid: '' })
-      console.log('2333333333' + res)
       this.data = res
     }
+  },
+  created () {
+    this.getTable()
   },
   mounted () {
     this.getTable()

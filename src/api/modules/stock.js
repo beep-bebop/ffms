@@ -20,9 +20,17 @@ export default ({ request }) => ({
     })
   },
   UPDATE_STOCK (data) {
+    console.log('updateeeeee' + data.price)
     return request({
       url: '/stock/updateStock',
       method: 'put',
+      data
+    })
+  },
+  DEL_STOCK (data) {
+    return request({
+      url: '/stock/deleteStock',
+      method: 'delete',
       data
     })
   }
