@@ -184,14 +184,15 @@ public class FundController {
     public String updateFund(@RequestBody Map<String,String> map) {
         String userid = map.get("userid");
         String code = map.get("fundid");
-        int quantity = Integer.parseInt(map.get("quantity"));
+        float cost = Integer.parseInt(map.get("quantity"));
         BigDecimal price = new BigDecimal(map.get("price"));
+        float quantity = new BigDecimal(cost).divide(price).floatValue();
 
         JSONObject json = new JSONObject();
 
         if(fundService.getFundAPIInfoByCode(code)==null){
             json.put("status_code",-2);
-            json.put("msg","stock id is error");
+            json.put("msg","fund id is error");
             return JSONObject.toJSONString(json);
         }
 
@@ -215,7 +216,7 @@ public class FundController {
                 fundService.insertFund(fund);
                 //新增支出信息
                 Disburse disburse = new Disburse();
-                disburse.setAmount_paid(price.multiply(new BigDecimal(quantity)).intValue());
+                disburse.setAmount_paid((int)(cost+0.5));
                 disburse.setUserId(userid);
                 disburse.setTime(new Date());
                 disburse.setDescription("购入基金");
@@ -234,23 +235,24 @@ public class FundController {
                 income.setType("基金");
 
                 if ((fund.getQuantity() + quantity) <= 0) {
-                    income.setIncome(price.multiply(new BigDecimal(fund.getQuantity())).floatValue());
+                    income.setIncome(new BigDecimal(fund.getQuantity()).multiply(price).floatValue());
                     fundService.deleteFund(fund);
                     json.put("msg", "success sell fund,you can only sell fund quantity you have ");
                 } else {
-                    income.setIncome(price.multiply(new BigDecimal(-quantity)).floatValue());
-                    fund.setQuantity(fund.getQuantity() + quantity);
+                    income.setIncome(cost);
+                    fund.setQuantity(fund.getQuantity()+quantity);
                     fundService.updateFund(fund);
                     json.put("msg", "success sell fund");
                 }
+                json.put("status_code",0);
                 incomeService.newIncome(income);
-                json.put("status_code", 0);
+
             } else {
                 fund.setQuantity(fund.getQuantity() + quantity);
                 fundService.updateFund(fund);
 
                 Disburse disburse = new Disburse();
-                disburse.setAmount_paid(price.multiply(new BigDecimal(quantity)).intValue());
+                disburse.setAmount_paid((int)(cost+0.5));
                 disburse.setUserId(userid);
                 disburse.setTime(new Date());
                 disburse.setDescription("购入基金");
