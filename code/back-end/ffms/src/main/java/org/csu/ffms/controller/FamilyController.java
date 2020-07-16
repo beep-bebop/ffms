@@ -133,13 +133,13 @@ public class FamilyController {
  */
     @UserLoginToken
     @RequestMapping(value="joinFamily",method = RequestMethod.POST)
-    public String joinFamily(@RequestBody Map<String,JSONObject>p)
+    public String joinFamily(@RequestBody Map<String,String> map)
     {
-        JSONObject useridJson = p.get("userid");
-        JSONObject familyJson = p.get("family");
-        Account account= accountService.getAccount(JSONObject.toJSONString(useridJson));
-        String familyid=familyJson.getString("familyid");
-        String familykey=familyJson.getString("familykey");
+        String userid =  map.get("userid");
+        String familyid= map.get("familyid");
+        String familykey= map.get("familykey");
+        Account account= accountService.getAccount(userid);
+
 
         Family family = familyService.getFamily(familyid,familykey);
         if(family != null)  //加入成功
