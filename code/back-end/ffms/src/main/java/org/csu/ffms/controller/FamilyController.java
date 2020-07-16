@@ -1,6 +1,7 @@
 package org.csu.ffms.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.csu.ffms.domain.*;
 import org.csu.ffms.jwt.note.UserLoginToken;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @CrossOrigin
@@ -183,44 +185,51 @@ public class FamilyController {
     @RequestMapping(value="searchFamily",method = RequestMethod.POST)
     public String searchFamily(@RequestBody Map<String, String> map)
     {
-        String userid =map.get("userid");
-        String searchId = map.get("searchId");
-        int stockQuantity = 0;
-        int fundQuantity = 0;
+        String userid ="1";
+        String searchId = "2";
+        BigDecimal stockQuantity=new BigDecimal(0);
+        BigDecimal OnestockQuantity=new BigDecimal(0);
+        BigDecimal fundQuantity=new BigDecimal(0);
+        BigDecimal OnefundQuantity=new BigDecimal(0);
         int moneyQuantity = 0;
-        int OnestockQuantity = 0;
-        int OnefundQuantity = 0;
         int OnemoneyQuantity = 0;
         Account account = accountService.getAccount(userid);
+        System.out.println(account.getUsername());
+        System.out.println(account.getPassword());
+        System.out.println(account.getFamilyid());
         String familyid = account.getFamilyid();
         List<Account> List = accountService.getAllAccountByFamilyid(familyid);
         for(int i=0;i<List.size();i++)
         {
-            List<Stock> List1 = stockService.getStockByUserId(List.get(i).getUserid());
-            for(int a=0;a<List1.size();a++)
-            {
-                stockQuantity = stockQuantity + List1.get(a).getQuantity();
-
+            JSONArray jsonArray1=stockService.getStockAPIInfoByUserid(account.getUserid());
+            for (int a = 0; a <jsonArray1.size() ; a++) {
+                System.out.println("currentValue : "+jsonArray1.getJSONObject(a).get("currentValue"));
+                BigDecimal currentvalue = new BigDecimal(jsonArray1.getJSONObject(a).get("currentValue").toString());
+                stockQuantity=stockQuantity.add(currentvalue);
                 if(List.get(i).getUserid().equals(searchId))
                 {
-                    OnestockQuantity = OnestockQuantity + List1.get(a).getQuantity();
+                    OnestockQuantity=OnestockQuantity.add(currentvalue);
                 }
             }
 
-            List<Fund> List2 = fundService.getFundByUserId(List.get(i).getUserid());
-            for(int b=0;b<List2.size();b++)
-            {
-//                fundQuantity = fundQuantity + List2.get(b).getQuantity();
 
+//计算基金
+            JSONArray jsonArray2=fundService.getFundAPIInfoByUserid(List.get(i).getUserid());
+            for (int b = 0; b <jsonArray2.size() ; b++)
+            {
+                System.out.println("currentValue : "+jsonArray2.getJSONObject(b).get("currentValue"));
+                BigDecimal currentvalue = new BigDecimal(jsonArray2.getJSONObject(b).get("currentValue").toString());
+                fundQuantity=fundQuantity.add(currentvalue);
                 if(List.get(i).getUserid().equals(searchId))
                 {
-//                    OnefundQuantity = OnefundQuantity + List2.get(b).getQuantity();
+                    OnefundQuantity=OnefundQuantity.add(currentvalue);
                 }
             }
 
             Income income = new Income();
             income.setUserId(List.get(i).getUserid());
             List<Income> List3 = incomeService.findIncomeList(income);
+            System.out.println("收入有多少条："+List3.size());
             for(int c=0;c<List3.size();c++)
             {
                 if(List3.get(c).getUserId().equals(List.get(i).getUserid())) {
@@ -257,6 +266,7 @@ public class FamilyController {
         json.put("user",new String[][]{{"现金", ""+OnemoneyQuantity},
                 {"股票", ""+OnestockQuantity},
                 {"基金", ""+OnefundQuantity}});
+        System.out.println(JSONObject.toJSONString(json));
         return "JSONObject.toJSONString(json)";
     }
 
@@ -265,9 +275,9 @@ public class FamilyController {
     @RequestMapping(value="getFamilyProperty",method = RequestMethod.POST)
     public String getFamilyProperty(@RequestBody Map<String, String> map)
     {
-        String userid=map.get("userid");
-        int stockQuantity = 0;
-        int fundQuantity = 0;
+        String userid="1";
+        BigDecimal stockQuantity=new BigDecimal(0);
+        BigDecimal fundQuantity=new BigDecimal(0);
         int[] totalQuantity = new int[54];
         int[] changeQuantity = new int[54];
         Calendar calendar = Calendar.getInstance();
@@ -276,16 +286,21 @@ public class FamilyController {
         List<Account> List = accountService.getAllAccountByFamilyid(familyid);
         for(int i=0;i<List.size();i++)
         {
-            List<Stock> List1 = stockService.getStockByUserId(List.get(i).getUserid());
-            for(int a=0;a<List1.size();a++)
-            {
-                stockQuantity = stockQuantity + List1.get(a).getQuantity();
+            JSONArray jsonArray1=stockService.getStockAPIInfoByUserid(account.getUserid());
+            for (int a = 0; a <jsonArray1.size() ; a++) {
+                System.out.println("currentValue : "+jsonArray1.getJSONObject(a).get("currentValue"));
+                BigDecimal currentvalue = new BigDecimal(jsonArray1.getJSONObject(a).get("currentValue").toString());
+                stockQuantity=stockQuantity.add(currentvalue);
             }
 
-            List<Fund> List2 = fundService.getFundByUserId(List.get(i).getUserid());
-            for(int b=0;b<List2.size();b++)
+
+//计算基金
+            JSONArray jsonArray2=fundService.getFundAPIInfoByUserid(List.get(i).getUserid());
+            for (int b = 0; b <jsonArray2.size() ; b++)
             {
-//                fundQuantity = fundQuantity + List2.get(b).getQuantity();
+                System.out.println("currentValue : "+jsonArray2.getJSONObject(b).get("currentValue"));
+                BigDecimal currentvalue = new BigDecimal(jsonArray2.getJSONObject(b).get("currentValue").toString());
+                fundQuantity=fundQuantity.add(currentvalue);
             }
 
             Income income = new Income();
@@ -293,11 +308,9 @@ public class FamilyController {
             List<Income> List3 = incomeService.findIncomeList(income);
             for(int c=0;c<List3.size();c++)
             {
-                if(List3.get(c).getUserId().equals(List.get(i).getUserid())) {
-                    calendar.setTime(List3.get(c).getTime());
-                    int weekno = calendar.get(Calendar.WEEK_OF_YEAR);
-                    changeQuantity[weekno] = changeQuantity[weekno] + (int) List3.get(c).getIncome();
-                }
+                calendar.setTime(List3.get(c).getTime());
+                int weekno=calendar.get(Calendar.WEEK_OF_YEAR);
+                changeQuantity[weekno] = changeQuantity[weekno] + (int)List3.get(c).getIncome();
             }
 
             Disburse disburse = new Disburse();
@@ -305,14 +318,12 @@ public class FamilyController {
             List<Disburse> List4 = disburseService.findDisburseList(disburse);
             for(int d=0;d<List4.size();d++)
             {
-                if(List4.get(d).getUserId().equals(List.get(i).getUserid())) {
-                    calendar.setTime(List4.get(d).getTime());
-                    int weekno = calendar.get(Calendar.WEEK_OF_YEAR);
-                    changeQuantity[weekno] = changeQuantity[weekno] + List4.get(d).getAmount_paid();
-                }
+                calendar.setTime(List4.get(d).getTime());
+                int weekno=calendar.get(Calendar.WEEK_OF_YEAR);
+                changeQuantity[weekno] = changeQuantity[weekno] + List4.get(d).getAmount_paid();
             }
         }
-        totalQuantity[0] =  fundQuantity + stockQuantity;
+        totalQuantity[0] =  fundQuantity.intValue() + stockQuantity.intValue();
         for(int i=1;i<53;i++)
         {
             totalQuantity[i] = totalQuantity[i-1] + changeQuantity[i];
