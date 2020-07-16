@@ -12,7 +12,10 @@ public class Stock {
     private int quantity;
     private float cost;
 
-    public Stock(String code,  String userid,String name, int quantity, float cost) {
+    public Stock() {
+    }
+
+    public Stock(String code, String userid, String name, int quantity, float cost) {
         this.code = code;
         this.name = name;
         this.userid = userid;

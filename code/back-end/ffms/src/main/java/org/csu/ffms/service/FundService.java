@@ -1,5 +1,6 @@
 package org.csu.ffms.service;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.csu.ffms.controller.GetJsonFromUrl;
@@ -68,4 +69,16 @@ public class FundService {
         }
         return data;
     }
+
+    public JSONObject getFundAPIInfoByCode(String code){
+        String basicUrl="https://api.doctorxiong.club/v1/fund/detail?code="+code;
+        try{
+            JSONObject jsonObject=(JSONObject) GetJsonFromUrl.GET(basicUrl).get("data");
+            return jsonObject;
+        }
+        catch (Exception e){
+            return null;
+        }
+    }
+
 }

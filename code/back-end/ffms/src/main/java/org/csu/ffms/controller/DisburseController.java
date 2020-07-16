@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@CrossOrigin
 @ResponseBody
 @RestController
 @RequestMapping("/disbursement/")
@@ -74,7 +75,7 @@ public class DisburseController {
     @UserLoginToken
     @RequestMapping(value="query",method = RequestMethod.GET)
     public String findDisburseList(@RequestBody Disburse disburse){
-        List<Disburse> disburseList=disburseService.findDisburseList(disburse);
+        List<Disburse> disburseList=disburseService.findDisburseListByUser(disburse);
         disburseService.sortByDate(disburseList);
 
         JSONObject json = new JSONObject();
@@ -89,15 +90,16 @@ public class DisburseController {
     @UserLoginToken
     @GetMapping(value="familyList",produces = "application/Json;charset=UTF-8")
     public String findDisburseByFamily(String userid){
-        List<String> familyMemberList=disburseService.findFamilyMember(userid);
         List<Disburse> familyList = new ArrayList<>();
         String familyName = disburseService.findFamily(userid);
+        disburse.setUserId(userid);
+        familyList = disburseService.findDisburseList(disburse);
 
-        for(int i=0;i<familyMemberList.size();i++){
+        /*for(int i=0;i<familyMemberList.size();i++){
             Disburse disburse = new Disburse();
             disburse.setUserId(familyMemberList.get(i));
             familyList=disburseService.findDisburseList(disburse);
-        }
+        }*/
         disburseService.sortByDate(familyList);
 
         JSONObject json = new JSONObject();

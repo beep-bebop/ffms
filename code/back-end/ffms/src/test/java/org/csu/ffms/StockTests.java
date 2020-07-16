@@ -89,10 +89,7 @@ class StockTests {
 
     @Test
     public void testStockController(){
-        Map<String,String>map=new HashMap<>();
-        map.put("userid","1");
-        System.out.println(stockController.getTotal(map));
-        map.put("queryid","1");
-        System.out.println(stockController.getTotal(map));
+        System.out.println(stockService.getStockAPIInfoByCode("000001"));
+        System.out.println(stockService.getStockAPIInfoByCode("000001").get("name"));
     }
 }

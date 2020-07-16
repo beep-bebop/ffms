@@ -76,4 +76,18 @@ public class StockService {
         return jsonArray;
     }
 
+    //返回股票信息，不涉及用户。
+    public JSONObject getStockAPIInfoByCode(String code){
+        String basicUrl="https://api.doctorxiong.club/v1/stock/detail?code="+code;
+        try{
+            JSONObject jsonObject=(JSONObject) GetJsonFromUrl.GET(basicUrl).get("data");
+            jsonObject.remove("dayMinData");
+            jsonObject.remove("dailyData");
+            return jsonObject;
+        }
+        catch (Exception e){
+            return null;
+        }
+    }
+
 }
