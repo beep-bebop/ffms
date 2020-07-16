@@ -69,9 +69,10 @@ public class FamilyController {
         if(account.getFamilyid() != null)  //返回用户现有家庭组
         {
            String familyid = account.getFamilyid();
+           String familykey=familyService.getFamily(familyid).getFamilykey();
             JSONObject json = new JSONObject();
             json.put("status_code",0);
-            json.put("data",familyid);
+            json.put("data",new String[]{familyid,familykey});
             System.out.println(JSONObject.toJSONString(json));
             return JSONObject.toJSONString(json);
         }
@@ -134,9 +135,9 @@ public class FamilyController {
     @RequestMapping(value="joinFamily",method = RequestMethod.POST)
     public String joinFamily(@RequestBody Map<String,JSONObject>p)
     {
-        JSONObject accountJson = p.get("account");
+        JSONObject useridJson = p.get("userid");
         JSONObject familyJson = p.get("family");
-        Account account=(Account) JSONObject.parseObject(JSONObject.toJSONString(accountJson),Account.class);
+        Account account= accountService.getAccount(JSONObject.toJSONString(useridJson));
         String familyid=familyJson.getString("familyid");
         String familykey=familyJson.getString("familykey");
 
@@ -163,9 +164,10 @@ public class FamilyController {
     //退出家庭组
     @UserLoginToken
     @RequestMapping(value="quitFamily",method = RequestMethod.POST)
-    public String quitFamily(@RequestBody Account account)
+    public String quitFamily(@RequestBody Map<String, String> map)
     {
-        accountService.quitFamily(account.getUserid());
+        String userid =map.get("userid");
+        Account account = accountService.getAccount(userid);
         account.setFamilyid(null);
         accountService.updateAccount(account);
         JSONObject json = new JSONObject();
