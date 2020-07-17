@@ -239,7 +239,7 @@ public class FundController {
                     fundService.deleteFund(fund);
                     json.put("msg", "success sell fund,you can only sell fund quantity you have ");
                 } else {
-                    income.setIncome(cost);
+                    income.setIncome(-cost);
                     fund.setQuantity(fund.getQuantity()+quantity);
                     fundService.updateFund(fund);
                     json.put("msg", "success sell fund");

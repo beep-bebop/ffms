@@ -87,7 +87,7 @@ public class DisburseController {
     }
 
     //通过userid查找该用户所在家庭组的支出列表，并排序
-    @UserLoginToken
+    //@UserLoginToken
     @GetMapping(value="familyList",produces = "application/Json;charset=UTF-8")
     public String findDisburseByFamily(String userid){
         List<Disburse> familyList = new ArrayList<>();
