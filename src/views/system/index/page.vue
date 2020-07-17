@@ -3,6 +3,7 @@
     <div style="height: 800px; margin: -16px;">
       <SplitPane :min-percent='20' :default-percent='30' split="vertical">
         <template slot="paneL" style="width: 80%">
+          <el-card style="text-align: center">家庭资产概览</el-card>
           <div :key="item.i" v-for="(item) in member" style="margin: 20px">
             <el-card shadow="hover" :style="{'background-color': item.color, 'height': item.height}">
               {{item.type}}
@@ -21,7 +22,8 @@
                       <el-col :span="16"><div ><ve-pie style="float: inherit" :data="chartData0" :settings="chartSettings"></ve-pie></div></el-col>
                       <el-col :span="7"><div>
                         <el-card>
-                          个人高风险资产较多，请谨慎投资
+                          个人高风险资产较多，请谨慎投资。
+                          个人现金储备较少，请做好适当储蓄。
                         </el-card>
                       </div></el-col>
                     </el-row>
@@ -32,7 +34,8 @@
                     <el-row :gutter="20">
                       <el-col :span="7"><div>
                         <el-card>
-                          家庭高风险资产较多，请谨慎投资
+                          家庭高风险资产较多，请谨慎投资。
+                          家庭现金储备较少，请做好适当储蓄。
                         </el-card>
                       </div></el-col>
                       <el-col :span="16"><div ><ve-pie style="float: inherit" :data="chartData" :settings="chartSettings"></ve-pie></div></el-col>
@@ -117,7 +120,7 @@ export default {
         { i: '0', color: '#EACACA', type: '股票', amount: '100', height: '50' },
         { i: '1', color: '#F0DFB6', type: '基金', amount: '100', height: '20' },
         { i: '2', color: '#A7C3D7', type: '现金', amount: '100', height: '20' },
-        { i: '3', color: '#DFDFBD', type: '家庭基金', amount: '100', height: '20' }
+        { i: '3', color: '#DFDFBD', type: '家庭基金', amount: '0', height: '20' }
       ],
       chartData1: {
         columns: ['risk', 'percent'],

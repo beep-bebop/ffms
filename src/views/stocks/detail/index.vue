@@ -7,9 +7,9 @@
         </el-input>
         <el-button shadow="hover" slot="header" type="primary" @click="addIn">加仓</el-button>
         <el-button shadow="hover" slot="header" type="info" style="margin-right: 15px" @click="addOut">减仓</el-button>
-        <el-card style="background-color: #DFDFBD;float: right;width: 200px;height: 40px;padding-bottom: 16px;text-align: center">
+        <el-card style="background-color: #DFDFBD;float: right;width: 400px;height: 40px;padding-bottom: 16px;text-align: center">
           该股票
-          <d2-count-up style="font-size: 29px;" :end="208.45" :decimals="2"/>
+          <d2-count-up style="font-size: 29px;" :end=this.$route.query.total :decimals="2"/>
         </el-card>
       </template>
       <div id="app2">

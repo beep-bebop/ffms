@@ -1,9 +1,9 @@
 export default {
   path: '/fund',
   title: '基金',
-  icon: 'flask',
+  icon: 'bank',
   children: (pre => [
-    { path: `${pre}index`, title: '持有', icon: 'home' },
-    { path: `${pre}details`, title: '详情', icon: 'home' }
+    { path: `${pre}index`, title: '持有', icon: 'list' },
+    { path: `${pre}details`, title: '详情', icon: 'area-chart' }
   ])('/fund/')
 }

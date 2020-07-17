@@ -5,7 +5,6 @@ export default ({ request }) => ({
    */
   FAMILY_STOCK (data) {
     // 接口请求
-    console.log(data)
     return request({
       url: '/stock/total',
       method: 'post',

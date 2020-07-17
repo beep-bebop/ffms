@@ -16,7 +16,7 @@
         <d2-count-up v-model=this.cash style="font-size: 28px;" :end=this.cash :decimals="2"/>
       </el-card>
     </template>
-    <div style="height: 800px; margin: -16px;">
+    <div style="height: 900px; margin: -16px;">
       <SplitPane :min-percent='20' :default-percent='40' split="vertical">
         <template slot="paneL" style="width: 400px;">
               <div class="inner">

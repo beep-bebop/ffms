@@ -10,9 +10,9 @@
 <!--        <template slot="prepend"></template>-->
 <!--      </el-input>-->
 <!--      <el-button slot="header" style="margin-bottom: 5px">搜索</el-button>-->
-      <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 200px;height: 40px;padding-bottom: 16px">
+      <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 400px;height: 40px;padding-bottom: 16px">
         总资产
-        <d2-count-up style="font-size: 30px;" :end="100" :decimals="2"/>
+        <d2-count-up style="font-size: 30px;" :end=total :decimals="2"/>
       </el-card>
     </template>
     <div style="height: 800px; margin: -16px;">
@@ -90,6 +90,7 @@ export default {
   mounted () {
     this.drawChart()
     this.isHaveFamily()
+    this.getPercent()
   },
   data () {
     this.chartSettings1 = {
@@ -98,6 +99,7 @@ export default {
       yAxisName: ['数值', '比率']
     }
     return {
+      total: '0',
       isFamily: false,
       familyId: '',
       familyKey: '',
@@ -158,6 +160,17 @@ export default {
     }
   },
   methods: {
+    async getPercent () {
+      try {
+        const res = await this.$api.FAMILY_PERCENT({
+          userid: this.info.username,
+          searchId: this.info.username
+        })
+        this.total = parseFloat(res.family[0][1]) + parseFloat(res.family[2][1]) + parseFloat(res.family[1][1])
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async quitFamily () {
       const res = await this.$api.QUIT_FAMILY({ userid: this.info.username })
       console.log(res.status_code)

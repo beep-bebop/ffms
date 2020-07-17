@@ -10,9 +10,9 @@
         <d2-icon name="download"/>
         导出 Excel
       </el-button>
-      <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 200px;height: 40px;padding-bottom: 16px;text-align: center">
+      <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 400px;height: 40px;padding-bottom: 16px;text-align: center">
         我的股票
-        <d2-count-up style="font-size: 29px;" :end="208.45" :decimals="2"/>
+        <d2-count-up style="font-size: 29px;" :end=total :decimals="2"/>
       </el-card>
     </template>
     <div style="height: 400px; margin: -16px;">
@@ -100,6 +100,7 @@ export default {
   },
   data () {
     return {
+      total: '0',
       dialogFormVisible: false,
       form: {
         stockid: '',
@@ -126,7 +127,7 @@ export default {
       console.log('checkkkkkkkk' + row.code)
       this.$router.push({
         path: '/stocks/detail',
-        query: { code: row.code }
+        query: { code: row.code, total: row.currentValue }
       })
     },
     exportExcel () {
@@ -167,6 +168,14 @@ export default {
       }).catch(() => {
       })
     },
+    async getTotal () {
+      const res = await this.$api.FAMILY_STOCK({
+        userid: this.info.username,
+        queryid: this.info.username
+      })
+      console.log('stocktttttttt' + res.total)
+      this.total = res.total
+    },
     async addStock () {
       this.dialogFormVisible = false
       const res = this.$api.UPDATE_STOCK({
@@ -205,6 +214,7 @@ export default {
   },
   mounted () {
     this.getTable()
+    this.getTotal()
   }
 }
 </script>
