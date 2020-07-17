@@ -10,7 +10,7 @@
         <d2-icon name="download"/>
         导出 Excel
       </el-button>
-      <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 400px;height: 40px;padding-bottom: 16px;text-align: center">
+      <el-card shadow="hover" style="background-color: #EACACA;float: right;width: 400px;height: 40px;padding-bottom: 16px;text-align: center">
         我的股票
         <d2-count-up style="font-size: 29px;" :end=total :decimals="2"/>
       </el-card>

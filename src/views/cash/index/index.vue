@@ -11,7 +11,7 @@
         <d2-icon name="download"/>
         导出 Excel
       </el-button>
-      <el-card shadow="hover" style="background-color: #DFDFBD;float: right;width: 400px;height: 40px;padding-bottom: 16px;text-align: center">
+      <el-card shadow="hover" style="background-color: #A7C3D7;float: right;width: 400px;height: 40px;padding-bottom: 16px;text-align: center">
         我的现金
         <d2-count-up v-model=this.cash style="font-size: 28px;" :end=this.cash :decimals="2"/>
       </el-card>
