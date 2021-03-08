@@ -3,9 +3,9 @@
 Vue  
 D2 Admin  
 i18n  
-element
-HQChart
-echarts
+element  
+HQChart  
+echarts  
 axios  
 ...   
 ├─.browserslistrc ------------------- // 目标浏览器配置  
