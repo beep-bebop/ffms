@@ -1,9 +1,11 @@
 # 前端
-## 使用技术
+## 使用技术/框架
 Vue  
 D2 Admin  
 i18n  
-element  
+element
+HQChart
+echarts
 axios  
 ...   
 ├─.browserslistrc ------------------- // 目标浏览器配置  
