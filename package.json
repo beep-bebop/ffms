@@ -13,7 +13,7 @@
   "dependencies": {
     "@d2-projects/d2-crud": "^2.1.2",
     "@d2-projects/vue-table-export": "^1.0.1",
-    "axios": "^0.19.0",
+    "axios": "^1.12.1",
     "axios-mock-adapter": "^1.18.1",
     "better-scroll": "^1.15.2",
     "core-js": "^3.4.3",
@@ -25,7 +25,7 @@
     "flex.css": "^1.1.7",
     "fuse.js": "^5.2.3",
     "hotkeys-js": "^3.7.3",
-    "hqchart": "^1.1.8663",
+    "hqchart": "^1.1.15198",
     "jquery": "^3.5.1",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.19",
